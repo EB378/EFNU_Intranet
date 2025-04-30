@@ -115,26 +115,6 @@ export default function home() {
                 </Stack>
               </CardContent>
             </Card>
-
-            {/* Verse of the Day */}
-            <Card sx={{ 
-              borderRadius: 2,
-              boxShadow: theme.shadows[2],
-              background: theme.palette.background.paper
-            }}>
-              <CardHeader 
-                title="Verse of the Day" 
-                titleTypographyProps={{ 
-                  variant: 'h6',
-                  color: 'text.primary',
-                  fontWeight: 500 
-                }}
-                sx={{ 
-                  borderBottom: `1px solid ${theme.palette.divider}`,
-                  pb: 1
-                }}
-              />
-            </Card>
           </Stack>
         </Grid>
         
@@ -184,36 +164,6 @@ export default function home() {
                   </Typography>
                 </Box>
               </CardContent>
-            </Card>
-
-            {/* Quick Note */}
-            <Card sx={{ 
-              borderRadius: 2,
-              boxShadow: theme.shadows[2],
-              flexGrow: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              background: theme.palette.background.paper
-            }}>
-              <CardHeader 
-                title="Quick Note" 
-                titleTypographyProps={{ 
-                  variant: 'h6',
-                  color: 'text.primary',
-                  fontWeight: 500 
-                }}
-                action={
-                  <Tooltip title="Edit note">
-                    <IconButton onClick={() => setIsEditingQuickNote(!isEditingQuickNote)}>
-                      <Edit fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                }
-                sx={{ 
-                  borderBottom: `1px solid ${theme.palette.divider}`,
-                  pb: 1
-                }}
-              />
             </Card>
           </Stack>
         </Grid>
