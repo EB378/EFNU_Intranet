@@ -24,13 +24,11 @@ import { useTheme } from "@hooks/useTheme";
 import { useGetIdentity } from "@refinedev/core";
 import { ProfileName, ProfileAvatar } from "@components/functions/FetchFunctions";
 
-export default function home() {
+export default function HomePage() {
   const theme = useTheme();
   const { data: identityData } = useGetIdentity<{ id: string }>();
   
-  // State for editable note
-  const [isEditingQuickNote, setIsEditingQuickNote] = useState(false);
- 
+   
   // Current time state
   const [currentTime, setCurrentTime] = useState(new Date());
   
