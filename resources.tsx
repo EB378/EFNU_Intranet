@@ -144,7 +144,15 @@ import {
           label: "PIC Fees",
           icon: <ListAlt />
         }
-    }
+    },
+    {
+      name: "admin",                          
+      list: "/admin",
+      meta: {
+        label: "Admin",
+        icon: <ListAlt />
+      }
+  }
   ];
   
   export default resources;

@@ -60,7 +60,7 @@ p, admin, contact, (list)|(show)
 p, admin, handbook, (list)|(show)
 p, admin, rules, (list)|(show)
 p, admin, pic, (list)|(show)
-
+p, admin, admin, (list)|(show)
 `);
 
 
