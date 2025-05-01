@@ -92,7 +92,6 @@ export default async function RootLayout({
             options={{
               syncWithLocation: true,
               warnWhenUnsavedChanges: true,
-              initialSiderCollapsed: true,
               useNewQueryKeys: true,
               projectId: "lexx72-WST3Re-ljtrGz",
               title: { 

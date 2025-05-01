@@ -23,9 +23,7 @@ export default async function Layout({ children }: React.PropsWithChildren) {
         Sider={CustomSider}
       >
         <SessionSync />
-            {/* <CanAccess> */}
-                { children }
-            {/* </CanAccess> */}
+        { children }
       </ThemedLayoutV2>
   );
 }
