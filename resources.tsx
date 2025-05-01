@@ -3,7 +3,19 @@ import {
   ListAlt,  
   BroadcastOnHome,  
   CloudQueue,
-  Map
+  Map,
+  PriorityHigh,
+  LocalGasStation,
+  CameraOutdoor,
+  Book,
+  Article,
+  Info,
+  Air,
+  Lightbulb,
+  AccountBox,
+  EnhancedEncryption,
+
+
   } from "@mui/icons-material";
     
 const resources = [
@@ -29,7 +41,7 @@ const resources = [
       create: "/priornotice/create",
       meta: {
         label: "PN",
-        icon: <ListAlt />
+        icon: <PriorityHigh />
       }
   },
   {
@@ -38,7 +50,7 @@ const resources = [
       create: "/fuel/create",
       meta: {
         label: "Fuel",
-        icon: <ListAlt />
+        icon: <LocalGasStation />
       }
   },
   {
@@ -46,7 +58,7 @@ const resources = [
       list: "/webcam",
       meta: {
         label: "WebCam",
-        icon: <ListAlt />
+        icon: <CameraOutdoor />
       }
   },
   {
@@ -55,7 +67,7 @@ const resources = [
       create: "/blog/create",
       meta: {
         label: "Blog",
-        icon: <ListAlt />
+        icon: <Book />
       }
   },
   {
@@ -63,7 +75,7 @@ const resources = [
       list: "/notams",
       meta: {
         label: "NOTAMS",
-        icon: <ListAlt />
+        icon: <Article />
       }
   },
   {
@@ -71,7 +83,7 @@ const resources = [
       list: "/info",
       meta: {
         label: "INFO",
-        icon: <ListAlt />
+        icon: <Info />
       }
   },
   {
@@ -87,7 +99,7 @@ const resources = [
       list: "/weather",
       meta: {
         label: "Weather",
-        icon: <ListAlt />
+        icon: <Air />
       }
   },
   {
@@ -95,7 +107,7 @@ const resources = [
       list: "/lights",
       meta: {
         label: "RWY Lights",
-        icon: <ListAlt />
+        icon: <Lightbulb />
       }
   },
   {
@@ -103,7 +115,7 @@ const resources = [
       list: "/profile",
       meta: {
         label: "Profile",
-        icon: <ListAlt />
+        icon: <AccountBox />
       }
   },
   {
@@ -112,7 +124,7 @@ const resources = [
       create: "/sms/create",
       meta: {
         label: "SMS",
-        icon: <ListAlt />
+        icon: <EnhancedEncryption />
       }
   },
   {
