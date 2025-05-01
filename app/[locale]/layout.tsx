@@ -11,7 +11,7 @@ import routerProvider from "@refinedev/nextjs-router";
 import { authProviderClient } from "@/providers/auth-provider/auth-provider.client";
 import { dataProvider } from "@/providers/data-provider";
 import { accessControlProvider } from "@providers/access-provider/access-control.client"
-import resources from "@/resources";
+import resources from "@resources";
 
 
 import { defaultUrl, APP_NAME, APP_DEFAULT_TITLE, APP_TITLE_TEMPLATE, APP_DESCRIPTION } from "@/constants";
@@ -92,10 +92,13 @@ export default async function RootLayout({
             options={{
               syncWithLocation: true,
               warnWhenUnsavedChanges: true,
-              
+              initialSiderCollapsed: true,
               useNewQueryKeys: true,
               projectId: "lexx72-WST3Re-ljtrGz",
-              title: { text: APP_DEFAULT_TITLE }
+              title: { 
+                text: APP_DEFAULT_TITLE,
+                icon: "/Logo.png"
+              }
             }}
           >
             <SplashScreen loading={false} />

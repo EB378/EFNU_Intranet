@@ -20,19 +20,8 @@ e = some(where (p.eft == allow))
 
 export const adapter = new StringAdapter(`
 //Roles
-
-
-//DevRoles
-
-//SalesRoles
-
-//LeadGenRoles
-
-//LeadRoles
-g, COO, ProejctManager
-g, CEO, COO
-g, Admin, CEO
-
+g, member, guest
+g, admin, member
 
 
 //MISCRoles
@@ -43,16 +32,16 @@ g, admin, Test2
 
 //Policies  
 
-p, admin, home, (list)|(show)
-p, admin, atis, (list)|(show)
-p, admin, priornotice, (list)|(show)|(create)
-p, admin, fuel, (list)|(show)|(create)
-p, admin, webcam, (list)|(show)
+p, guest, home, (list)|(show)
+p, guest, atis, (list)|(show)
+p, guest, priornotice, (list)|(show)|(create)
+p, member, fuel, (list)|(show)|(create)
+p, member, webcam, (list)|(show)
 p, admin, blog, (list)|(show)|(create)
-p, admin, notams, (list)|(show)
-p, admin, info, (list)|(show)
-p, admin, flyk, (list)|(show)
-p, admin, weather, (list)|(show)
+p, guest, notams, (list)|(show)
+p, guest, info, (list)|(show)
+p, member, flyk, (list)|(show)
+p, member, weather, (list)|(show)
 p, admin, lights, (list)|(show)
 p, admin, profiles, (list)|(show)
 p, admin, sms, (list)|(show)|(create)

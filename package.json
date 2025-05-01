@@ -30,6 +30,8 @@
     "@mui/material": "^6.4.8",
     "@mui/x-charts": "^7.26.0",
     "@mui/x-data-grid": "^7.22.2",
+    "@pankod/refine-core": "^3.103.0",
+    "@pankod/refine-mui": "^3.63.0",
     "@radix-ui/react-dropdown-menu": "^2.1.5",
     "@refinedev/cli": "^2.16.46",
     "@refinedev/core": "^4.57.9",

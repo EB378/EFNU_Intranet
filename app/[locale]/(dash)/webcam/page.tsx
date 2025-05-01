@@ -1,140 +1,128 @@
 "use client";
 
-import React from "react";
-import { useTranslations } from "next-intl";
-import NextLink from "next/link";
-import { motion } from "framer-motion";
-import { Box, Container, Typography, Button } from "@mui/material";
-import { useTheme } from "@hooks/useTheme";
+import { Box, Grid, Typography, Paper, Skeleton } from "@mui/material";
+import React, { useEffect, useState } from "react";
 
-const AboutBusinessPage: React.FC = () => {
-  const t = useTranslations("AboutBusiness");
-  const theme = useTheme()
+const WebCamPage: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Animation variants for Framer Motion.
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1 } },
-  };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
 
-  const slideInRight = {
-    hidden: { opacity: 0, x: 100 },
-    visible: { opacity: 1, x: 0, transition: { duration: 1 } },
-  };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    
+    // Simulate loading
+    const timer = setTimeout(() => setLoading(false), 1500);
+    
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  const webcams = [
+    {
+      url: "https://atis.efnu.fi/webcam/cam-efnu-wx1.jpg",
+      label: "Runway 27",
+      description: "View of main runway approach"
+    },
+    {
+      url: "https://atis.efnu.fi/webcam/cam-efnu-wx2.jpg",
+      label: "Runway Intersection",
+      description: "Taxiway and runway intersection"
+    },
+    {
+      url: "https://atis.efnu.fi/webcam/cam-efnu-wx3.jpg",
+      label: "Glider Runway 22",
+      description: "Glider operations area"
+    }
+  ];
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography variant="h3" sx={{ fontWeight: "bold", mb: 4, textAlign: "center" }}>
-        {t("title")}
+    <Box sx={{
+      p: { xs: 2, md: 4 },
+      maxWidth: "1800px",
+      margin: "0 auto"
+    }}>
+      <Typography variant="h4" component="h1" gutterBottom sx={{
+        fontWeight: 600,
+        mb: 4,
+        color: "text.primary"
+      }}>
+        EFNU Webcams
+      </Typography>
+      
+      <Typography variant="body1" paragraph sx={{ mb: 4, color: "text.secondary" }}>
+        Live views from around the airfield. Images refresh every 60 seconds.
       </Typography>
 
-      <Box component={motion.div} initial="hidden" whileInView="visible" variants={fadeInUp}>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("introParagraph1")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("introParagraph2")}
-        </Typography>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("harshRealityTitle")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("harshRealityText")}
-        </Typography>
-        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem1")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem2")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem3")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem4")}
-          </Typography>
-          <Typography component="li" variant="body1">
-            {t("harshRealityListItem5")}
-          </Typography>
-        </Box>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("benefitsTitle")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("benefitsIntro")}
-        </Typography>
-        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem1")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem2")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem3")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem4")}
-          </Typography>
-          <Typography component="li" variant="body1">
-            {t("benefitListItem5")}
-          </Typography>
-        </Box>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("packageTitle")}
-        </Typography>
-        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem1")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem2")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem3")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem4")}
-          </Typography>
-          <Typography component="li" variant="body1">
-            {t("packageListItem5")}
-          </Typography>
-        </Box>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("finalCallTitle")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 4, lineHeight: 1.6 }}>
-          {t("finalCallText")}
-        </Typography>
-
-        <NextLink href={`https://calendly.com/ekoforge`} passHref>
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <Button
-              variant="contained"
-              size="large"
-              sx={{
-                px: 4,
-                py: 1.5,
-                background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                color: theme.palette.common.white,
-                fontWeight: "bold",
-                borderRadius: 50,
-                boxShadow: 3,
-                textTransform: "none",
-              }}
-            >
-              {t("bookNow")}
-            </Button>
-          </motion.div>
-        </NextLink>
-      </Box>
-    </Container>
+      <Grid container spacing={4}>
+        {webcams.map((webcam, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Paper elevation={3} sx={{
+              borderRadius: 2,
+              overflow: "hidden",
+              transition: "transform 0.3s ease-in-out",
+              '&:hover': {
+                transform: "translateY(-4px)",
+                boxShadow: 6
+              }
+            }}>
+              <Box sx={{
+                position: "relative",
+                width: "100%",
+                height: 0,
+                paddingTop: "56.25%", // 16:9 aspect ratio
+                backgroundColor: "grey.200"
+              }}>
+                {loading ? (
+                  <Skeleton 
+                    variant="rectangular" 
+                    width="100%" 
+                    height="100%" 
+                    sx={{ position: "absolute", top: 0, left: 0 }}
+                  />
+                ) : (
+                  <img
+                    src={webcam.url}
+                    alt={webcam.label}
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover"
+                    }}
+                  />
+                )}
+              </Box>
+              
+              <Box sx={{ p: 2 }}>
+                <Typography variant="h6" component="h3" gutterBottom>
+                  {webcam.label}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {webcam.description}
+                </Typography>
+                <Typography variant="caption" display="block" sx={{ 
+                  mt: 1,
+                  color: "text.disabled",
+                  fontStyle: "italic"
+                }}>
+                  Last updated: {new Date().toLocaleTimeString()}
+                </Typography>
+              </Box>
+            </Paper>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
 };
 
-export default AboutBusinessPage;
+export default WebCamPage;
