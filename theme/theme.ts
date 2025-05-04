@@ -61,7 +61,7 @@ declare module "@mui/material/styles" {
 }
 
 // Light theme using RefineThemes.Blue.
-export const lightTheme = createTheme(RefineThemes.Blue, {
+export const lightTheme = createTheme(RefineThemes.Orange, {
   palette: {
     primary: {
       main: "#133c83",
@@ -70,25 +70,25 @@ export const lightTheme = createTheme(RefineThemes.Blue, {
       contrastText: "#ffffff",
     },
     secondary: {
-      main: "#FF914D", // Orange main
+      main: "#FF914D",
       light: "#FFB585",
       dark: "#D9743E",
       contrastText: "#000000",
     },
     third: {
-      main: "#005F6B", // Teal main
+      main: "#005F6B",
       light: "#008592",
       dark: "#004953",
       contrastText: "#000000",
     },
     fourth: {
-      main: "#E5E5E5", // Grey main
+      main: "#E5E5E5",
       light: "#F5F5F5",
       dark: "#CFCFCF",
       contrastText: "#000000",
     },
     fifth: {
-      main: "#3FAF7D", // Emerald main
+      main: "#3FAF7D",
       light: "#60C89C",
       dark: "#2E8F63",
       contrastText: "#000000",
@@ -106,7 +106,7 @@ export const lightTheme = createTheme(RefineThemes.Blue, {
       contrastText: "#ffa726",
     },
     info: {
-      main: "#4fc3f7", // A slightly lighter info color for better visibility on dark backgrounds
+      main: "#4fc3f7",
       light: "#80dfff",
       dark: "#0288d1",
       contrastText: "#aaaaaa",
@@ -129,7 +129,7 @@ export const lightTheme = createTheme(RefineThemes.Blue, {
     MuiSnackbar: {
       styleOverrides: {
         root: {
-          zIndex: 250000, // Higher than navbar
+          zIndex: 250000, 
         },
       },
     },
@@ -137,7 +137,7 @@ export const lightTheme = createTheme(RefineThemes.Blue, {
 });
 
 // Dark theme using RefineThemes.BlueDark.
-export const darkTheme = createTheme(RefineThemes.BlueDark, {
+export const darkTheme = createTheme(RefineThemes.OrangeDark, {
   palette: {
     primary: {
       main: "#2676ff",
@@ -146,25 +146,25 @@ export const darkTheme = createTheme(RefineThemes.BlueDark, {
       contrastText: "#ffffff",
     },
     secondary: {
-      main: "#FF914D", // Orange main
+      main: "#FF914D",
       light: "#FFB585",
       dark: "#D9743E",
       contrastText: "#ffffff",
     },
     third: {
-      main: "#005F6B", // Teal main
+      main: "#005F6B",
       light: "#008592",
       dark: "#004953",
       contrastText: "#ffffff",
     },
     fourth: {
-      main: "#E5E5E5", // Grey main
+      main: "#E5E5E5",
       light: "#F5F5F5",
       dark: "#CFCFCF",
       contrastText: "#ffffff",
     },
     fifth: {
-      main: "#3FAF7D", // Emerald main
+      main: "#3FAF7D",
       light: "#60C89C",
       dark: "#2E8F63",
       contrastText: "#ffffff",
@@ -182,7 +182,7 @@ export const darkTheme = createTheme(RefineThemes.BlueDark, {
       contrastText: "#ffa726",
     },
     info: {
-      main: "#4fc3f7", // A slightly lighter info color for better visibility on dark backgrounds
+      main: "#4fc3f7",
       light: "#80dfff",
       dark: "#0288d1",
       contrastText: "#aaaaaa",
@@ -205,7 +205,7 @@ export const darkTheme = createTheme(RefineThemes.BlueDark, {
     MuiSnackbar: {
       styleOverrides: {
         root: {
-          zIndex: 250000, // Higher than navbar
+          zIndex: 250000,
         },
       },
     },

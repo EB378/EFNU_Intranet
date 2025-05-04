@@ -28,7 +28,7 @@ export const authProviderClient: AuthProvider = {
 
       return {
         success: true,
-        redirectTo: "/dash",
+        redirectTo: "/home",
       };
     }
 
