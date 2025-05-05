@@ -90,7 +90,7 @@ interface FuelValues {
   amount: number;
   fuel: string;
   userid: string;
-  createdAt?: string;
+  createdAt: string;
 }
 interface FuelItem extends FuelValues {
   id: string;
@@ -132,6 +132,8 @@ export default function FuelPage() {
       enabled: !!identityData?.id,
     },
   });
+
+  console.log(MyRefulingsData);
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -205,6 +207,7 @@ export default function FuelPage() {
             left: '50%',
             transform: 'translate(-50%, -50%)',
             width: 400,
+            maxWidth: "100vw",
             bgcolor: 'background.paper',
             boxShadow: 24,
             borderRadius: 4,
@@ -249,6 +252,7 @@ export default function FuelPage() {
               <SaveButton
                 fullWidth
                 loading={formLoading}
+                type="submit"
                 sx={{ 
                   height: 45, 
                   borderRadius: 14,
@@ -276,6 +280,7 @@ export default function FuelPage() {
             left: '50%',
             transform: 'translate(-50%, -50%)',
             width: 500,
+            maxWidth: "100vw",
             bgcolor: 'background.paper',
             boxShadow: 24,
             borderRadius: 4,
@@ -349,7 +354,7 @@ export default function FuelPage() {
             borderTopLeftRadius: 16,
             borderTopRightRadius: 16,
             p: 3,
-            maxWidth: 600,
+            maxWidth: "100vw",
             margin: '0 auto'
           }}>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -411,6 +416,7 @@ export default function FuelPage() {
             left: '50%',
             transform: 'translate(-50%, -50%)',
             width: 600,
+            maxWidth: "100vw",
             bgcolor: 'background.paper',
             boxShadow: 24,
             borderRadius: 4,
@@ -526,6 +532,7 @@ export default function FuelPage() {
                         startIcon={React.cloneElement(option.icon, { sx: { fontSize: 32 } })}
                         sx={{
                           height: 120,
+                          maxWidth: "100vw",
                           borderRadius: 3,
                           flexDirection: 'column',
                           justifyContent: 'center',
@@ -569,6 +576,9 @@ export default function FuelPage() {
                     startIcon={<EventAvailable sx={{ fontSize: 32 }} />}
                     sx={{
                       height: 80,
+                      width: '100%',
+                      maxWidth: "100vw",
+                      alignSelf: 'center',
                       borderRadius: 3,
                       justifyContent: 'flex-start',
                       px: 3,
@@ -590,6 +600,9 @@ export default function FuelPage() {
                     startIcon={<Info sx={{ fontSize: 32 }} />}
                     sx={{
                       height: 80,
+                      width: '100%',
+                      maxWidth: "100vw",
+                      alignSelf: 'center',
                       borderRadius: 3,
                       justifyContent: 'flex-start',
                       px: 3,
@@ -611,6 +624,9 @@ export default function FuelPage() {
                     startIcon={<Email sx={{ fontSize: 32 }} />}
                     sx={{
                       height: 80,
+                      width: '100%',
+                      maxWidth: "100vw",
+                      alignSelf: 'center',
                       borderRadius: 3,
                       justifyContent: 'flex-start',
                       px: 3,
