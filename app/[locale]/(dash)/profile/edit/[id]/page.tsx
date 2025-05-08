@@ -1,256 +1,140 @@
 "use client";
 
-import { useForm } from '@refinedev/react-hook-form';
-import { Edit } from '@refinedev/mui';
-import {
-  Box,
-  Grid,
-  TextField,
-  Checkbox,
-  FormControlLabel,
-  Typography,
-  Button,
-} from '@mui/material';
-import { Controller } from 'react-hook-form';
-import { useTheme } from '@hooks/useTheme';
+import React from "react";
+import { useTranslations } from "next-intl";
+import NextLink from "next/link";
+import { motion } from "framer-motion";
+import { Box, Container, Typography, Button } from "@mui/material";
+import { useTheme } from "@hooks/useTheme";
 
-interface PNFormValues {
-  from_location: string;
-  to_location: string;
-  dep_time: string;
-  arr_time: string;
-  dep_date?: string;
-  arr_date?: string;
-  aircraft_reg: string;
-  mtow: number;
-  pic_name: string;
-  phone: string;
-  email: string;
-  ifr_arrival: boolean;
-}
+const AboutBusinessPage: React.FC = () => {
+  const t = useTranslations("AboutBusiness");
+  const theme = useTheme()
 
-const PNEdit = () => {
-  const theme = useTheme();
-  const {
-    refineCore: { formLoading, queryResult },
-    saveButtonProps,
-    register,
-    control,
-    formState: { errors },
-  } = useForm<PNFormValues>({
-    refineCoreProps: {
-      resource: 'pn_forms',
-      action: 'edit',
-      redirect: false,
-    },
-  });
+  // Animation variants for Framer Motion.
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+  };
 
-  const { data: record } = queryResult;
+  const slideInRight = {
+    hidden: { opacity: 0, x: 100 },
+    visible: { opacity: 1, x: 0, transition: { duration: 1 } },
+  };
 
   return (
-    <Edit
-      isLoading={formLoading}
-      saveButtonProps={saveButtonProps}
-      title={
-        <Typography variant="h4">
-          Edit Prior Notice (PN) Form
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      <Typography variant="h3" sx={{ fontWeight: "bold", mb: 4, textAlign: "center" }}>
+        {t("title")}
+      </Typography>
+
+      <Box component={motion.div} initial="hidden" whileInView="visible" variants={fadeInUp}>
+        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
+          {t("introParagraph1")}
         </Typography>
-      }
-    >
-      <Box component="form" sx={{ mt: 3 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="body1" color={theme.palette.error.main}>
-              All operations outside of 0900-2100 local time are forbidden
-            </Typography>
-          </Grid>
+        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
+          {t("introParagraph2")}
+        </Typography>
 
-          {/* Departure Location */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('from_location', {
-                required: 'Departure Location is required',
-              })}
-              defaultValue={record?.data?.from_location}
-              error={!!errors.from_location}
-              helperText={errors.from_location?.message}
-              fullWidth
-              label="Departure Location"
-            />
-          </Grid>
+        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
+          {t("harshRealityTitle")}
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
+          {t("harshRealityText")}
+        </Typography>
+        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("harshRealityListItem1")}
+          </Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("harshRealityListItem2")}
+          </Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("harshRealityListItem3")}
+          </Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("harshRealityListItem4")}
+          </Typography>
+          <Typography component="li" variant="body1">
+            {t("harshRealityListItem5")}
+          </Typography>
+        </Box>
 
-          {/* Arrival Location */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('to_location', {
-                required: 'Arrival location is required',
-              })}
-              defaultValue={record?.data?.to_location}
-              error={!!errors.to_location}
-              helperText={errors.to_location?.message}
-              fullWidth
-              label="Arrival Location"
-            />
-          </Grid>
+        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
+          {t("benefitsTitle")}
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
+          {t("benefitsIntro")}
+        </Typography>
+        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("benefitListItem1")}
+          </Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("benefitListItem2")}
+          </Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("benefitListItem3")}
+          </Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("benefitListItem4")}
+          </Typography>
+          <Typography component="li" variant="body1">
+            {t("benefitListItem5")}
+          </Typography>
+        </Box>
 
-          {/* Departure Time */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('dep_time', {
-                required: 'Departure time is required',
-                pattern: {
-                  value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
-                  message: 'Invalid time format (HHMM)',
-                },
-              })}
-              defaultValue={record?.data?.dep_time}
-              error={!!errors.dep_time}
-              helperText={errors.dep_time?.message}
-              fullWidth
-              label="DEP (local HHMM)"
-            />
-          </Grid>
+        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
+          {t("packageTitle")}
+        </Typography>
+        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("packageListItem1")}
+          </Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("packageListItem2")}
+          </Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("packageListItem3")}
+          </Typography>
+          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
+            {t("packageListItem4")}
+          </Typography>
+          <Typography component="li" variant="body1">
+            {t("packageListItem5")}
+          </Typography>
+        </Box>
 
-          {/* Arrival Time */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('arr_time', {
-                required: 'Arrival time is required',
-                pattern: {
-                  value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
-                  message: 'Invalid time format (HHMM)',
-                },
-              })}
-              defaultValue={record?.data?.arr_time}
-              error={!!errors.arr_time}
-              helperText={errors.arr_time?.message}
-              fullWidth
-              label="ARR (local HHMM)"
-            />
-          </Grid>
+        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
+          {t("finalCallTitle")}
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 4, lineHeight: 1.6 }}>
+          {t("finalCallText")}
+        </Typography>
 
-          {/* Departure Date */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('dep_date')}
-              defaultValue={record?.data?.dep_date || new Date().toISOString().split('T')[0]}
-              fullWidth
-              type="date"
-              label="DEP Date"
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-
-          {/* Arrival Date */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('arr_date')}
-              defaultValue={record?.data?.arr_date || new Date().toISOString().split('T')[0]}
-              fullWidth
-              type="date"
-              label="ARR Date"
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-
-          {/* Aircraft Registration */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('aircraft_reg', {
-                required: 'Aircraft registration is required',
-              })}
-              defaultValue={record?.data?.aircraft_reg}
-              error={!!errors.aircraft_reg}
-              helperText={errors.aircraft_reg?.message}
-              fullWidth
-              label="Aircraft registration"
-            />
-          </Grid>
-
-          {/* MTOW */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('mtow', {
-                required: 'MTOW is required',
-                min: { value: 1, message: 'Invalid MTOW' },
-                max: { value: 10000, message: 'MTOW too high' },
-                valueAsNumber: true,
-              })}
-              defaultValue={record?.data?.mtow}
-              error={!!errors.mtow}
-              helperText={errors.mtow?.message}
-              fullWidth
-              type="number"
-              label="MTOW (Kg)"
-            />
-          </Grid>
-
-          {/* PIC Name */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('pic_name', { required: 'PIC name is required' })}
-              defaultValue={record?.data?.pic_name}
-              error={!!errors.pic_name}
-              helperText={errors.pic_name?.message}
-              fullWidth
-              label="PIC (Full name)"
-            />
-          </Grid>
-
-          {/* Phone */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('phone', {
-                required: 'Phone number is required',
-                pattern: {
-                  value: /^\+?[0-9\s-]+$/,
-                  message: 'Invalid phone number',
-                },
-              })}
-              defaultValue={record?.data?.phone}
-              error={!!errors.phone}
-              helperText={errors.phone?.message}
-              fullWidth
-              label="Phone"
-            />
-          </Grid>
-
-          {/* Email */}
-          <Grid item xs={12}>
-            <TextField
-              {...register('email', {
-                required: 'Email is required',
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Invalid email address',
-                },
-              })}
-              defaultValue={record?.data?.email}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-              fullWidth
-              label="PIC e-mail (for billing)"
-            />
-          </Grid>
-
-          {/* IFR Arrival */}
-          <Grid item xs={12}>
-            <Controller
-              control={control}
-              name="ifr_arrival"
-              defaultValue={record?.data?.ifr_arrival || false}
-              render={({ field }) => (
-                <FormControlLabel
-                  control={<Checkbox {...field} checked={field.value} color="primary" />}
-                  label="IFR Arrival"
-                />
-              )}
-            />
-          </Grid>
-        </Grid>
+        <NextLink href={`https://calendly.com/ekoforge`} passHref>
+          <motion.div whileHover={{ scale: 1.05 }}>
+            <Button
+              variant="contained"
+              size="large"
+              sx={{
+                px: 4,
+                py: 1.5,
+                background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+                color: theme.palette.common.white,
+                fontWeight: "bold",
+                borderRadius: 50,
+                boxShadow: 3,
+                textTransform: "none",
+              }}
+            >
+              {t("bookNow")}
+            </Button>
+          </motion.div>
+        </NextLink>
       </Box>
-    </Edit>
+    </Container>
   );
 };
 
-export default PNEdit;
+export default AboutBusinessPage;
