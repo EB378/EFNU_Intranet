@@ -141,7 +141,7 @@ export default function MobileNav() {
           horizontal: 'center',
         }}
         transformOrigin={{
-          vertical: 'bottom',
+          vertical: 'top',
           horizontal: 'center',
         }}
         PaperProps={{
