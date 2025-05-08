@@ -31,7 +31,8 @@ import {
 } from "@mui/icons-material";
 import { BarChart } from "recharts";
 import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { ProfileAvatar } from "@components/functions/FetchFunctions"
+import { ProfileAvatar, ProfileLicence, ProfileName, ProfileEmail, ProfilePhone, ProfileRatings } from "@components/functions/FetchFunctions"
+import { EditButton } from "@refinedev/mui";
 
 const Profile = () => {
   const { open } = useNotification();
@@ -102,17 +103,15 @@ const Profile = () => {
                 <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
                   <ProfileAvatar profileId={uid}/>
                   <Box>
-                    <Typography variant="h6">John Pilot</Typography>
-                    <Typography variant="body2" color="text.secondary">License #: PI-23456-A</Typography>
+                    <Typography variant="h6"><ProfileName profileId={uid} /></Typography>
+                    <Typography variant="body2" color="text.secondary">License #: <ProfileLicence profileId={uid} /></Typography>
                   </Box>
                 </Box>
                 <Box>
                   {[
-                    { label: "Email", value: "john.pilot@airmail.com" },
-                    { label: "Phone", value: "(555) 123-4567" },
-                    { label: "Aircraft", value: "Cessna 172 (N12345)" },
-                    { label: "Hangar", value: "B-42" },
-                    { label: "Certification", value: "Commercial" }
+                    { label: "Email", value: <ProfileEmail profileId={uid} /> },
+                    { label: "Phone", value: <ProfilePhone profileId={uid} /> },
+                    { label: "Certification", value: <ProfileRatings profileId={uid} /> }
                   ].map((item, index) => (
                     <Box 
                       key={index} 
@@ -130,9 +129,12 @@ const Profile = () => {
                 </Box>
               </CardContent>
               <CardActions>
-                <Button fullWidth variant="outlined" size="small">
-                  Edit Profile
-                </Button>
+                <EditButton
+                  resource="profiles"
+                  recordItemId={uid}
+                  fullWidth
+                  variant="outlined"
+                />
               </CardActions>
             </Card>
           </Grid>

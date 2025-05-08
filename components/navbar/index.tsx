@@ -34,6 +34,7 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import resources from '@/resources';
+import { CanAccess } from "@refinedev/core";
 
 const StyledFab = styled(Fab)({
   position: 'absolute',
@@ -136,7 +137,7 @@ export default function MobileNav() {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
         anchorOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'center',
         }}
         transformOrigin={{
@@ -149,33 +150,46 @@ export default function MobileNav() {
             borderRadius: 4,
             boxShadow: theme.shadows[6],
             minWidth: 200,
+            maxHeight: "60vh"
           }
         }}
       >
         {menuResources.map((resource) => (
-          <MenuItem 
-            key={resource.name}
-            onClick={handleMenuClose}
-            component={Link}
-            href={resource.list}
+          <CanAccess
+          key={resource.name}
+            resource={resource.name}
+            action='list'
           >
-            {resource.meta.icon}
-            <Box sx={{ ml: 2 }}>{resource.meta.label}</Box>
-          </MenuItem>
+            <MenuItem 
+              key={resource.name}
+              onClick={handleMenuClose}
+              component={Link}
+              href={resource.list}
+            >
+              {resource.meta.icon}
+              <Box sx={{ ml: 2 }}>{resource.meta.label}</Box>
+            </MenuItem>
+          </CanAccess>
         ))}
         {/* Add Create Actions */}
         {resources
           .filter(r => r.create)
           .map((resource) => (
-            <MenuItem
-              key={`create-${resource.name}`}
-              onClick={handleMenuClose}
-              component={Link}
-              href={resource.create!} // Use non-null assertion if you're certain it exists
+            <CanAccess
+            key={`create-${resource.name}`}
+            resource={resource.name}
+            action='create'
             >
-              <Add sx={{ mr: 2 }} />
-              Create {resource.meta.label}
-            </MenuItem>
+              <MenuItem
+                key={`create-${resource.name}`}
+                onClick={handleMenuClose}
+                component={Link}
+                href={resource.create!} // Use non-null assertion if you're certain it exists
+              >
+                <Add sx={{ mr: 2 }} />
+                Create {resource.meta.label}
+              </MenuItem>
+            </CanAccess>
           ))}
       </Menu>
     </Paper>

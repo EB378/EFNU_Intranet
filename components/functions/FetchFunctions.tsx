@@ -28,18 +28,53 @@ export function ProfileAvatar({ profileId }: { profileId: string }) {
   return <Avatar src={profileData.avatar_url} alt={"pfp"} />;
 }
 
-export function ProfilePhone({ profileId }: { profileId: string }) {
-    const { queryResult } = useShow({
+export function ProfileLicence({ profileId }: { profileId: string }) {
+  const { queryResult } = useShow({
       resource: "profiles",
       id: profileId,
-      meta: { select: "phone_number" },
+      meta: { select: "licence" },
       queryOptions: { enabled: !!profileId },
-    });
-    const profileData = queryResult?.data?.data as { phone_number: string; } | undefined;
-    if (!profileData) return <span>Loading...</span>;
-    return <span>{profileData.phone_number}</span>;
-  }
+  });
+  const profileData = queryResult?.data?.data as { licence: string;} | undefined;
+  if (!profileData) return <span>Loading...</span>;
+  return <span>{profileData.licence}</span>;
+}
 
+export function ProfilePhone({ profileId }: { profileId: string }) {
+  const { queryResult } = useShow({
+    resource: "profiles",
+    id: profileId,
+    meta: { select: "phone_number" },
+    queryOptions: { enabled: !!profileId },
+  });
+  const profileData = queryResult?.data?.data as { phone_number: string; } | undefined;
+  if (!profileData) return <span>Loading...</span>;
+  return <span>{profileData.phone_number}</span>;
+}
+
+export function ProfileEmail({ profileId }: { profileId: string }) {
+  const { queryResult } = useShow({
+    resource: "profiles",
+    id: profileId,
+    meta: { select: "email" },
+    queryOptions: { enabled: !!profileId },
+  });
+  const profileData = queryResult?.data?.data as { email: string; } | undefined;
+  if (!profileData) return <span>Loading...</span>;
+  return <span>{profileData.email}</span>;
+}
+
+export function ProfileRatings({ profileId }: { profileId: string }) {
+  const { queryResult } = useShow({
+    resource: "profiles",
+    id: profileId,
+    meta: { select: "ratings" },
+    queryOptions: { enabled: !!profileId },
+  });
+  const profileData = queryResult?.data?.data as { ratings: string; } | undefined;
+  if (!profileData) return <span>Loading...</span>;
+  return <span>{profileData.ratings}</span>;
+}
   
 export function InstructorName({ instructorId }: { instructorId: string }) {
   const { queryResult } = useShow({
