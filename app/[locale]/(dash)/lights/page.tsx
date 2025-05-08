@@ -1,140 +1,94 @@
 "use client";
 
-import React from "react";
-import { useTranslations } from "next-intl";
-import NextLink from "next/link";
+import { Typography, Box } from "@mui/material";
 import { motion } from "framer-motion";
-import { Box, Container, Typography, Button } from "@mui/material";
-import { useTheme } from "@hooks/useTheme";
+import React from "react";
 
-const AboutBusinessPage: React.FC = () => {
-  const t = useTranslations("AboutBusiness");
-  const theme = useTheme()
+const RWYLightsPage: React.FC = () => {
 
-  // Animation variants for Framer Motion.
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1 } },
-  };
-
-  const slideInRight = {
-    hidden: { opacity: 0, x: 100 },
-    visible: { opacity: 1, x: 0, transition: { duration: 1 } },
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.5 } },
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography variant="h3" sx={{ fontWeight: "bold", mb: 4, textAlign: "center" }}>
-        {t("title")}
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+      className="h-screen w-full flex flex-col bg-gray-900 relative overflow-hidden"
+    >
+      {/* Header */}
+      <Typography 
+        variant="h4"
+        component={motion.h1}
+        sx={{
+          p: 4,
+          position: 'relative',
+          top: 0,
+          left: 0,
+          background: 'linear-gradient(45deg, #00e5ff, #0066ff)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          fontWeight: 'bold',
+          zIndex: 10,
+        }}
+      >
+        Runway Lights Guide
       </Typography>
 
-      <Box component={motion.div} initial="hidden" whileInView="visible" variants={fadeInUp}>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("introParagraph1")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("introParagraph2")}
-        </Typography>
+      {/* Main Content Container */}
+      <Box
+        sx={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          p: 4,
+          position: 'relative',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Video Container */}
+        <motion.div
+          className="relative"
+          style={{
+            maxWidth: '90vw',
+            maxHeight: '80vh',
+            width: 'auto',
+            height: 'auto',
+            aspectRatio: '16/9',
+          }}
+          whileHover={{ scale: 1.02 }}
 
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("harshRealityTitle")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("harshRealityText")}
-        </Typography>
-        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem1")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem2")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem3")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem4")}
-          </Typography>
-          <Typography component="li" variant="body1">
-            {t("harshRealityListItem5")}
-          </Typography>
-        </Box>
+        >
 
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("benefitsTitle")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("benefitsIntro")}
-        </Typography>
-        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem1")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem2")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem3")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem4")}
-          </Typography>
-          <Typography component="li" variant="body1">
-            {t("benefitListItem5")}
-          </Typography>
-        </Box>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("packageTitle")}
-        </Typography>
-        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem1")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem2")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem3")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem4")}
-          </Typography>
-          <Typography component="li" variant="body1">
-            {t("packageListItem5")}
-          </Typography>
-        </Box>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("finalCallTitle")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 4, lineHeight: 1.6 }}>
-          {t("finalCallText")}
-        </Typography>
-
-        <NextLink href={`https://calendly.com/ekoforge`} passHref>
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <Button
-              variant="contained"
-              size="large"
-              sx={{
-                px: 4,
-                py: 1.5,
-                background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                color: theme.palette.common.white,
-                fontWeight: "bold",
-                borderRadius: 50,
-                boxShadow: 3,
-                textTransform: "none",
-              }}
-            >
-              {t("bookNow")}
-            </Button>
-          </motion.div>
-        </NextLink>
+          {/* Video Element */}
+          <video
+            controls
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+              borderRadius: '12px',
+              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
+            }}
+            title="Runway Lights Guide"
+          >
+            <source
+              src="https://efnu.fi/wp-content/uploads/efnu-lights-guide-2023-10-11.mp4"
+              type="video/mp4"
+            />
+            Your browser does not support the video tag.
+          </video>
+        </motion.div>
       </Box>
-    </Container>
+    </motion.div>
   );
 };
 
-export default AboutBusinessPage;
+export default RWYLightsPage;

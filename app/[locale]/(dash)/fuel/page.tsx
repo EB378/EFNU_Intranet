@@ -179,7 +179,7 @@ export default function FuelPage() {
       remarks: "Jet fuel, ideal for turbine-engine aircraft."
     },
     { 
-      label: "Small Aircraft Petrol", 
+      label: "Be95SE", 
       capacity: 3000,
       remaining: 783.50,
       price: 1.60,
@@ -323,7 +323,7 @@ export default function FuelPage() {
                       </Box>
                       <Box textAlign="right">
                         <Typography variant="body2" color="text.secondary">
-                          {new Date(item.createdAt).toLocaleDateString()}
+                          {item.createdAt}
                         </Typography>
                         <Typography variant="h6" color="primary">
                           {item.amount}L
@@ -506,7 +506,7 @@ export default function FuelPage() {
 
 
       {/* Main Content */}
-      <Grid container spacing={3} justifyContent="center">
+      <Grid container spacing={3} justifyContent="center" sx={{ p: 4}}>
         <Grid item xs={12} md={6}>
           <GradientCard>
             <CardContent>
