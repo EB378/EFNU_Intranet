@@ -24,26 +24,25 @@ g, member, guest
 g, admin, member
 
 
-//MISCRoles
-g, admin, Test1
-g, admin, Test2
-
-
 
 //Policies  
 
 p, guest, home, (list)|(show)
 p, guest, atis, (list)|(show)
 p, guest, priornotice, (list)|(show)|(create)
-p, member, fuel, (list)|(show)|(create)
-p, member, webcam, (list)|(show)
-p, admin, blog, (list)|(show)|(create)
 p, guest, notams, (list)|(show)
 p, guest, info, (list)|(show)
+
+
+p, member, fuel, (list)|(show)|(create)
+p, member, webcam, (list)|(show)
 p, member, flyk, (list)|(show)
 p, member, weather, (list)|(show)
+p, member, profiles, (list)|(show)
+p, member, profiles/*, edit
+
+p, admin, blog, (list)|(show)|(create)
 p, admin, lights, (list)|(show)
-p, admin, profiles, (list)|(show)
 p, admin, sms, (list)|(show)|(create)
 p, admin, contact, (list)|(show)
 p, admin, handbook, (list)|(show)

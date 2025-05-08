@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useShow } from "@refinedev/core";
+import { useList, useShow } from "@refinedev/core";
 import { Typography, Avatar } from "@mui/material";
 
 export function ProfileName({ profileId }: { profileId: string }) {
@@ -71,7 +71,7 @@ export function ProfileRatings({ profileId }: { profileId: string }) {
     meta: { select: "ratings" },
     queryOptions: { enabled: !!profileId },
   });
-  const profileData = queryResult?.data?.data as { ratings: string; } | undefined;
+  const profileData = queryResult?.data?.data as { ratings: string[]; } | undefined;
   if (!profileData) return <span>Loading...</span>;
   return <span>{profileData.ratings}</span>;
 }
@@ -99,21 +99,4 @@ function ResourceName({ id }: { id: string }) {
   const resourceData = queryResult?.data?.data as { name: string } | undefined;
   if (!resourceData) return <span>Loading...</span>;
   return <span>{resourceData.name}</span>;
-}
-
-// Helper component to fetch and display the author's full name.
-export function AuthorName({ profileId }: { profileId: string }) {
-  const { queryResult } = useShow<{ first_name: string; last_name: string }>({
-    resource: "profiles",
-    id: profileId,
-    meta: { select: "first_name,last_name" },
-    queryOptions: { enabled: !!profileId },
-  });
-  const data = queryResult?.data?.data;
-  if (!data) return <Typography variant="body2">Loading...</Typography>;
-  return (
-    <Typography variant="body2">
-      {data.first_name} {data.last_name}
-    </Typography>
-  );
 }

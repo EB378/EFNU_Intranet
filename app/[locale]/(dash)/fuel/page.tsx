@@ -540,7 +540,10 @@ const FuelPage = () => {
         <Grid container spacing={3}>
           {/*Fueling options */}
           <Grid item xs={12} md={6} >
-            <Card elevation={2}>
+            <Card elevation={2} sx={{ 
+              borderRadius: '12px',
+              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
+            }}>
               <CardHeader
                 title={
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -592,7 +595,10 @@ const FuelPage = () => {
 
           {/* Misc */}
           <Grid item xs={12} md={6}>
-            <Card elevation={2}>
+            <Card elevation={2} sx={{ 
+              borderRadius: '12px',
+              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
+            }}>
               <CardHeader
                 title={
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

@@ -34,10 +34,10 @@ import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
 import { BarChart } from "recharts";
 import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { ProfileAvatar, ProfileLicence, ProfileName, ProfileEmail, ProfilePhone, ProfileRatings } from "@components/functions/FetchFunctions"
+import { ProfileAvatar, ProfileLicence, ProfileName, ProfileEmail, ProfilePhone, ProfileRatings} from "@components/functions/FetchFunctions"
 import { EditButton } from "@refinedev/mui";
 import { ColorModeContext } from "@contexts/color-mode";
-
+import { FuelData } from "@components/FuelProfile";
 
 const Profile = () => {
   const { open } = useNotification();
@@ -82,6 +82,7 @@ const Profile = () => {
   };
 
   const uid = identityData?.id as string;
+  
 
   return (
     <Box sx={{ minHeight: "100vh", py: 4 }}>
@@ -95,7 +96,10 @@ const Profile = () => {
         <Grid container spacing={3}>
           {/* Personal Information Card */}
           <Grid item xs={12} md={4}>
-            <Card elevation={2}>
+            <Card elevation={2} sx={{ 
+              borderRadius: '12px',
+              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
+            }}>
               <CardHeader
                 title={
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -133,6 +137,15 @@ const Profile = () => {
                     </Box>
                   ))}
                 </Box>
+              </CardContent>
+              <CardActions>
+                <EditButton
+                  resource="profiles"
+                  recordItemId={uid}
+                  fullWidth
+                  LinkComponent={"button"}
+                  variant="outlined"
+                />
                 <IconButton
                   color="inherit"
                   onClick={() => {
@@ -141,21 +154,16 @@ const Profile = () => {
                 >
                   {mode === "dark" ? <LightModeOutlined /> : <DarkModeOutlined />}
                 </IconButton>
-              </CardContent>
-              <CardActions>
-                <EditButton
-                  resource="profiles"
-                  recordItemId={uid}
-                  fullWidth
-                  variant="outlined"
-                />
               </CardActions>
             </Card>
           </Grid>
 
           {/* Fee Status Card */}
           <Grid item xs={12} md={4}>
-            <Card elevation={2}>
+            <Card elevation={2} sx={{ 
+              borderRadius: '12px',
+              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
+            }}>
               <CardHeader
                 title={
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -166,6 +174,7 @@ const Profile = () => {
                 subheader="Your current airport fees"
               />
               <CardContent>
+                {/* 
                 <Box sx={{ mb: 3 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
                     <Typography variant="body2" fontWeight="medium">Payment Status</Typography>
@@ -207,9 +216,16 @@ const Profile = () => {
                     </TableBody>
                   </Table>
                 </TableContainer>
+                */}
+                <Box sx={{ mb: 3 }}>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                    <Typography variant="h3" fontWeight="bold">Coming Soon</Typography>
+                  </Box>
+                </Box>
               </CardContent>
               <CardActions>
-                <Button 
+
+                {/*   <Button 
                   fullWidth 
                   variant="outlined" 
                   size="small" 
@@ -217,63 +233,13 @@ const Profile = () => {
                   onClick={handleDownloadStatement}
                 >
                   Download Statement
-                </Button>
+                </Button>   */}
               </CardActions>
             </Card>
           </Grid>
 
           {/* Fuel Totals Card */}
-          <Grid item xs={12} md={4}>
-            <Card elevation={2}>
-              <CardHeader
-                title={
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant="h6">Fuel Consumption</Typography>
-                    <FuelIcon color="action" />
-                  </Box>
-                }
-                subheader="6-month fuel usage in gallons"
-              />
-              <CardContent>
-                <Box sx={{ height: 240, mb: 3 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={fuelData} margin={{ top: 20, right: 0, left: 0, bottom: 5 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="amount" name="Fuel" fill="#8884d8" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </Box>
-                <Box>
-                  {[
-                    { label: "Total YTD", value: "6,800 gallons" },
-                    { label: "Current Month", value: "800 gallons" },
-                    { label: "Avg. Monthly", value: "1,133 gallons" }
-                  ].map((item, index) => (
-                    <Box 
-                      key={index} 
-                      sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        py: 1, 
-                        borderBottom: '1px solid #e0e0e0'
-                      }}
-                    >
-                      <Typography color="text.secondary">{item.label}</Typography>
-                      <Typography fontWeight="medium">{item.value}</Typography>
-                    </Box>
-                  ))}
-                </Box>
-              </CardContent>
-              <CardActions>
-                <Button fullWidth variant="outlined" size="small">
-                  View Full History
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
+          <FuelData profileId={uid} />
         </Grid>
       </Container>
     </Box>

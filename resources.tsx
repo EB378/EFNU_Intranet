@@ -47,7 +47,6 @@ const resources = [
   {
       name: "fuel",                          
       list: "/fuel",
-      create: "/fuel/create",
       meta: {
         label: "Fuel",
         icon: <LocalGasStation />
@@ -113,6 +112,7 @@ const resources = [
   {
       name: "profiles",                          
       list: "/profile",
+      edit: "/profile/edit/:id",
       meta: {
         label: "Profile",
         icon: <AccountBox />

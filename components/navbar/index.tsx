@@ -12,7 +12,6 @@ import {
   MenuItem,
   Paper,
   styled,
-  useTheme
 } from '@mui/material';
 import {
   ListAlt,  
@@ -37,6 +36,7 @@ import { usePathname } from 'next/navigation';
 import resources from '@/resources';
 import { CanAccess } from "@refinedev/core";
 import { useLogout } from '@refinedev/core';
+import { useTheme } from '@hooks/useTheme';
 
 const StyledFab = styled(Fab)({
   position: 'absolute',
