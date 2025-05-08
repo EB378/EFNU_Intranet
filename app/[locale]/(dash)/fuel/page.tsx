@@ -653,7 +653,7 @@ const FuelPage = () => {
                     >
                         <Box>
                         <Typography variant="h6" fontWeight={600}>Fuel Availability</Typography>
-                        <Typography variant="caption">Check current stock</Typography>
+                        <Typography variant="caption">STATIC! NOT FOR USE!</Typography>
                         </Box>
                     </HoverButton>
                     </motion.div>
