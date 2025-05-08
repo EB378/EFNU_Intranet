@@ -164,17 +164,19 @@ export default function MobileNav() {
           </MenuItem>
         ))}
         {/* Add Create Actions */}
-        {resources.filter(r => r.create).map((resource) => (
-          <MenuItem
-            key={`create-${resource.name}`}
-            onClick={handleMenuClose}
-            component={Link}
-            href={resource.create}
-          >
-            <Add sx={{ mr: 2 }} />
-            Create {resource.meta.label}
-          </MenuItem>
-        ))}
+        {resources
+          .filter(r => r.create)
+          .map((resource) => (
+            <MenuItem
+              key={`create-${resource.name}`}
+              onClick={handleMenuClose}
+              component={Link}
+              href={resource.create!} // Use non-null assertion if you're certain it exists
+            >
+              <Add sx={{ mr: 2 }} />
+              Create {resource.meta.label}
+            </MenuItem>
+          ))}
       </Menu>
     </Paper>
   );
