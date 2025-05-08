@@ -53,9 +53,9 @@ export default function HomePage() {
       minHeight: '100vh'
     }}>
       {/* Main Grid Layout */}
-      <Grid container spacing={3}>
+      <Grid container spacing={2}>
         {/* Left Column - Profile and Verse */}
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Stack spacing={3}>
             {/* Profile Card */}
             <Card sx={{
@@ -117,7 +117,7 @@ export default function HomePage() {
         </Grid>
         
         {/* Middle Column - Time and Quick Note */}
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={6}>
           <Stack spacing={3}>
             {/* Time Card */}
             <Card sx={{ 
@@ -164,67 +164,6 @@ export default function HomePage() {
               </CardContent>
             </Card>
           </Stack>
-        </Grid>
-        
-        {/* Right Column - Upcoming Events */}
-        <Grid item xs={12} md={4}>
-          <Card sx={{ 
-            borderRadius: 2,
-            boxShadow: theme.shadows[2],
-            height: '100%',
-            background: theme.palette.background.paper
-          }}>
-            <CardHeader 
-              title="Upcoming Events" 
-              titleTypographyProps={{ 
-                variant: 'h6',
-                color: 'text.primary',
-                fontWeight: 500 
-              }}
-              action={
-                <Tooltip title="Add event">
-                  <IconButton>
-                    <Add />
-                  </IconButton>
-                </Tooltip>
-              }
-              sx={{ 
-                borderBottom: `1px solid ${theme.palette.divider}`,
-                pb: 1
-              }}
-            />
-            <CardContent>
-              <Box sx={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: 'calc(100% - 60px)',
-                textAlign: 'center'
-              }}>
-                <Event sx={{ 
-                  fontSize: 60, 
-                  color: theme.palette.text.disabled,
-                  mb: 2
-                }} />
-                <Typography variant="body1" color="text.secondary">
-                  No upcoming events scheduled
-                </Typography>
-                <Button 
-                  variant="outlined" 
-                  sx={{ 
-                    mt: 3,
-                    borderRadius: 20,
-                    px: 3,
-                    textTransform: 'none'
-                  }}
-                  startIcon={<Add />}
-                >
-                  Create New Event
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
         </Grid>
       </Grid>
     </Box>
