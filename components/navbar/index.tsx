@@ -6,6 +6,7 @@ import {
   BottomNavigation, 
   BottomNavigationAction,
   Box,
+  Divider,
   Fab,
   Menu,
   MenuItem,
@@ -35,6 +36,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import resources from '@/resources';
 import { CanAccess } from "@refinedev/core";
+import { useLogout } from '@refinedev/core';
 
 const StyledFab = styled(Fab)({
   position: 'absolute',
@@ -48,15 +50,20 @@ const StyledFab = styled(Fab)({
 });
 
 export default function MobileNav() {
-  const [value, setValue] = useState(0);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
   const pathname = usePathname();
+  const { mutate: logout } = useLogout();
 
-  // Define main navigation items (customize this array to select which items appear in the bottom bar)
+  // Define main navigation items
   const mainNavItems = ['home', 'atis', 'fuel', 'profiles'];
   const mainNavResources = resources.filter(resource => mainNavItems.includes(resource.name));
   const menuResources = resources.filter(resource => !mainNavItems.includes(resource.name));
+
+  // Derive active tab from current path
+  const activeTab = mainNavResources.findIndex(resource => 
+    pathname.startsWith(resource.list) // Use startsWith for child routes
+  );
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -83,8 +90,7 @@ export default function MobileNav() {
     >
       <BottomNavigation
         showLabels
-        value={value}
-        onChange={(_, newValue) => setValue(newValue)}
+        value={activeTab}
         sx={{
           height: "10vh",
           backgroundColor: 'transparent',
@@ -99,13 +105,13 @@ export default function MobileNav() {
             href={resource.list}
             sx={{
               minWidth: 'auto',
-              color: pathname === resource.list 
+              color: pathname.startsWith(resource.list) // Handle child routes
                 ? theme.palette.primary.main 
                 : theme.palette.text.secondary,
               '& .MuiBottomNavigationAction-label': {
                 fontSize: '0.75rem',
                 transition: 'color 0.2s',
-                fontWeight: pathname === resource.list ? 600 : 400,
+                fontWeight: pathname.startsWith(resource.list) ? 600 : 400,
               },
             }}
           />
@@ -137,11 +143,11 @@ export default function MobileNav() {
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
         anchorOrigin={{
-          vertical: 'bottom',
+          vertical: 'top',
           horizontal: 'center',
         }}
         transformOrigin={{
-          vertical: 'top',
+          vertical: 'bottom',
           horizontal: 'center',
         }}
         PaperProps={{
@@ -150,18 +156,18 @@ export default function MobileNav() {
             borderRadius: 4,
             boxShadow: theme.shadows[6],
             minWidth: 200,
-            maxHeight: "60vh"
+            maxHeight: "60vh",
+            overflow: 'auto',
           }
         }}
       >
         {menuResources.map((resource) => (
           <CanAccess
-          key={resource.name}
+            key={resource.name}
             resource={resource.name}
             action='list'
           >
             <MenuItem 
-              key={resource.name}
               onClick={handleMenuClose}
               component={Link}
               href={resource.list}
@@ -171,26 +177,41 @@ export default function MobileNav() {
             </MenuItem>
           </CanAccess>
         ))}
+
+        {menuResources.length > 0 && <Divider />}
+
         {/* Add Create Actions */}
         {resources
           .filter(r => r.create)
           .map((resource) => (
             <CanAccess
-            key={`create-${resource.name}`}
-            resource={resource.name}
-            action='create'
+              key={`create-${resource.name}`}
+              resource={resource.name}
+              action='create'
             >
               <MenuItem
-                key={`create-${resource.name}`}
                 onClick={handleMenuClose}
                 component={Link}
-                href={resource.create!} // Use non-null assertion if you're certain it exists
+                href={resource.create!}
               >
                 <Add sx={{ mr: 2 }} />
                 Create {resource.meta.label}
               </MenuItem>
             </CanAccess>
           ))}
+
+        <Divider />
+
+        <MenuItem 
+          onClick={() => {
+            logout();
+            handleMenuClose();
+          }}
+          sx={{ color: theme.palette.error.main }}
+        >
+          <AccountBox sx={{ mr: 2 }} />
+          Log Out
+        </MenuItem>
       </Menu>
     </Paper>
   );

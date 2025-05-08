@@ -58,6 +58,7 @@ const PNCreate = () => {
     <Create
       isLoading={formLoading}
       saveButtonProps={saveButtonProps}
+      goBack
       title={
         <Typography variant="h4">
           EFNU - Prior Notice Form (PN)

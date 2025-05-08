@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { useGetIdentity, useNotification } from "@refinedev/core";
 import { 
   Container,
@@ -21,7 +21,8 @@ import {
   TableRow,
   TableContainer,
   LinearProgress,
-  Chip
+  Chip,
+  IconButton
 } from "@mui/material";
 import { 
   Person as UserIcon, 
@@ -29,15 +30,20 @@ import {
   AttachMoney as DollarIcon, 
   Description as FileTextIcon 
 } from "@mui/icons-material";
+import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
+import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
 import { BarChart } from "recharts";
 import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ProfileAvatar, ProfileLicence, ProfileName, ProfileEmail, ProfilePhone, ProfileRatings } from "@components/functions/FetchFunctions"
 import { EditButton } from "@refinedev/mui";
+import { ColorModeContext } from "@contexts/color-mode";
+
 
 const Profile = () => {
   const { open } = useNotification();
   const { data: identityData } = useGetIdentity<{ id: string }>();
-  
+  const { mode, setMode } = useContext(ColorModeContext);
+
   const [fuelData] = useState([
     { month: 'Jan', amount: 1200 },
     { month: 'Feb', amount: 900 },
@@ -127,6 +133,14 @@ const Profile = () => {
                     </Box>
                   ))}
                 </Box>
+                <IconButton
+                  color="inherit"
+                  onClick={() => {
+                    setMode();
+                  }}
+                >
+                  {mode === "dark" ? <LightModeOutlined /> : <DarkModeOutlined />}
+                </IconButton>
               </CardContent>
               <CardActions>
                 <EditButton

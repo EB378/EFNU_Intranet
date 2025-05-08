@@ -65,7 +65,7 @@ const PNList = () => {
     <Grid container spacing={3} >
       {/* Public Board Column */}
       <Grid item xs={12}>
-        <Paper sx={{ p: 3, height: '80vh', overflow: 'auto' }}>
+        <Paper sx={{ p: 3, minHeight: '90vh', overflow: 'auto' }}>
           <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography variant="h5" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
               <Flight sx={{ mr: 1, color: theme.palette.primary.main }} />

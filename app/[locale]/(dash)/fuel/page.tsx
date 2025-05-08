@@ -1,26 +1,51 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  Button,
-  Stack,
+import React, { useState } from "react"
+import { useGetIdentity, useNotification } from "@refinedev/core";
+import { 
+  Container,
   Grid,
+  Paper,
+  Typography,
+  Box,
+  Avatar,
   Card,
+  CardHeader,
   CardContent,
+  CardActions,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  TableContainer,
+  LinearProgress,
+  Chip,
+  Stack
+} from "@mui/material";
+import { 
+  Person as UserIcon, 
+  LocalGasStation as FuelIcon, 
+  AttachMoney as DollarIcon, 
+  Description as FileTextIcon 
+} from "@mui/icons-material";
+import { BarChart } from "recharts";
+import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { ProfileAvatar, ProfileLicence, ProfileName, ProfileEmail, ProfilePhone, ProfileRatings } from "@components/functions/FetchFunctions"
+import { EditButton } from "@refinedev/mui";
+import {
   Modal,
   Backdrop,
   Fade,
   TextField,
-  Chip,
   Divider,
   IconButton,
   Slide,
   styled
 } from "@mui/material";
 import { useTheme } from "@hooks/useTheme";
-import { useForm, useGetIdentity, useList } from "@refinedev/core";
+import { useForm, useList } from "@refinedev/core";
 import { useTranslations } from "next-intl";
 import {
   LocalGasStation,
@@ -96,102 +121,102 @@ interface FuelItem extends FuelValues {
   id: string;
   createdAt: string;
 }
-
-export default function FuelPage() {
-  const theme = useTheme();
-  const t = useTranslations("Fuel");
-  const { data: identityData } = useGetIdentity<{ id: string }>();
-  const [selectedFuel, setSelectedFuel ] = useState<string>("");
-  const [createModalOpen, setCreateModalOpen ] = useState(false);
-  const [ myRefulingsModalOpen, setMyRefulingsModalOpen ] = useState(false);
-  const [contactModalOpen, setContactModalOpen ] = useState(false);
-  const [tankStatusModalOpen, setTankStatusModalOpen] = useState(false);
-
-  const { 
-    formLoading,
-    onFinish,
-  } = useForm<FuelValues>({
-    resource: 'fuel',
-    action: "create",
-    redirect: false,
-    onMutationSuccess: () => {
-      setCreateModalOpen(false);
-    }
-  });
-
-  const { data: MyRefulingsData } = useList<FuelItem>({
-    resource: "fuel",
-    filters: [
-      {
-        field: "userid",
-        operator: "eq",
-        value: identityData?.id || "",
-      },
-    ],
-    queryOptions: {
-      enabled: !!identityData?.id,
-    },
-  });
-
-  console.log(MyRefulingsData);
-
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    
-    onFinish({
-      aircraft: formData.get("aircraft") as string,
-      amount: Number(formData.get("amount")),
-      fuel: selectedFuel,
-      userid: identityData?.id || ""
+const FuelPage = () => {
+    const { data: identityData } = useGetIdentity<{ id: string }>();
+    const theme = useTheme();
+    const [selectedFuel, setSelectedFuel ] = useState<string>("");
+    const [createModalOpen, setCreateModalOpen ] = useState(false);
+    const [ myRefulingsModalOpen, setMyRefulingsModalOpen ] = useState(false);
+    const [contactModalOpen, setContactModalOpen ] = useState(false);
+    const [tankStatusModalOpen, setTankStatusModalOpen] = useState(false);
+  
+    const { 
+      formLoading,
+      onFinish,
+    } = useForm<FuelValues>({
+      resource: 'fuel',
+      action: "create",
+      redirect: false,
+      onMutationSuccess: () => {
+        setCreateModalOpen(false);
+      }
     });
-  };
-
+  
+    const { data: MyRefulingsData } = useList<FuelItem>({
+      resource: "fuel",
+      filters: [
+        {
+          field: "userid",
+          operator: "eq",
+          value: identityData?.id || "",
+        },
+      ],
+      queryOptions: {
+        enabled: !!identityData?.id,
+      },
+    });
+  
+    console.log(MyRefulingsData);
+  
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const formData = new FormData(e.currentTarget);
+      
+      onFinish({
+        aircraft: formData.get("aircraft") as string,
+        amount: Number(formData.get("amount")),
+        fuel: selectedFuel,
+        userid: identityData?.id || ""
+      });
+    };
+  
   const fuelOptions: FuelOption[] = [
-    { 
-      label: "Avgas", 
-      capacity: 3000,
-      remaining: 783.50,
-      price: 3.50,
-      value: "avgas", 
-      icon: <LocalGasStation fontSize="large" />, 
-      color: "warning",
-      remarks: "Aviation gasoline, commonly used in piston-engine aircraft."
-    },
-    { 
-      label: "E98", 
-      capacity: 3000,
-      remaining: 783.50,
-      price: 1.80,
-      value: "e95", 
-      icon: <Recycling fontSize="large" />, 
-      color: "success",
-      remarks: "Ethanol-blended gasoline, suitable for various engines."
-    },
-    { 
-      label: "Jet Fuel", 
-      capacity: 3000,
-      remaining: 783.50,
-      price: 2.00,
-      value: "jet-fuel", 
-      icon: <Flight fontSize="large" />, 
-      color: "primary",
-      remarks: "Jet fuel, ideal for turbine-engine aircraft."
-    },
-    { 
-      label: "Be95SE", 
-      capacity: 3000,
-      remaining: 783.50,
-      price: 1.60,
-      value: "small-aircraft", 
-      icon: <AirplanemodeActive fontSize="large" />, 
-      color: "secondary",
-      remarks: "Specialized petrol for small aircraft engines."
-    }
-  ];
+      { 
+        label: "Avgas", 
+        capacity: 3000,
+        remaining: 783.50,
+        price: 3.50,
+        value: "avgas", 
+        icon: <LocalGasStation fontSize="large" />, 
+        color: "warning",
+        remarks: "Aviation gasoline, commonly used in piston-engine aircraft."
+      },
+      { 
+        label: "E98", 
+        capacity: 3000,
+        remaining: 783.50,
+        price: 1.80,
+        value: "e95", 
+        icon: <Recycling fontSize="large" />, 
+        color: "success",
+        remarks: "Ethanol-blended gasoline, suitable for various engines."
+      },
+      { 
+        label: "Jet Fuel", 
+        capacity: 3000,
+        remaining: 783.50,
+        price: 2.00,
+        value: "jet-fuel", 
+        icon: <Flight fontSize="large" />, 
+        color: "primary",
+        remarks: "Jet fuel, ideal for turbine-engine aircraft."
+      },
+      { 
+        label: "Be95SE", 
+        capacity: 3000,
+        remaining: 783.50,
+        price: 1.60,
+        value: "small-aircraft", 
+        icon: <AirplanemodeActive fontSize="large" />, 
+        color: "secondary",
+        remarks: "Specialized petrol for small aircraft engines."
+      }
+    ];
 
+    
   return (
-    <Box>
+    <Box sx={{ minHeight: "100vh", py: 4 }}>
+
       {/* Create New Refueling Modal */}
       <Modal
         open={createModalOpen}
@@ -505,145 +530,160 @@ export default function FuelPage() {
       </Modal>
 
 
-      {/* Main Content */}
-      <Grid container spacing={3} justifyContent="center" sx={{ p: 4}}>
-        <Grid item xs={12} md={6}>
-          <GradientCard>
-            <CardContent>
-              <Typography variant="h4" gutterBottom sx={{ 
-                fontWeight: 700, 
-                textAlign: 'center',
-                textShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }}>
-                ✈️ Fuel Services
-              </Typography>
-              <Grid container spacing={2} sx={{ mt: 2 }}>
-                {fuelOptions.map((option) => (
-                  <Grid item xs={6} key={option.value}>
-                    <motion.div whileHover={{ scale: 1.03 }}>
-                      <HoverButton
-                        fullWidth
-                        variant="contained"
-                        color={option.color}
-                        onClick={() => {
-                          setSelectedFuel(option.value);
-                          setCreateModalOpen(true);
-                        }}
-                        startIcon={React.cloneElement(option.icon, { sx: { fontSize: 32 } })}
+      <Container maxWidth="lg">
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+          <Typography variant="h4" component="h1" fontWeight="bold">
+            Fuel Management System
+          </Typography>
+        </Box>
+
+        <Grid container spacing={3}>
+          {/*Fueling options */}
+          <Grid item xs={12} md={6} >
+            <Card elevation={2}>
+              <CardHeader
+                title={
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="h6">Report Fuel</Typography>
+                  </Box>
+                }
+                subheader="Fuel Reporting system"
+              />
+              <CardContent>
+                <Grid container spacing={2} sx={{ mt: 2 }}>
+                  {fuelOptions.map((option) => (
+                    <Grid item xs={6} key={option.value}>
+                      <motion.div whileHover={{ scale: 1.03 }}>
+                          <HoverButton
+                          fullWidth
+                          variant="outlined"
+                          color={option.color}
+                          onClick={() => {
+                              setSelectedFuel(option.value);
+                              setCreateModalOpen(true);
+                          }}
+                          startIcon={React.cloneElement(option.icon, { sx: { fontSize: 32 } })}
+                          sx={{
+                              height: 120,
+                              maxWidth: "100vw",
+                              borderRadius: 3,
+                              flexDirection: 'column',
+                              justifyContent: 'center',
+                              '& .MuiButton-startIcon': {
+                              margin: 0,
+                              mb: 1
+                              }
+                          }}
+                          >
+                          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                              {option.label}
+                          </Typography>
+                          <Typography variant="caption" sx={{ opacity: 0.9 }}>
+                              From €{option?.price}/L
+                          </Typography>
+                          </HoverButton>
+                      </motion.div>
+                      </Grid>
+                  ))}
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Misc */}
+          <Grid item xs={12} md={6}>
+            <Card elevation={2}>
+              <CardHeader
+                title={
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="h6">Fuel Management</Typography>
+                    <DollarIcon color="action" />
+                  </Box>
+                }
+                subheader="Your fuelings, etc"
+              />
+              <CardContent>
+                <Stack spacing={2} sx={{ mt: 3 }}>
+                    <motion.div whileHover={{ scale: 1.02 }}>
+                    <HoverButton
+                        variant="outlined"
+                        color="secondary"
+                        onClick={() => setMyRefulingsModalOpen(true)}
+                        startIcon={<EventAvailable sx={{ fontSize: 32 }} />}
                         sx={{
-                          height: 120,
-                          maxWidth: "100vw",
-                          borderRadius: 3,
-                          flexDirection: 'column',
-                          justifyContent: 'center',
-                          '& .MuiButton-startIcon': {
-                            margin: 0,
-                            mb: 1
-                          }
+                        height: 80,
+                        width: '100%',
+                        maxWidth: "100vw",
+                        alignSelf: 'center',
+                        borderRadius: 3,
+                        justifyContent: 'flex-start',
+                        px: 3,
+                        textTransform: 'none'
                         }}
-                      >
-                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                          {option.label}
-                        </Typography>
-                        <Typography variant="caption" sx={{ opacity: 0.9 }}>
-                          From €{option?.price}/L
-                        </Typography>
-                      </HoverButton>
+                    >
+                        <Box>
+                        <Typography variant="h6" fontWeight={600}>Refueling History</Typography>
+                        <Typography variant="caption">View past transactions</Typography>
+                        </Box>
+                    </HoverButton>
                     </motion.div>
-                  </Grid>
-                ))}
-              </Grid>
-            </CardContent>
-          </GradientCard>
+
+                    <motion.div whileHover={{ scale: 1.02 }}>
+                    <HoverButton
+                        variant="outlined"
+                        color="info"
+                        onClick={() => setTankStatusModalOpen(true)}
+                        startIcon={<Info sx={{ fontSize: 32 }} />}
+                        sx={{
+                        height: 80,
+                        width: '100%',
+                        maxWidth: "100vw",
+                        alignSelf: 'center',
+                        borderRadius: 3,
+                        justifyContent: 'flex-start',
+                        px: 3,
+                        textTransform: 'none'
+                        }}
+                    >
+                        <Box>
+                        <Typography variant="h6" fontWeight={600}>Fuel Availability</Typography>
+                        <Typography variant="caption">Check current stock</Typography>
+                        </Box>
+                    </HoverButton>
+                    </motion.div>
+
+                    <motion.div whileHover={{ scale: 1.02 }}>
+                    <HoverButton
+                        variant="outlined"
+                        color="success"
+                        onClick={() => setContactModalOpen(true)}
+                        startIcon={<Email sx={{ fontSize: 32 }} />}
+                        sx={{
+                        height: 80,
+                        width: '100%',
+                        maxWidth: "100vw",
+                        alignSelf: 'center',
+                        borderRadius: 3,
+                        justifyContent: 'flex-start',
+                        px: 3,
+                        textTransform: 'none'
+                        }}
+                    >
+                        <Box>
+                        <Typography variant="h6" fontWeight={600}>Support Center</Typography>
+                        <Typography variant="caption">24/7 assistance</Typography>
+                        </Box>
+                    </HoverButton>
+                    </motion.div>
+                </Stack>
+                </CardContent>
+
+            </Card>
+          </Grid>
         </Grid>
-
-        <Grid item xs={12} md={6}>
-          <GradientCard>
-            <CardContent>
-              <Typography variant="h4" gutterBottom sx={{ 
-                fontWeight: 700, 
-                textAlign: 'center',
-                textShadow: '0 2px 4px rgba(0,0,0,0.1)'
-              }}>
-                🛠️ Management
-              </Typography>
-              <Stack spacing={2} sx={{ mt: 3 }}>
-                <motion.div whileHover={{ scale: 1.02 }}>
-                  <HoverButton
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => setMyRefulingsModalOpen(true)}
-                    startIcon={<EventAvailable sx={{ fontSize: 32 }} />}
-                    sx={{
-                      height: 80,
-                      width: '100%',
-                      maxWidth: "100vw",
-                      alignSelf: 'center',
-                      borderRadius: 3,
-                      justifyContent: 'flex-start',
-                      px: 3,
-                      textTransform: 'none'
-                    }}
-                  >
-                    <Box>
-                      <Typography variant="h6" fontWeight={600}>Refueling History</Typography>
-                      <Typography variant="caption">View past transactions</Typography>
-                    </Box>
-                  </HoverButton>
-                </motion.div>
-
-                <motion.div whileHover={{ scale: 1.02 }}>
-                  <HoverButton
-                    variant="contained"
-                    color="info"
-                    onClick={() => setTankStatusModalOpen(true)}
-                    startIcon={<Info sx={{ fontSize: 32 }} />}
-                    sx={{
-                      height: 80,
-                      width: '100%',
-                      maxWidth: "100vw",
-                      alignSelf: 'center',
-                      borderRadius: 3,
-                      justifyContent: 'flex-start',
-                      px: 3,
-                      textTransform: 'none'
-                    }}
-                  >
-                    <Box>
-                      <Typography variant="h6" fontWeight={600}>Fuel Availability</Typography>
-                      <Typography variant="caption">Check current stock</Typography>
-                    </Box>
-                  </HoverButton>
-                </motion.div>
-
-                <motion.div whileHover={{ scale: 1.02 }}>
-                  <HoverButton
-                    variant="contained"
-                    color="success"
-                    onClick={() => setContactModalOpen(true)}
-                    startIcon={<Email sx={{ fontSize: 32 }} />}
-                    sx={{
-                      height: 80,
-                      width: '100%',
-                      maxWidth: "100vw",
-                      alignSelf: 'center',
-                      borderRadius: 3,
-                      justifyContent: 'flex-start',
-                      px: 3,
-                      textTransform: 'none'
-                    }}
-                  >
-                    <Box>
-                      <Typography variant="h6" fontWeight={600}>Support Center</Typography>
-                      <Typography variant="caption">24/7 assistance</Typography>
-                    </Box>
-                  </HoverButton>
-                </motion.div>
-              </Stack>
-            </CardContent>
-          </GradientCard>
-        </Grid>
-      </Grid>
+      </Container>
     </Box>
   );
-}
+};
+
+export default FuelPage;
