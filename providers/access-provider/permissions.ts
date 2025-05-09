@@ -40,9 +40,9 @@ p, member, flyk, (list)|(show)
 p, member, weather, (list)|(show)
 p, member, profiles, (list)|(show)
 p, member, profiles/*, edit
+p, member, lights, (list)|(show)
 
 p, admin, blog, (list)|(show)|(create)
-p, admin, lights, (list)|(show)
 p, admin, sms, (list)|(show)|(create)
 p, admin, contact, (list)|(show)
 p, admin, handbook, (list)|(show)

@@ -78,39 +78,6 @@ export default function HomePage() {
                 <Typography variant="subtitle1" sx={{ mb: 3, opacity: 0.9 }}>
                   {formattedDate}
                 </Typography>
-                <Stack direction="row" spacing={2} justifyContent="center">
-                  <Button 
-                    variant="contained" 
-                    color="secondary"
-                    startIcon={<Event />}
-                    sx={{
-                      borderRadius: 20,
-                      px: 3,
-                      textTransform: 'none',
-                      fontWeight: 500
-                    }}
-                  >
-                    Events
-                  </Button>
-                  <Button 
-                    variant="outlined" 
-                    sx={{ 
-                      color: 'white', 
-                      borderColor: 'rgba(255,255,255,0.5)',
-                      borderRadius: 20,
-                      px: 3,
-                      textTransform: 'none',
-                      fontWeight: 500,
-                      '&:hover': {
-                        borderColor: 'white',
-                        backgroundColor: 'rgba(255,255,255,0.1)'
-                      }
-                    }}
-                    startIcon={<Article />}
-                  >
-                    Posts
-                  </Button>
-                </Stack>
               </CardContent>
             </Card>
           </Stack>
