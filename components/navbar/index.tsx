@@ -38,16 +38,19 @@ import { CanAccess } from "@refinedev/core";
 import { useLogout } from '@refinedev/core';
 import { useTheme } from '@hooks/useTheme';
 
-const StyledFab = styled(Fab)({
-  position: 'absolute',
-  top: -30,
-  left: '50%',
-  transform: 'translateX(-50%)',
-  boxShadow: 'none',
-  '&:active': {
-    boxShadow: 'none',
+const StyledFab = styled(Fab)(({ theme }) => ({
+  position: 'relative',
+  top: '-20px',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  boxShadow: theme.shadows[6],
+  '&:hover': {
+    transform: 'scale(1.1)',
+    boxShadow: theme.shadows[8],
   },
-});
+  '&:active': {
+    transform: 'scale(0.95)',
+  },
+}));
 
 export default function MobileNav() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -80,23 +83,27 @@ export default function MobileNav() {
         bottom: 0, 
         left: 0, 
         right: 0, 
-        display: { xs: 'block'},
-        backdropFilter: 'blur(10px)',
+        backdropFilter: 'blur(20px)',
         backgroundColor: theme.palette.mode === 'dark' 
-          ? 'rgba(18, 18, 18, 0.8)' 
-          : 'rgba(255, 255, 255, 0.8)',
+          ? 'rgba(18, 18, 18, 0.95)' 
+          : 'rgba(255, 255, 255, 0.95)',
+        borderTop: `1px solid ${theme.palette.divider}`,
+        zIndex: 1200,
       }}
-      elevation={3}
+      elevation={0}
     >
       <BottomNavigation
         showLabels
         value={activeTab}
         sx={{
-          height: "10vh",
+          height: "64px",
           backgroundColor: 'transparent',
+          gap: 1,
+          px: 1,
         }}
       >
-        {mainNavResources.map((resource) => (
+        {/* Left Group */}
+        {mainNavResources.slice(0, 2).map((resource) => (
           <BottomNavigationAction
             key={resource.name}
             label={resource.meta.label}
@@ -104,40 +111,84 @@ export default function MobileNav() {
             component={Link}
             href={resource.list}
             sx={{
-              minWidth: 'auto',
-              color: pathname.startsWith(resource.list) // Handle child routes
+              minWidth: '72px',
+              maxWidth: '96px',
+              color: pathname.startsWith(resource.list) 
                 ? theme.palette.primary.main 
                 : theme.palette.text.secondary,
-              '& .MuiBottomNavigationAction-label': {
-                fontSize: '0.75rem',
-                transition: 'color 0.2s',
-                fontWeight: pathname.startsWith(resource.list) ? 600 : 400,
+              transition: 'color 0.2s, transform 0.2s',
+              '&:hover': {
+                color: theme.palette.primary.dark,
               },
+              '& .MuiBottomNavigationAction-label': {
+                fontSize: '0.7rem',
+                mt: 0.5,
+                fontWeight: pathname.startsWith(resource.list) ? 600 : 500,
+              },
+              '& .MuiSvgIcon-root': {
+                fontSize: '1.8rem',
+                mb: 0.5,
+              }
             }}
           />
         ))}
 
         {/* Floating Menu Button */}
-        <Box sx={{ position: 'relative', width: 40 }}>
+        <Box sx={{ 
+          position: 'relative',
+          mx: 'auto',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
           <StyledFab
             color="primary"
             aria-label="menu"
             onClick={handleMenuOpen}
             sx={{
-              backgroundColor: theme.palette.mode === 'dark' 
-                ? theme.palette.primary.dark 
-                : theme.palette.primary.main,
+              bgcolor: theme.palette.primary.main,
               '&:hover': {
-                backgroundColor: theme.palette.primary.dark,
-              }
+                bgcolor: theme.palette.primary.dark,
+              },
             }}
           >
-            <MenuIcon />
+            <MenuIcon sx={{ fontSize: '1.8rem' }} />
           </StyledFab>
         </Box>
+
+        {/* Right Group */}
+        {mainNavResources.slice(2).map((resource) => (
+          <BottomNavigationAction
+            key={resource.name}
+            label={resource.meta.label}
+            icon={resource.meta.icon}
+            component={Link}
+            href={resource.list}
+            sx={{
+              minWidth: '72px',
+              maxWidth: '96px',
+              color: pathname.startsWith(resource.list) 
+                ? theme.palette.primary.main 
+                : theme.palette.text.secondary,
+              transition: 'color 0.2s, transform 0.2s',
+              '&:hover': {
+                color: theme.palette.primary.dark,
+              },
+              '& .MuiBottomNavigationAction-label': {
+                fontSize: '0.7rem',
+                mt: 0.5,
+                fontWeight: pathname.startsWith(resource.list) ? 600 : 500,
+              },
+              '& .MuiSvgIcon-root': {
+                fontSize: '1.8rem',
+                mb: 0.5,
+              }
+            }}
+          />
+        ))}
       </BottomNavigation>
 
-      {/* Floating Menu */}
+      {/* Enhanced Floating Menu */}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -152,28 +203,48 @@ export default function MobileNav() {
         }}
         PaperProps={{
           sx: {
-            mt: -8,
-            borderRadius: 4,
+            mt: -7,
+            borderRadius: 3,
             boxShadow: theme.shadows[6],
-            minWidth: 200,
-            maxHeight: "60vh",
+            minWidth: 240,
+            maxWidth: '80vw',
+            maxHeight: "70vh",
             overflow: 'auto',
+            background: theme.palette.background.paper,
+            border: `1px solid ${theme.palette.divider}`,
+            '& .MuiDivider-root': {
+              my: 1,
+            }
           }
         }}
       >
         {menuResources.map((resource) => (
-          <CanAccess
-            key={resource.name}
-            resource={resource.name}
-            action='list'
-          >
+          <CanAccess key={resource.name} resource={resource.name} action='list'>
             <MenuItem 
               onClick={handleMenuClose}
               component={Link}
               href={resource.list}
+              sx={{
+                py: 1.5,
+                '&:hover': {
+                  bgcolor: theme.palette.action.hover,
+                }
+              }}
             >
-              {resource.meta.icon}
-              <Box sx={{ ml: 2 }}>{resource.meta.label}</Box>
+              {resource.meta.icon && React.cloneElement(resource.meta.icon, {
+                sx: {
+                  color: theme.palette.primary.main,
+                  fontSize: '1.4rem',
+                  mr: 2
+                }
+              })}
+              <Box sx={{ 
+                fontSize: '0.95rem',
+                fontWeight: 500,
+                color: theme.palette.text.primary
+              }}>
+                {resource.meta.label}
+              </Box>
             </MenuItem>
           </CanAccess>
         ))}
