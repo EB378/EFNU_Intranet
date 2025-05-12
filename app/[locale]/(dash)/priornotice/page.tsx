@@ -18,13 +18,14 @@ import { Edit, Delete, Flight } from "@mui/icons-material";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useTheme } from "@mui/material/styles";
-import { CreateButton } from "@refinedev/mui";
+import { CreateButton, DeleteButton, EditButton } from "@refinedev/mui";
 
 dayjs.extend(relativeTime);
 
 
 interface PNEntry {
   id: string;
+  uid: string;
   aircraft_reg: string;
   pic_name: string;
   dep_time: string;
@@ -39,7 +40,9 @@ interface PNEntry {
 
 const PNList = () => {
   const theme = useTheme();
-  const { data: identity } = useGetIdentity<{ id: string }>();
+  const { data: identityData } = useGetIdentity<{ id: string }>();
+
+  const UserID = identityData?.id as string;
   
   // Fetch all public PN entries
   const { tableQueryResult: { data: publicData, isLoading: publicLoading } } = useTable({
@@ -94,6 +97,24 @@ const PNList = () => {
                     <Typography variant="caption">
                       {pn.from_location} → {pn.to_location}
                     </Typography>
+                    {UserID === pn.uid && isTimePassed(pn.arr_time) === false && (
+                      <Box sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                      }}>
+                        <EditButton
+                          resource="priornotice"
+                          hideText
+                          recordItemId={pn.id}
+                        />
+                         <DeleteButton
+                          resource="priornotice"
+                          hideText
+                          recordItemId={pn.id}
+                        />
+                      </Box>
+                    )}
+
                   </div>
                   <Chip 
                     label={pn.status} 
@@ -118,3 +139,33 @@ const PNList = () => {
 };
 
 export default PNList;
+
+
+
+function isTimePassed(hhmm: string): boolean {
+  // Validate input format
+  if (!/^\d{4}$/.test(hhmm)) {
+    throw new Error('Invalid time format. Expected HHMM as a 4-digit string.');
+  }
+
+  // Extract hours and minutes
+  const hours = parseInt(hhmm.substring(0, 2), 10);
+  const minutes = parseInt(hhmm.substring(2, 4), 10);
+
+  // Validate time values
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+    throw new Error('Invalid time. Hours must be 00-23 and minutes 00-59.');
+  }
+
+  // Get current UTC date components
+  const now = new Date();
+  const currentYear = now.getUTCFullYear();
+  const currentMonth = now.getUTCMonth();
+  const currentDay = now.getUTCDate();
+
+  // Create input time in UTC
+  const inputDate = new Date(Date.UTC(currentYear, currentMonth, currentDay, hours, minutes));
+
+  // Compare with current time
+  return inputDate.getTime() < now.getTime();
+}

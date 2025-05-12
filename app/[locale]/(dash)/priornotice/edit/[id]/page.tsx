@@ -1,9 +1,9 @@
 "use client";
 
-// src/pages/pn-form/create.tsx
+// src/pages/pn-form/edit.tsx
 
 import { useForm } from '@refinedev/react-hook-form';
-import { Create } from '@refinedev/mui';
+import { Edit } from '@refinedev/mui';
 import {
   Box,
   Grid,
@@ -11,11 +11,10 @@ import {
   Checkbox,
   FormControlLabel,
   Typography,
-  Link,
-  Button,
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { useTheme } from '@hooks/useTheme';
+import { useParams } from "next/navigation";
 
 interface PNFormValues {
   from_location: string;
@@ -32,10 +31,13 @@ interface PNFormValues {
   ifr_arrival: boolean;
 }
 
-const PNCreate = () => {
+const PNEdit = () => {
+
+    const { id: pnID } = useParams<{ id: string }>();
+
   const theme = useTheme();
   const {
-    refineCore: { formLoading },
+    refineCore: { formLoading, queryResult },
     saveButtonProps,
     register,
     control,
@@ -43,25 +45,21 @@ const PNCreate = () => {
   } = useForm<PNFormValues>({
     refineCoreProps: {
       resource: 'pn_forms',
+      action: 'edit',
+      id: pnID,
       redirect: false,
     },
   });
 
-  // Ensure notify is properly imported or defined before usage
-    const notify = () => {
-      // Define the notify function logic here or import it from the appropriate module
-      console.log('Notification triggered');
-    };
-  
-    const notifyInstance = notify();
+  const defaultValues = queryResult?.data?.data;
+
   return (
-    <Create
+    <Edit
       isLoading={formLoading}
       saveButtonProps={saveButtonProps}
-      goBack
       title={
         <Typography variant="h4">
-          EFNU - Prior Notice Form (PN)
+          Edit Prior Notice (PN)
         </Typography>
       }
     >
@@ -79,11 +77,11 @@ const PNCreate = () => {
               {...register('from_location', {
                 required: 'Departure Location is required',
               })}
+              defaultValue={defaultValues?.from_location}
               error={!!errors.from_location}
               helperText={typeof errors.from_location?.message === 'string' ? errors.from_location.message : ''}
               fullWidth
               label="Departure Location"
-              placeholder="Enter location here"
             />
           </Grid>
 
@@ -91,14 +89,13 @@ const PNCreate = () => {
           <Grid item xs={12} md={6}>
             <TextField
               {...register('to_location', {
-                required: 'Arrival time is required',
-  
+                required: 'Arrival Location is required',
               })}
+              defaultValue={defaultValues?.to_location}
               error={!!errors.to_location}
               helperText={typeof errors.to_location?.message === 'string' ? errors.to_location.message : ''}
               fullWidth
               label="Arrival Location"
-              placeholder="Enter location here"
             />
           </Grid>
 
@@ -109,14 +106,14 @@ const PNCreate = () => {
                 required: 'Departure time is required',
                 pattern: {
                   value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
-                  message: 'Invalid time format (HHMM)',
+                  message: 'Invalid UTC time format (HHMM)',
                 },
               })}
+              defaultValue={defaultValues?.dep_time}
               error={!!errors.dep_time}
               helperText={typeof errors.dep_time?.message === 'string' ? errors.dep_time.message : ''}
               fullWidth
               label="DEP (UTC HHMM)"
-              placeholder="Enter dep time here"
             />
           </Grid>
 
@@ -127,14 +124,13 @@ const PNCreate = () => {
                 required: 'Arrival time is required',
                 pattern: {
                   value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
-                  message: 'Invalid time format (HHMM)',
+                  message: 'Invalid UTC time format (HHMM)',
                 },
               })}
+              defaultValue={defaultValues?.arr_time}
               error={!!errors.arr_time}
-              helperText={typeof errors.arr_time?.message === 'string' ? errors.arr_time.message : ''}
-              fullWidth
+              helperText={typeof errors.arr_time?.message === 'string' ? errors.arr_time.message : ''}              fullWidth
               label="ARR (UTC HHMM)"
-              placeholder="Enter arr time here"
             />
           </Grid>
 
@@ -142,10 +138,10 @@ const PNCreate = () => {
           <Grid item xs={12} md={6}>
             <TextField
               {...register('dep_date')}
+              defaultValue={defaultValues?.dep_date?.split('T')[0]}
               fullWidth
               type="date"
-              label="DEP Date (leave empty if today)"
-              defaultValue={new Date().toISOString().split('T')[0]}
+              label="DEP Date"
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
@@ -154,10 +150,10 @@ const PNCreate = () => {
           <Grid item xs={12} md={6}>
             <TextField
               {...register('arr_date')}
+              defaultValue={defaultValues?.arr_date?.split('T')[0]}
               fullWidth
               type="date"
-              defaultValue={new Date().toISOString().split('T')[0]}
-              label="ARR Date (leave empty if today)"
+              label="ARR Date"
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
@@ -168,6 +164,7 @@ const PNCreate = () => {
               {...register('aircraft_reg', {
                 required: 'Aircraft registration is required',
               })}
+              defaultValue={defaultValues?.aircraft_reg}
               error={!!errors.aircraft_reg}
               helperText={typeof errors.aircraft_reg?.message === 'string' ? errors.aircraft_reg.message : ''}
               fullWidth
@@ -184,6 +181,7 @@ const PNCreate = () => {
                 max: { value: 10000, message: 'MTOW too high' },
                 valueAsNumber: true,
               })}
+              defaultValue={defaultValues?.mtow}
               error={!!errors.mtow}
               helperText={typeof errors.mtow?.message === 'string' ? errors.mtow.message : ''}
               fullWidth
@@ -196,6 +194,7 @@ const PNCreate = () => {
           <Grid item xs={12} md={6}>
             <TextField
               {...register('pic_name', { required: 'PIC name is required' })}
+              defaultValue={defaultValues?.pic_name}
               error={!!errors.pic_name}
               helperText={typeof errors.pic_name?.message === 'string' ? errors.pic_name.message : ''}
               fullWidth
@@ -213,6 +212,7 @@ const PNCreate = () => {
                   message: 'Invalid phone number',
                 },
               })}
+              defaultValue={defaultValues?.phone}
               error={!!errors.phone}
               helperText={typeof errors.phone?.message === 'string' ? errors.phone.message : ''}
               fullWidth
@@ -230,6 +230,7 @@ const PNCreate = () => {
                   message: 'Invalid email address',
                 },
               })}
+              defaultValue={defaultValues?.email}
               error={!!errors.email}
               helperText={typeof errors.email?.message === 'string' ? errors.email.message : ''}
               fullWidth
@@ -242,10 +243,10 @@ const PNCreate = () => {
             <Controller
               control={control}
               name="ifr_arrival"
-              defaultValue={false}
+              defaultValue={defaultValues?.ifr_arrival || false}
               render={({ field }) => (
                 <FormControlLabel
-                  control={<Checkbox {...field} color="primary" />}
+                  control={<Checkbox {...field} checked={field.value} color="primary" />}
                   label="IFR Arrival"
                 />
               )}
@@ -253,8 +254,8 @@ const PNCreate = () => {
           </Grid>
         </Grid>
       </Box>
-    </Create>
+    </Edit>
   );
 };
 
-export default PNCreate;
+export default PNEdit;

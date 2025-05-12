@@ -13,6 +13,7 @@ import {
   CardHeader,
   Tooltip
 } from "@mui/material";
+import Link from "next/link";
 import {
   Edit,
   Add,
@@ -54,17 +55,58 @@ export default function HomePage() {
     }}>
       {/* Main Grid Layout */}
       <Grid container spacing={2}>
-        {/* Left Column - Profile and Verse */}
+        <Grid item xs={12}>
+          {/* Time Card */}
+          <Card sx={{ 
+            borderRadius: '12px',
+            boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
+          }}>
+            <CardContent>
+              <Box sx={{ 
+                display: "flex",
+                flexDirection: { xs: "coloumn", md: "row" },
+                alignItems: 'center', 
+                justifyContent: 'space-between',
+                mb: 1
+              }}>
+                <Typography variant="h6" sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center',
+                  fontWeight: 500
+                }}>
+                  <AccessTime sx={{ mr: 1, color: theme.palette.mode === 'dark' ? 'white' : 'primary.dark' }} />
+                  UTC Time
+                </Typography>
+              </Box>
+              <Box sx={{ 
+                textAlign: 'center',
+                py: 2
+              }}>
+                <Typography variant="h2" sx={{ 
+                  fontWeight: 300,
+                  letterSpacing: 1,
+                  color: theme.palette.mode === 'dark' ? 'white' : 'text.primary'
+                }}>
+                  {formattedTime}
+                </Typography>
+                <Typography variant="subtitle1" sx={{ 
+                  mt: 1,
+                  color: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary'
+                }}>
+                  {formattedDate}
+                </Typography>
+              </Box>
+            </CardContent>
+          </Card>
+        </Grid>
+        {/* Profile Coloumn */}
         <Grid item xs={12} md={6}>
           <Stack spacing={3}>
             {/* Profile Card */}
             <Card sx={{
-              background: theme.palette.mode === 'dark'
-                ? 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)'
-                : 'linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%)',
               color: 'white',
-              borderRadius: 2,
-              boxShadow: theme.shadows[6]
+              borderRadius: '12px',
+              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)'
             }}>
               <CardContent sx={{ textAlign: 'center' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
@@ -83,54 +125,36 @@ export default function HomePage() {
           </Stack>
         </Grid>
         
-        {/* Middle Column - Time and Quick Note */}
+        {/* Right Column */}
         <Grid item xs={12} md={6}>
-          <Stack spacing={3}>
-            {/* Time Card */}
-            <Card sx={{ 
-              borderRadius: 2,
-              boxShadow: theme.shadows[2],
-              background: theme.palette.mode === 'dark'
-                ? 'linear-gradient(135deg, #2c3e50 0%, #4ca1af 100%)'
-                : 'linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%)'
-            }}>
-              <CardContent>
-                <Box sx={{ 
+          <Card sx={{ 
+            borderRadius: '12px',
+            boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
+          }}>
+            <CardContent>
+              <Box sx={{ 
+                display: "flex",
+                flexDirection: { xs: "coloumn", md: "row" },
+                alignItems: 'center', 
+                justifyContent: 'space-between',
+                mb: 1
+              }}>
+                <Typography variant="h6" sx={{ 
                   display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'space-between',
-                  mb: 1
+                  alignItems: 'center',
+                  fontWeight: 500
                 }}>
-                  <Typography variant="h6" sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center',
-                    fontWeight: 500
-                  }}>
-                    <AccessTime sx={{ mr: 1, color: theme.palette.mode === 'dark' ? 'white' : 'primary.dark' }} />
-                    UTC Time
-                  </Typography>
-                </Box>
-                <Box sx={{ 
-                  textAlign: 'center',
-                  py: 2
-                }}>
-                  <Typography variant="h2" sx={{ 
-                    fontWeight: 300,
-                    letterSpacing: 1,
-                    color: theme.palette.mode === 'dark' ? 'white' : 'text.primary'
-                  }}>
-                    {formattedTime}
-                  </Typography>
-                  <Typography variant="subtitle1" sx={{ 
-                    mt: 1,
-                    color: theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.7)' : 'text.secondary'
-                  }}>
-                    {formattedDate}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Stack>
+                  <AccessTime sx={{ mr: 1, color: theme.palette.mode === 'dark' ? 'white' : 'primary.dark' }} />
+                  Quick Actions
+                </Typography>
+              </Box>
+              <Stack spacing={1}>
+                <Link href="/atis">
+                  <Button variant="outlined" color="secondary">Report Trouble at EFNU</Button>
+                </Link>
+              </Stack>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
     </Box>

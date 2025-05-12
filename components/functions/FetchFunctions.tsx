@@ -4,6 +4,8 @@ import React from "react";
 import { useList, useShow } from "@refinedev/core";
 import { Typography, Avatar } from "@mui/material";
 
+
+
 export function ProfileName({ profileId }: { profileId: string }) {
     const { queryResult } = useShow({
       resource: "profiles",

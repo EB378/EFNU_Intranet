@@ -30,6 +30,7 @@ g, admin, member
 p, guest, home, (list)|(show)
 p, guest, atis, (list)|(show)
 p, guest, priornotice, (list)|(show)|(create)
+p, guest, priornotice/*, (edit)|(delete) 
 p, guest, notams, (list)|(show)
 p, guest, info, (list)|(show)
 

@@ -9,6 +9,7 @@ import {
   People, LocalGasStation, Assignment, Flight, 
   Article, Warning, Circle, Add, Notifications
 } from '@mui/icons-material';
+import PNStatusDashboard from "@components/pn-status-dashboard";
 
 const pulse = keyframes`
   0% { transform: scale(0.95); opacity: 0.8; }
@@ -282,6 +283,12 @@ export default function AdminDashboard() {
                 </Grid>
               </Grid>
             </Box>
+          </StyledPaper>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <StyledPaper>
+            <PNStatusDashboard/>
           </StyledPaper>
         </Grid>
       </Grid>

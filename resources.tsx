@@ -39,9 +39,11 @@ const resources = [
       name: "priornotice",                          
       list: "/priornotice",
       create: "/priornotice/create",
+      edit: "/priornotice/edit/:id",
       meta: {
         label: "PN",
-        icon: <PriorityHigh />
+        icon: <PriorityHigh />,
+        canDelete: true
       }
   },
   {

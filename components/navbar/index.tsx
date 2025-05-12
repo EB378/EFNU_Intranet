@@ -8,10 +8,14 @@ import {
   Box,
   Divider,
   Fab,
-  Menu,
-  MenuItem,
   Paper,
+  Grid,
+  Typography,
+  Modal,
+  IconButton,
+  Slide,
   styled,
+  MenuItem 
 } from '@mui/material';
 import {
   ListAlt,  
@@ -29,7 +33,8 @@ import {
   AccountBox,
   EnhancedEncryption,
   Menu as MenuIcon,
-  Add
+  Add,
+  Close,
 } from '@mui/icons-material';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -53,7 +58,7 @@ const StyledFab = styled(Fab)(({ theme }) => ({
 }));
 
 export default function MobileNav() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
   const theme = useTheme();
   const pathname = usePathname();
   const { mutate: logout } = useLogout();
@@ -65,225 +70,227 @@ export default function MobileNav() {
 
   // Derive active tab from current path
   const activeTab = mainNavResources.findIndex(resource => 
-    pathname.startsWith(resource.list) // Use startsWith for child routes
+    pathname.startsWith(resource.list)
   );
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
+  const handleMenuToggle = () => {
+    setMenuOpen(!menuOpen);
   };
 
   return (
-    <Paper 
-      sx={{ 
-        position: 'fixed', 
-        bottom: 0, 
-        left: 0, 
-        right: 0, 
-        backdropFilter: 'blur(20px)',
-        backgroundColor: theme.palette.mode === 'dark' 
-          ? 'rgba(18, 18, 18, 0.95)' 
-          : 'rgba(255, 255, 255, 0.95)',
-        borderTop: `1px solid ${theme.palette.divider}`,
-        zIndex: 1200,
-      }}
-      elevation={0}
-    >
-      <BottomNavigation
-        showLabels
-        value={activeTab}
-        sx={{
-          height: "64px",
-          backgroundColor: 'transparent',
-          gap: 1,
-          px: 1,
-        }}
+    <>
+      {/* Navigation Modal */}
+      <Modal
+        open={menuOpen}
+        onClose={handleMenuToggle}
+        closeAfterTransition
       >
-        {/* Left Group */}
-        {mainNavResources.slice(0, 2).map((resource) => (
-          <BottomNavigationAction
-            key={resource.name}
-            label={resource.meta.label}
-            icon={resource.meta.icon}
-            component={Link}
-            href={resource.list}
-            sx={{
-              minWidth: '72px',
-              maxWidth: '96px',
-              color: pathname.startsWith(resource.list) 
-                ? theme.palette.primary.main 
-                : theme.palette.text.secondary,
-              transition: 'color 0.2s, transform 0.2s',
-              '&:hover': {
-                color: theme.palette.primary.dark,
-              },
-              '& .MuiBottomNavigationAction-label': {
-                fontSize: '0.7rem',
-                mt: 0.5,
-                fontWeight: pathname.startsWith(resource.list) ? 600 : 500,
-              },
-              '& .MuiSvgIcon-root': {
-                fontSize: '1.8rem',
-                mb: 0.5,
-              }
-            }}
-          />
-        ))}
+        <Slide in={menuOpen} direction="up">
+          <Box sx={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            bgcolor: 'background.paper',
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            p: 3,
+            maxWidth: "100vw",
+            margin: '0 auto'
+          }}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+              <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <MenuIcon color="primary" />
+                Navigation Menu
+              </Typography>
+              <IconButton onClick={handleMenuToggle}>
+                <Close />
+              </IconButton>
+            </Box>
+            <Grid container spacing={2}>
+              {menuResources.map((resource) => (
+                <CanAccess key={resource.name} resource={resource.name} action='list'>
+                  <MenuItem 
+                    onClick={handleMenuToggle}
+                    component={Link}
+                    href={resource.list}
+                    sx={{
+                      py: 1.5,
+                      '&:hover': {
+                        bgcolor: theme.palette.action.hover,
+                      }
+                    }}
+                  >
+                    {resource.meta.icon && React.cloneElement(resource.meta.icon, {
+                      sx: {
+                        color: theme.palette.primary.main,
+                        fontSize: '1.4rem',
+                        mr: 2
+                      }
+                    })}
+                    <Box sx={{ 
+                      fontSize: '0.95rem',
+                      fontWeight: 500,
+                      color: theme.palette.text.primary
+                    }}>
+                      {resource.meta.label}
+                    </Box>
+                  </MenuItem>
+                </CanAccess>
+              ))}
 
-        {/* Floating Menu Button */}
-        <Box sx={{ 
-          position: 'relative',
-          mx: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <StyledFab
-            color="primary"
-            aria-label="menu"
-            onClick={handleMenuOpen}
-            sx={{
-              bgcolor: theme.palette.primary.main,
-              '&:hover': {
-                bgcolor: theme.palette.primary.dark,
-              },
-            }}
-          >
-            <MenuIcon sx={{ fontSize: '1.8rem' }} />
-          </StyledFab>
-        </Box>
+              {menuResources.length > 0 && <Divider />}
 
-        {/* Right Group */}
-        {mainNavResources.slice(2).map((resource) => (
-          <BottomNavigationAction
-            key={resource.name}
-            label={resource.meta.label}
-            icon={resource.meta.icon}
-            component={Link}
-            href={resource.list}
-            sx={{
-              minWidth: '72px',
-              maxWidth: '96px',
-              color: pathname.startsWith(resource.list) 
-                ? theme.palette.primary.main 
-                : theme.palette.text.secondary,
-              transition: 'color 0.2s, transform 0.2s',
-              '&:hover': {
-                color: theme.palette.primary.dark,
-              },
-              '& .MuiBottomNavigationAction-label': {
-                fontSize: '0.7rem',
-                mt: 0.5,
-                fontWeight: pathname.startsWith(resource.list) ? 600 : 500,
-              },
-              '& .MuiSvgIcon-root': {
-                fontSize: '1.8rem',
-                mb: 0.5,
-              }
-            }}
-          />
-        ))}
-      </BottomNavigation>
+              {/* Add Create Actions */}
+              {resources
+                .filter(r => r.create)
+                .map((resource) => (
+                  <CanAccess
+                    key={`create-${resource.name}`}
+                    resource={resource.name}
+                    action='create'
+                  >
+                    <MenuItem
+                      onClick={handleMenuToggle}
+                      component={Link}
+                      href={resource.create!}
+                    >
+                      <Add sx={{ mr: 2 }} />
+                      Create {resource.meta.label}
+                    </MenuItem>
+                  </CanAccess>
+                ))}
 
-      {/* Enhanced Floating Menu */}
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
+              <Divider />
+
+              <MenuItem 
+                onClick={() => {
+                  logout();
+                  handleMenuToggle();
+                }}
+                sx={{ color: theme.palette.error.main }}
+              >
+                <AccountBox sx={{ mr: 2 }} />
+                Log Out
+              </MenuItem>
+            </Grid>
+          </Box>
+        </Slide>
+      </Modal>
+
+      <Paper 
+        sx={{ 
+          position: 'fixed', 
+          bottom: 0, 
+          left: 0, 
+          right: 0, 
+          backdropFilter: 'blur(20px)',
+          backgroundColor: theme.palette.mode === 'dark' 
+            ? 'rgba(18, 18, 18, 0.95)' 
+            : 'rgba(255, 255, 255, 0.95)',
+          borderTop: `1px solid ${theme.palette.divider}`,
+          zIndex: 1200,
         }}
-        transformOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        PaperProps={{
-          sx: {
-            mt: -7,
-            borderRadius: 3,
-            boxShadow: theme.shadows[6],
-            minWidth: 240,
-            maxWidth: '80vw',
-            maxHeight: "70vh",
-            overflow: 'auto',
-            background: theme.palette.background.paper,
-            border: `1px solid ${theme.palette.divider}`,
-            '& .MuiDivider-root': {
-              my: 1,
-            }
-          }
-        }}
+        elevation={0}
       >
-        {menuResources.map((resource) => (
-          <CanAccess key={resource.name} resource={resource.name} action='list'>
-            <MenuItem 
-              onClick={handleMenuClose}
+        <BottomNavigation
+          showLabels
+          value={activeTab}
+          sx={{
+            height: "64px",
+            backgroundColor: 'transparent',
+            gap: 1,
+            px: 1,
+          }}
+        >
+          {/* Left Group */}
+          {mainNavResources.slice(0, 2).map((resource) => (
+            <BottomNavigationAction
+              key={resource.name}
+              label={resource.meta.label}
+              icon={resource.meta.icon}
               component={Link}
               href={resource.list}
               sx={{
-                py: 1.5,
+                minWidth: '72px',
+                maxWidth: '96px',
+                color: pathname.startsWith(resource.list) 
+                  ? theme.palette.primary.main 
+                  : theme.palette.text.secondary,
+                transition: 'color 0.2s, transform 0.2s',
                 '&:hover': {
-                  bgcolor: theme.palette.action.hover,
+                  color: theme.palette.primary.dark,
+                },
+                '& .MuiBottomNavigationAction-label': {
+                  fontSize: '0.7rem',
+                  mt: 0.5,
+                  fontWeight: pathname.startsWith(resource.list) ? 600 : 500,
+                },
+                '& .MuiSvgIcon-root': {
+                  fontSize: '1.8rem',
+                  mb: 0.5,
                 }
               }}
-            >
-              {resource.meta.icon && React.cloneElement(resource.meta.icon, {
-                sx: {
-                  color: theme.palette.primary.main,
-                  fontSize: '1.4rem',
-                  mr: 2
-                }
-              })}
-              <Box sx={{ 
-                fontSize: '0.95rem',
-                fontWeight: 500,
-                color: theme.palette.text.primary
-              }}>
-                {resource.meta.label}
-              </Box>
-            </MenuItem>
-          </CanAccess>
-        ))}
-
-        {menuResources.length > 0 && <Divider />}
-
-        {/* Add Create Actions */}
-        {resources
-          .filter(r => r.create)
-          .map((resource) => (
-            <CanAccess
-              key={`create-${resource.name}`}
-              resource={resource.name}
-              action='create'
-            >
-              <MenuItem
-                onClick={handleMenuClose}
-                component={Link}
-                href={resource.create!}
-              >
-                <Add sx={{ mr: 2 }} />
-                Create {resource.meta.label}
-              </MenuItem>
-            </CanAccess>
+            />
           ))}
 
-        <Divider />
+          {/* Floating Menu Button */}
+          <Box 
+            sx={{ 
+              position: 'relative',
+              mx: 'auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <StyledFab
+              color="primary"
+              aria-label="menu"
+              onClick={handleMenuToggle}
+              sx={{
+                bgcolor: theme.palette.primary.main,
+                '&:hover': {
+                  bgcolor: theme.palette.primary.dark,
+                },
+              }}
+            >
+              <MenuIcon sx={{ fontSize: '1.8rem' }} />
+            </StyledFab>
+          </Box>
 
-        <MenuItem 
-          onClick={() => {
-            logout();
-            handleMenuClose();
-          }}
-          sx={{ color: theme.palette.error.main }}
-        >
-          <AccountBox sx={{ mr: 2 }} />
-          Log Out
-        </MenuItem>
-      </Menu>
-    </Paper>
+          {/* Right Group */}
+          {mainNavResources.slice(2).map((resource) => (
+            <BottomNavigationAction
+              key={resource.name}
+              label={resource.meta.label}
+              icon={resource.meta.icon}
+              component={Link}
+              href={resource.list}
+              sx={{
+                minWidth: '72px',
+                maxWidth: '96px',
+                color: pathname.startsWith(resource.list) 
+                  ? theme.palette.primary.main 
+                  : theme.palette.text.secondary,
+                transition: 'color 0.2s, transform 0.2s',
+                '&:hover': {
+                  color: theme.palette.primary.dark,
+                },
+                '& .MuiBottomNavigationAction-label': {
+                  fontSize: '0.7rem',
+                  mt: 0.5,
+                  fontWeight: pathname.startsWith(resource.list) ? 600 : 500,
+                },
+                '& .MuiSvgIcon-root': {
+                  fontSize: '1.8rem',
+                  mb: 0.5,
+                }
+              }}
+            />
+          ))}
+        </BottomNavigation>
+      </Paper>
+    </>
   );
 }
