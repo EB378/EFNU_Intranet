@@ -16,7 +16,21 @@ import {
 import { Flight } from "@mui/icons-material";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { PNEntry } from "../pages/pn-form/list";
+
+interface PNEntry {
+  id: string;
+  uid: string;
+  aircraft_reg: string;
+  pic_name: string;
+  dep_time: string;
+  arr_time: string;
+  dep_date: string;
+  from_location: string;
+  to_location: string;
+  status: string;
+  created_at: string;
+  // Add other fields as needed
+}
 
 const PNStatusDashboard = () => {
   const theme = useTheme();
