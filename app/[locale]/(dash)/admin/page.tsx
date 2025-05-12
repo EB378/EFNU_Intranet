@@ -9,7 +9,6 @@ import {
   People, LocalGasStation, Assignment, Flight, 
   Article, Warning, Circle, Add, Notifications
 } from '@mui/icons-material';
-import PNStatusDashboard from "@components/pn-status-dashboard";
 
 const pulse = keyframes`
   0% { transform: scale(0.95); opacity: 0.8; }
