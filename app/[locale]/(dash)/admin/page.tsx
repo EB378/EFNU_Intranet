@@ -288,7 +288,7 @@ export default function AdminDashboard() {
 
         <Grid item xs={12} md={6}>
           <StyledPaper>
-            <PNStatusDashboard/>
+            {/*<PNStatusDashboard/>*/}
           </StyledPaper>
         </Grid>
       </Grid>
