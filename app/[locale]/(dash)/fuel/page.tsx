@@ -115,7 +115,7 @@ interface FuelValues {
   amount: number;
   fuel: string;
   userid: string;
-  createdAt: string;
+  created_at: string;
 }
 interface FuelItem extends FuelValues {
   id: string;
@@ -348,7 +348,14 @@ const FuelPage = () => {
                       </Box>
                       <Box textAlign="right">
                         <Typography variant="body2" color="text.secondary">
-                          {item.createdAt}
+                          {new Date(item.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            timeZoneName: 'short'
+                          })}
                         </Typography>
                         <Typography variant="h6" color="primary">
                           {item.amount}L

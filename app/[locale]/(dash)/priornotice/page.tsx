@@ -31,6 +31,7 @@ interface PNEntry {
   dep_time: string;
   arr_time: string;
   dep_date: string;
+  arr_date: string;
   from_location: string;
   to_location: string;
   status: string;
@@ -47,6 +48,12 @@ const PNList = () => {
   // Fetch all public PN entries
   const { tableQueryResult: { data: publicData, isLoading: publicLoading } } = useTable({
     resource: "pn_forms",
+    sorters: {
+      permanent: [
+        { field: "dep_date", order: "asc" },
+        { field: "dep_time", order: "asc" },
+      ]
+    },
     filters: {
       permanent: [
         { field: "dep_date", operator: "gte", value: dayjs().format("YYYY-MM-DD") }
@@ -85,7 +92,7 @@ const PNList = () => {
             ))
           ) : (
             publicPNs.map((pn: PNEntry) => (
-              <Paper key={pn.id} sx={{ p: 2, mb: 2, borderLeft: `4px solid ${theme.palette.primary.main}`, color: theme.palette.text.primary }}>
+              <Paper key={pn.id} sx={{ p: 2, mb: 2, borderLeft: UserID === pn.uid ? `4px solid ${theme.palette.secondary.main}` : `4px solid ${theme.palette.primary.main}`, color: theme.palette.text.primary }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <div>
                     <Typography variant="subtitle1">
@@ -97,7 +104,7 @@ const PNList = () => {
                     <Typography variant="caption">
                       {pn.from_location} → {pn.to_location}
                     </Typography>
-                    {UserID === pn.uid && isTimePassed(pn.arr_time) === false && (
+                    {UserID === pn.uid && isDateTimePassed(pn.arr_date, pn.arr_time) === false && (
                       <Box sx={{
                         display: "flex",
                         flexDirection: "row",
@@ -142,30 +149,42 @@ export default PNList;
 
 
 
-function isTimePassed(hhmm: string): boolean {
-  // Validate input format
-  if (!/^\d{4}$/.test(hhmm)) {
+function isDateTimePassed(dateStr: string, timeStr: string): boolean {
+  // Validate date format (yyyy-mm-dd)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    throw new Error('Invalid date format. Expected yyyy-mm-dd.');
+  }
+
+  // Validate time format (HHMM)
+  if (!/^\d{4}$/.test(timeStr)) {
     throw new Error('Invalid time format. Expected HHMM as a 4-digit string.');
   }
 
-  // Extract hours and minutes
-  const hours = parseInt(hhmm.substring(0, 2), 10);
-  const minutes = parseInt(hhmm.substring(2, 4), 10);
+  // Parse date components
+  const [year, month, day] = dateStr.split('-').map(Number);
+  
+  // Parse time components
+  const hours = parseInt(timeStr.substring(0, 2), 10);
+  const minutes = parseInt(timeStr.substring(2, 4), 10);
+
+  // Validate date values
+  const dateObj = new Date(Date.UTC(year, month - 1, day));
+  if (
+    dateObj.getUTCFullYear() !== year ||
+    dateObj.getUTCMonth() !== month - 1 ||
+    dateObj.getUTCDate() !== day
+  ) {
+    throw new Error('Invalid date values.');
+  }
 
   // Validate time values
   if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
     throw new Error('Invalid time. Hours must be 00-23 and minutes 00-59.');
   }
 
-  // Get current UTC date components
-  const now = new Date();
-  const currentYear = now.getUTCFullYear();
-  const currentMonth = now.getUTCMonth();
-  const currentDay = now.getUTCDate();
+  // Create the full datetime in UTC
+  const inputDateTime = new Date(Date.UTC(year, month - 1, day, hours, minutes));
 
-  // Create input time in UTC
-  const inputDate = new Date(Date.UTC(currentYear, currentMonth, currentDay, hours, minutes));
-
-  // Compare with current time
-  return inputDate.getTime() < now.getTime();
+  // Compare with current UTC time
+  return inputDateTime.getTime() < Date.now();
 }

@@ -1,22 +1,21 @@
 "use client";
 
 import React from "react";
-import { useList, useShow } from "@refinedev/core";
-import { Typography, Avatar } from "@mui/material";
-
+import { useShow } from "@refinedev/core";
+import { Avatar } from "@mui/material";
 
 
 export function ProfileName({ profileId }: { profileId: string }) {
-    const { queryResult } = useShow({
-      resource: "profiles",
-      id: profileId,
-      meta: { select: "fullname" },
-      queryOptions: { enabled: !!profileId },
-    });
-    const profileData = queryResult?.data?.data as { fullname: string} | undefined;
-    if (!profileData) return <span>Loading...</span>;
-    return <span>{profileData.fullname}</span>;
-  }
+  const { queryResult } = useShow({
+    resource: "profiles",
+    id: profileId,
+    meta: { select: "fullname" },
+    queryOptions: { enabled: !!profileId },
+  });
+  const profileData = queryResult?.data?.data as { fullname: string} | undefined;
+  if (!profileData) return <span>Loading...</span>;
+  return <span>{profileData.fullname}</span>;
+}
 
 export function ProfileAvatar({ profileId }: { profileId: string }) {
   const { queryResult } = useShow({

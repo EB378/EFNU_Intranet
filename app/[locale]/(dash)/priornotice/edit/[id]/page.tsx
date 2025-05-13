@@ -24,6 +24,7 @@ interface PNFormValues {
   dep_date?: string;
   arr_date?: string;
   aircraft_reg: string;
+  status: string;
   mtow: number;
   pic_name: string;
   phone: string;
@@ -69,6 +70,15 @@ const PNEdit = () => {
             <Typography variant="body1" color={theme.palette.error.main}>
               All operations outside of 0900-2100 local time are forbidden
             </Typography>
+            <TextField
+              {...register('status', {
+                required: 'Departure Location is required',
+              })}
+              value={"pending"}
+              error={!!errors.status}
+              helperText={typeof errors.status?.message === 'string' ? errors.status.message : ''}
+              sx={{ display: "hidden" }}
+            />
           </Grid>
 
           {/* Departure Location */}

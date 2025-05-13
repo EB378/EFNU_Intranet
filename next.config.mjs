@@ -9,6 +9,9 @@ const nextConfig = {
   reactStrictMode: true,
   productionBrowserSourceMaps: false,
   compress: true,
+  images: {
+    domains: ['atis.efnu.fi'],
+  },
   async headers() {
     return [
       {
@@ -114,9 +117,6 @@ const pwaConfig = withPWA({
       },
     },
   ],
-  additionalManifestEntries: [
-    { url: '/offline', revision: Date.now().toString() },
-  ],
   buildExcludes: [
     /middleware-manifest\.json$/,
     /_middleware\.js$/,
@@ -136,4 +136,6 @@ const pwaConfig = withPWA({
   },
 });
 
-export default nextIntl(pwaConfig(nextConfig));
+export default nextIntl(
+  pwaConfig(nextConfig)
+);

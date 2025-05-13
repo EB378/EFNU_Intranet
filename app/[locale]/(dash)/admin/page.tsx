@@ -7,9 +7,10 @@ import {
 } from '@mui/material';
 import {
   People, LocalGasStation, Assignment, Flight, 
-  Article, Warning, Circle, Add, Notifications
+  Article, Circle, Add, Notifications
 } from '@mui/icons-material';
-
+import PNStatusDashboard from '@/components/PNStatusDashboard';
+import { useProfileStats } from '@/hooks/useProfileStats';
 const pulse = keyframes`
   0% { transform: scale(0.95); opacity: 0.8; }
   50% { transform: scale(1.05); opacity: 1; }
@@ -67,8 +68,12 @@ const StatusIndicator = ({ label, status }: { label: string; status: string }) =
 };
 
 export default function AdminDashboard() {
+  const { totalCount, todayCount } = useProfileStats();
+
+
+
   const metrics = {
-    totalUsers: 245,
+    totalUsers: totalCount,
     pendingApprovals: 12,
     fuelLevel: 65,
     activeFlights: 18,
@@ -105,7 +110,7 @@ export default function AdminDashboard() {
                   {metrics.totalUsers}
                 </Typography>
                 <Chip 
-                  label="+3 new today" 
+                  label={`+ ${todayCount} new today` }
                   color="success"
                   size="small"
                   sx={{ alignSelf: 'flex-start', borderRadius: 1 }}
@@ -240,25 +245,7 @@ export default function AdminDashboard() {
         {/* Recent Activity */}
         <Grid item xs={12} md={6}>
           <StyledPaper>
-            <Box p={3}>
-              <Typography variant="h6" fontWeight="700" mb={2}>Recent Activity</Typography>
-              <Stack spacing={2}>
-                {[
-                  { text: 'User johndoe updated fuel logs', time: '2m ago', color: '#4caf50' },
-                  { text: 'New blog post draft created', time: '1h ago', color: '#2196f3' },
-                  { text: 'Flight AA245 approved', time: '4h ago', color: '#ff9800' },
-                  { text: 'System maintenance completed', time: '1d ago', color: '#9c27b0' }
-                ].map((activity, index) => (
-                  <Box key={index} display="flex" gap={2} alignItems="center" p={1.5} bgcolor="action.hover" borderRadius={2}>
-                    <Box width={8} height={8} borderRadius="50%" bgcolor={activity.color} />
-                    <Box flex={1}>
-                      <Typography variant="body2">{activity.text}</Typography>
-                      <Typography variant="caption" color="text.secondary">{activity.time}</Typography>
-                    </Box>
-                  </Box>
-                ))}
-              </Stack>
-            </Box>
+            <PNStatusDashboard/>
           </StyledPaper>
         </Grid>
 
@@ -282,12 +269,6 @@ export default function AdminDashboard() {
                 </Grid>
               </Grid>
             </Box>
-          </StyledPaper>
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <StyledPaper>
-            {/*<PNStatusDashboard/>*/}
           </StyledPaper>
         </Grid>
       </Grid>

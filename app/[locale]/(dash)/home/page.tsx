@@ -114,7 +114,7 @@ export default function HomePage() {
                     profileId={identityData?.id || ""} 
                   />
                 </Box>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
+                <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, color: theme.palette.primary.contrastText }}>
                   Welcome back, <br/><ProfileName profileId={identityData?.id || ""} />
                 </Typography>
                 <Typography variant="subtitle1" sx={{ mb: 3, opacity: 0.9 }}>

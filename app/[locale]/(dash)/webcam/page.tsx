@@ -2,6 +2,7 @@
 
 import { Box, Grid, Typography, Paper, Skeleton } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import NextImage from "next/image";
 
 const WebCamPage: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -15,7 +16,6 @@ const WebCamPage: React.FC = () => {
     handleResize();
     window.addEventListener("resize", handleResize);
     
-    // Simulate loading
     const timer = setTimeout(() => setLoading(false), 1500);
     
     return () => {
@@ -64,12 +64,12 @@ const WebCamPage: React.FC = () => {
         {webcams.map((webcam, index) => (
           <Grid item xs={12} sm={6} md={4} key={index}>
             <Paper elevation={3} sx={{
-              borderRadius: 2,
+              borderRadius: '12px',
+              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
               overflow: "hidden",
               transition: "transform 0.3s ease-in-out",
               '&:hover': {
-                transform: "translateY(-4px)",
-                boxShadow: 6
+                transform: "translateY(-4px)"
               }
             }}>
               <Box sx={{
@@ -87,15 +87,12 @@ const WebCamPage: React.FC = () => {
                     sx={{ position: "absolute", top: 0, left: 0 }}
                   />
                 ) : (
-                  <img
+                  <NextImage
                     src={webcam.url}
                     alt={webcam.label}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "100%",
                       objectFit: "cover"
                     }}
                   />

@@ -88,7 +88,7 @@ export default function MobileNav() {
         <Slide in={menuOpen} direction="up">
           <Box sx={{
             position: 'absolute',
-            bottom: 0,
+            bottom: "10vh", 
             left: 0,
             right: 0,
             bgcolor: 'background.paper',
@@ -96,6 +96,8 @@ export default function MobileNav() {
             borderTopRightRadius: 16,
             p: 3,
             maxWidth: "100vw",
+            maxHeight: "50vh",
+            overflowY: 'auto',
             margin: '0 auto'
           }}>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
@@ -107,7 +109,7 @@ export default function MobileNav() {
                 <Close />
               </IconButton>
             </Box>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} flexDirection="column" justifyContent="space-between">
               {menuResources.map((resource) => (
                 <CanAccess key={resource.name} resource={resource.name} action='list'>
                   <MenuItem 
@@ -189,7 +191,7 @@ export default function MobileNav() {
             ? 'rgba(18, 18, 18, 0.95)' 
             : 'rgba(255, 255, 255, 0.95)',
           borderTop: `1px solid ${theme.palette.divider}`,
-          zIndex: 1200,
+          zIndex: 2200,
         }}
         elevation={0}
       >
@@ -213,7 +215,6 @@ export default function MobileNav() {
               href={resource.list}
               sx={{
                 minWidth: '72px',
-                maxWidth: '96px',
                 color: pathname.startsWith(resource.list) 
                   ? theme.palette.primary.main 
                   : theme.palette.text.secondary,
@@ -269,7 +270,6 @@ export default function MobileNav() {
               href={resource.list}
               sx={{
                 minWidth: '72px',
-                maxWidth: '96px',
                 color: pathname.startsWith(resource.list) 
                   ? theme.palette.primary.main 
                   : theme.palette.text.secondary,
