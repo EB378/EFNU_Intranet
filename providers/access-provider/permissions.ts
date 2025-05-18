@@ -22,7 +22,7 @@ export const adapter = new StringAdapter(`
 //Roles
 g, member, guest
 g, admin, member
-
+g, pilot, member
 
 
 //Policies  
@@ -43,6 +43,7 @@ p, member, profiles, (list)|(show)
 p, member, profiles/*, edit
 p, member, lights, (list)|(show)
 
+p, member, profiles/*, delete
 p, admin, blog, (list)|(show)|(create)
 p, admin, sms, (list)|(show)|(create)
 p, admin, contact, (list)|(show)

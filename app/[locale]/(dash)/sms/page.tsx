@@ -15,10 +15,11 @@ import {
   Select,
   MenuItem
 } from "@mui/material";
-import { Search, FilterList, Warning, CheckCircle, Assignment } from "@mui/icons-material";
-import { useState, useEffect } from "react";
+import { Search, Warning, CheckCircle, Assignment } from "@mui/icons-material";
+import React, { useState, useEffect } from "react";
 import NextLink from "next/link";
 import { formatDistanceToNow } from "date-fns";
+import { CreateButton } from "@refinedev/mui";
 
 const ReportListPage = () => {
   const [loading, setLoading] = useState(true);
@@ -116,6 +117,7 @@ const ReportListPage = () => {
         <Typography variant="body1" color="text.secondary">
           Active safety reports and incident tracking
         </Typography>
+        <CreateButton/>
       </Box>
 
       {/* Filter Bar */}

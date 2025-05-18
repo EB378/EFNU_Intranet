@@ -1,140 +1,290 @@
 "use client";
 
-import React from "react";
-import { useTranslations } from "next-intl";
+import {
+  Box,
+  Typography,
+  Paper,
+  Grid,
+  TextField,
+  Button,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControl,
+  FormHelperText,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  IconButton,
+  Avatar,
+  Chip
+} from "@mui/material";
+import { useForm, Controller } from "react-hook-form";
+import { Add, Warning, Close, CloudUpload, LocationOn } from "@mui/icons-material";
+import React, { useState } from "react";
 import NextLink from "next/link";
-import { motion } from "framer-motion";
-import { Box, Container, Typography, Button } from "@mui/material";
-import { useTheme } from "@hooks/useTheme";
+import { useRouter } from "next/navigation";
 
-const AboutBusinessPage: React.FC = () => {
-  const t = useTranslations("AboutBusiness");
-  const theme = useTheme()
+type FormValues = {
+  title: string;
+  category: string;
+  severity: string;
+  description: string;
+  location: string;
+  reportedBy: string;
+  attachments: File[];
+};
 
-  // Animation variants for Framer Motion.
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 50 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+const ReportCreatePage = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
+  const { 
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<FormValues>({
+    defaultValues: {
+      title: '',
+      category: '',
+      severity: 'medium',
+      description: '',
+      location: '',
+      reportedBy: 'John D.', // Default to current user
+      attachments: []
+    }
+  });
+
+  const onSubmit = async (data: FormValues) => {
+    setLoading(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('Report created:', data);
+      setSuccess(true);
+      reset();
+      setFiles([]);
+      setTimeout(() => router.push('/safety-reports'), 2000);
+    } catch (error) {
+      console.error('Submission error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const slideInRight = {
-    hidden: { opacity: 0, x: 100 },
-    visible: { opacity: 1, x: 0, transition: { duration: 1 } },
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const newFiles = Array.from(event.target.files);
+      setFiles(prev => [...prev, ...newFiles]);
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
-      <Typography variant="h3" sx={{ fontWeight: "bold", mb: 4, textAlign: "center" }}>
-        {t("title")}
-      </Typography>
-
-      <Box component={motion.div} initial="hidden" whileInView="visible" variants={fadeInUp}>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("introParagraph1")}
+    <Box sx={{ 
+      p: { xs: 2, md: 4 },
+      maxWidth: 1200,
+      margin: '0 auto'
+    }}>
+      {/* Header */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom sx={{ 
+          fontWeight: 700,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2
+        }}>
+          <Avatar sx={{ bgcolor: 'primary.main' }}>
+            <Add />
+          </Avatar>
+          New Safety Report
         </Typography>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("introParagraph2")}
+        <Typography variant="body1" color="text.secondary">
+          Report safety concerns or incidents using this form
         </Typography>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("harshRealityTitle")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("harshRealityText")}
-        </Typography>
-        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem1")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem2")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem3")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("harshRealityListItem4")}
-          </Typography>
-          <Typography component="li" variant="body1">
-            {t("harshRealityListItem5")}
-          </Typography>
-        </Box>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("benefitsTitle")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2, lineHeight: 1.6 }}>
-          {t("benefitsIntro")}
-        </Typography>
-        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem1")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem2")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem3")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("benefitListItem4")}
-          </Typography>
-          <Typography component="li" variant="body1">
-            {t("benefitListItem5")}
-          </Typography>
-        </Box>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("packageTitle")}
-        </Typography>
-        <Box component="ul" sx={{ ml: 3, mb: 2 }}>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem1")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem2")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem3")}
-          </Typography>
-          <Typography component="li" variant="body1" sx={{ mb: 1 }}>
-            {t("packageListItem4")}
-          </Typography>
-          <Typography component="li" variant="body1">
-            {t("packageListItem5")}
-          </Typography>
-        </Box>
-
-        <Typography variant="h5" sx={{ fontWeight: "bold", mt: 4, mb: 2 }}>
-          {t("finalCallTitle")}
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 4, lineHeight: 1.6 }}>
-          {t("finalCallText")}
-        </Typography>
-
-        <NextLink href={`https://calendly.com/ekoforge`} passHref>
-          <motion.div whileHover={{ scale: 1.05 }}>
-            <Button
-              variant="contained"
-              size="large"
-              sx={{
-                px: 4,
-                py: 1.5,
-                background: `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                color: theme.palette.common.white,
-                fontWeight: "bold",
-                borderRadius: 50,
-                boxShadow: 3,
-                textTransform: "none",
-              }}
-            >
-              {t("bookNow")}
-            </Button>
-          </motion.div>
-        </NextLink>
       </Box>
-    </Container>
+
+      <Paper sx={{ p: 3 }}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Grid container spacing={3}>
+            {/* Title */}
+            <Grid item xs={12}>
+              <Controller
+                name="title"
+                control={control}
+                rules={{ required: 'Title is required' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Report Title"
+                    fullWidth
+                    error={!!errors.title}
+                    helperText={errors.title?.message}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                )}
+              />
+            </Grid>
+
+            {/* Category & Severity */}
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth error={!!errors.category}>
+                <InputLabel>Category</InputLabel>
+                <Controller
+                  name="category"
+                  control={control}
+                  rules={{ required: 'Category is required' }}
+                  render={({ field }) => (
+                    <Select {...field} label="Category">
+                      <MenuItem value="Fire Safety">Fire Safety</MenuItem>
+                      <MenuItem value="Electrical">Electrical</MenuItem>
+                      <MenuItem value="Housekeeping">Housekeeping</MenuItem>
+                      <MenuItem value="Equipment">Equipment</MenuItem>
+                      <MenuItem value="Structural">Structural</MenuItem>
+                    </Select>
+                  )}
+                />
+                <FormHelperText>{errors.category?.message}</FormHelperText>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <FormControl fullWidth>
+                <InputLabel>Severity Level</InputLabel>
+                <Controller
+                  name="severity"
+                  control={control}
+                  render={({ field }) => (
+                    <Select {...field} label="Severity Level">
+                      <MenuItem value="low">Low</MenuItem>
+                      <MenuItem value="medium">Medium</MenuItem>
+                      <MenuItem value="high">High</MenuItem>
+                      <MenuItem value="critical">Critical</MenuItem>
+                    </Select>
+                  )}
+                />
+              </FormControl>
+            </Grid>
+
+            {/* Description */}
+            <Grid item xs={12}>
+              <Controller
+                name="description"
+                control={control}
+                rules={{ required: 'Description is required' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Detailed Description"
+                    multiline
+                    rows={4}
+                    fullWidth
+                    error={!!errors.description}
+                    helperText={errors.description?.message}
+                    InputLabelProps={{ shrink: true }}
+                  />
+                )}
+              />
+            </Grid>
+
+            {/* Location */}
+            <Grid item xs={12} md={6}>
+              <Controller
+                name="location"
+                control={control}
+                rules={{ required: 'Location is required' }}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Location"
+                    fullWidth
+                    error={!!errors.location}
+                    helperText={errors.location?.message}
+                    InputProps={{
+                      startAdornment: (
+                        <LocationOn color="action" sx={{ mr: 1 }} />
+                      )
+                    }}
+                  />
+                )}
+              />
+            </Grid>
+
+            {/* Attachments */}
+            <Grid item xs={12}>
+              <input
+                accept="image/*,.pdf,.doc,.docx"
+                style={{ display: 'none' }}
+                id="file-upload"
+                type="file"
+                multiple
+                onChange={handleFileUpload}
+              />
+              <label htmlFor="file-upload">
+                <Button
+                  component="span"
+                  variant="outlined"
+                  startIcon={<CloudUpload />}
+                  sx={{ mb: 2 }}
+                >
+                  Upload Evidence
+                </Button>
+              </label>
+
+              {files.map((file, index) => (
+                <Chip
+                  key={index}
+                  label={file.name}
+                  onDelete={() => removeFile(index)}
+                  sx={{ m: 0.5 }}
+                  deleteIcon={<Close />}
+                />
+              ))}
+            </Grid>
+
+            {/* Submit Area */}
+            <Grid item xs={12}>
+              <Box sx={{ 
+                display: 'flex', 
+                gap: 2,
+                justifyContent: 'flex-end',
+                borderTop: 1,
+                borderColor: 'divider',
+                pt: 3
+              }}>
+                <NextLink href="/safety-reports" passHref>
+                  <Button variant="outlined">Cancel</Button>
+                </NextLink>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  startIcon={loading ? <CircularProgress size={20} /> : <Warning />}
+                  disabled={loading}
+                >
+                  {loading ? 'Submitting...' : 'Create Report'}
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
+        </form>
+      </Paper>
+
+      <Snackbar
+        open={success}
+        autoHideDuration={3000}
+        onClose={() => setSuccess(false)}
+      >
+        <Alert severity="success" sx={{ width: '100%' }}>
+          Report submitted successfully!
+        </Alert>
+      </Snackbar>
+    </Box>
   );
 };
 
-export default AboutBusinessPage;
+export default ReportCreatePage;

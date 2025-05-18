@@ -182,7 +182,8 @@ export default function MobileNav() {
 
       <Paper 
         sx={{ 
-          position: 'fixed', 
+          position: 'fixed',
+          minHeight: '10vh', 
           bottom: 0, 
           left: 0, 
           right: 0, 

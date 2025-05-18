@@ -58,7 +58,10 @@ const PNList = () => {
       permanent: [
         { field: "dep_date", operator: "gte", value: dayjs().format("YYYY-MM-DD") }
       ]
-    }
+    },
+    pagination: {
+      pageSize: 10,
+    },
   });
 
   const publicPNs = (publicData?.data as PNEntry[]) || [];

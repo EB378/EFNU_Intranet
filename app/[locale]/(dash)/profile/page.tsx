@@ -42,6 +42,7 @@ import { FuelData } from "@components/FuelProfile";
 const Profile = () => {
   const { open } = useNotification();
   const { data: identityData } = useGetIdentity<{ id: string }>();
+  const uid = identityData?.id as string;
   const { mode, setMode } = useContext(ColorModeContext);
 
   const [fuelData] = useState([
@@ -80,8 +81,6 @@ const Profile = () => {
       description: "Your complete fee statement has been downloaded.",
     });
   };
-
-  const uid = identityData?.id as string;
   
 
   return (

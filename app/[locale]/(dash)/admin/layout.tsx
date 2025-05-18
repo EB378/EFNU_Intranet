@@ -9,7 +9,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
   return (
       <>
         <AdminNav />
-        <Box sx={{ mb: 10 }}>
+        <Box >
           { children }
         </Box>
       </>

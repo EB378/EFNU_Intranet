@@ -151,6 +151,12 @@ const FuelPage = () => {
           value: identityData?.id || "",
         },
       ],
+      sorters: [
+        {
+          field: "created_at",
+          order: "desc",
+        },
+      ],
       queryOptions: {
         enabled: !!identityData?.id,
       },
@@ -379,7 +385,7 @@ const FuelPage = () => {
         <Slide in={contactModalOpen} direction="up">
           <Box sx={{
             position: 'absolute',
-            bottom: 0,
+            bottom: "10vh", 
             left: 0,
             right: 0,
             bgcolor: 'background.paper',
