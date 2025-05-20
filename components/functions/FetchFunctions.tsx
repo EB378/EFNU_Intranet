@@ -45,12 +45,12 @@ export function ProfilePhone({ profileId }: { profileId: string }) {
   const { queryResult } = useShow({
     resource: "profiles",
     id: profileId,
-    meta: { select: "phone_number" },
+    meta: { select: "phone" },
     queryOptions: { enabled: !!profileId },
   });
-  const profileData = queryResult?.data?.data as { phone_number: string; } | undefined;
+  const profileData = queryResult?.data?.data as { phone: string; } | undefined;
   if (!profileData) return <span>Loading...</span>;
-  return <span>{profileData.phone_number}</span>;
+  return <span>{profileData.phone}</span>;
 }
 
 export function ProfileEmail({ profileId }: { profileId: string }) {
@@ -76,21 +76,8 @@ export function ProfileRatings({ profileId }: { profileId: string }) {
   if (!profileData) return <span>Loading...</span>;
   return <span>{profileData.ratings}</span>;
 }
-  
-export function InstructorName({ instructorId }: { instructorId: string }) {
-  const { queryResult } = useShow({
-    resource: "instructors",
-    id: instructorId,
-    meta: { select: "profile_id" },
-    queryOptions: { enabled: !!instructorId },
-  });
-  const data = queryResult?.data?.data as { profile_id: string } | undefined;
-  if (!data) return <span>Loading...</span>;
-  return <ProfileName profileId={data.profile_id} />;
-}
 
-export // Component to display a resource's name based on id.
-function ResourceName({ id }: { id: string }) {
+export function ResourceName({ id }: { id: string }) {
   const { queryResult } = useShow({
     resource: "resources",
     id: id,

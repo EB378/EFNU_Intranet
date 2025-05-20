@@ -1,26 +1,22 @@
-import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import adminClient from '@/utils/supabase/admin'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const serviceRoleKey = process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY!
+
 
 export async function POST(request: Request) {
   try {
     const { email, password, user_metadata } = await request.json()
 
-    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false
-      }
-    })
-
     // 1. Create auth user
-    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.createUser({
+    const { data: authUser, error: authError } = await adminClient.auth.admin.createUser({
       email,
       password: password || undefined,
       email_confirm: true,
       user_metadata: {
+        ...user_metadata,
+        created_by_admin: true
+      },
+      app_metadata: {
         ...user_metadata,
         created_by_admin: true
       }
@@ -31,7 +27,7 @@ export async function POST(request: Request) {
     }
 
     // 2. Create profile record
-    const { error: profileError } = await supabaseAdmin
+    const { error: profileError } = await adminClient
       .from('profiles')
       .insert({
         id: authUser.user.id,

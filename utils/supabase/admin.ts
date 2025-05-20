@@ -10,4 +10,4 @@ const adminClient = createClient(supabaseUrl, serviceRoleKey, {
   }
 })
 
-export const adminAuthClient = adminClient.auth.admin
+export default adminClient;

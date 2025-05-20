@@ -30,10 +30,6 @@ import {
   AttachMoney as DollarIcon, 
   Description as FileTextIcon 
 } from "@mui/icons-material";
-import { BarChart } from "recharts";
-import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { ProfileAvatar, ProfileLicence, ProfileName, ProfileEmail, ProfilePhone, ProfileRatings } from "@components/functions/FetchFunctions"
-import { EditButton } from "@refinedev/mui";
 import {
   Modal,
   Backdrop,
@@ -61,6 +57,7 @@ import {
 } from "@mui/icons-material";
 import { List, SaveButton } from "@refinedev/mui";
 import { motion } from "framer-motion";
+import { FuelOption, FuelingValues, FuelItem } from '@/types/index';
 
 // Styled components
 const GradientCard = styled(Card)(({ theme }) => ({
@@ -99,28 +96,6 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-type FuelOption = {
-  label: string;
-  capacity?: number;
-  remaining?: number;
-  price?: number;
-  value: string;
-  icon: JSX.Element;
-  color: "primary" | "secondary" | "success" | "error" | "warning" | "info";
-  remarks?: string;
-};
-
-interface FuelValues {
-  aircraft: string;
-  amount: number;
-  fuel: string;
-  userid: string;
-  created_at: string;
-}
-interface FuelItem extends FuelValues {
-  id: string;
-  createdAt: string;
-}
 const FuelPage = () => {
     const { data: identityData } = useGetIdentity<{ id: string }>();
     const theme = useTheme();
@@ -133,8 +108,8 @@ const FuelPage = () => {
     const { 
       formLoading,
       onFinish,
-    } = useForm<FuelValues>({
-      resource: 'fuel',
+    } = useForm<FuelingValues>({
+      resource: 'fuelings',
       action: "create",
       redirect: false,
       onMutationSuccess: () => {
@@ -143,7 +118,7 @@ const FuelPage = () => {
     });
   
     const { data: MyRefulingsData } = useList<FuelItem>({
-      resource: "fuel",
+      resource: "fuelings",
       filters: [
         {
           field: "userid",
@@ -185,7 +160,9 @@ const FuelPage = () => {
         value: "avgas", 
         icon: <LocalGasStation fontSize="large" />, 
         color: "warning",
-        remarks: "Aviation gasoline, commonly used in piston-engine aircraft."
+        remarks: "Aviation gasoline, commonly used in piston-engine aircraft.",
+        updated_at: "2023-10-01T12:00:00Z",
+        created_at: "2023-10-01T12:00:00Z"
       },
       { 
         label: "E98", 
@@ -195,7 +172,9 @@ const FuelPage = () => {
         value: "e95", 
         icon: <Recycling fontSize="large" />, 
         color: "success",
-        remarks: "Ethanol-blended gasoline, suitable for various engines."
+        remarks: "Ethanol-blended gasoline, suitable for various engines.",
+        updated_at: "2023-10-01T12:00:00Z",
+        created_at: "2023-10-01T12:00:00Z"
       },
       { 
         label: "Jet Fuel", 
@@ -205,7 +184,9 @@ const FuelPage = () => {
         value: "jet-fuel", 
         icon: <Flight fontSize="large" />, 
         color: "primary",
-        remarks: "Jet fuel, ideal for turbine-engine aircraft."
+        remarks: "Jet fuel, ideal for turbine-engine aircraft.",
+        updated_at: "2023-10-01T12:00:00Z",
+        created_at: "2023-10-01T12:00:00Z"
       },
       { 
         label: "Be95SE", 
@@ -215,7 +196,9 @@ const FuelPage = () => {
         value: "small-aircraft", 
         icon: <AirplanemodeActive fontSize="large" />, 
         color: "secondary",
-        remarks: "Specialized petrol for small aircraft engines."
+        remarks: "Specialized petrol for small aircraft engines.",
+        updated_at: "2023-10-01T12:00:00Z",
+        created_at: "2023-10-01T12:00:00Z"
       }
     ];
 

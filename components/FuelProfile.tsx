@@ -6,33 +6,13 @@ import { Grid, Card, CardHeader, Box, Typography, CardContent, Tooltip, CardActi
 import { useList } from "@refinedev/core";
 import { FuelIcon } from "lucide-react";
 import { ResponsiveContainer, CartesianGrid, XAxis, YAxis, Bar } from "recharts";
+import { FuelItem, FuelStats, ProcessedFuelData } from '@/types/index';
 
-interface FuelValues {
-    aircraft: string;
-    amount: number;
-    fuel: string;
-    userid: string;
-    createdAt: string;
-  }
-  interface FuelItem extends FuelValues {
-    id: string;
-    createdAt: string;
-  }
-  interface ProcessedFuelData {
-    month: string;
-    amount: number;
-  }
-  
-  interface FuelStats {
-    totalYTD: number;
-    currentMonth: number;
-    monthlyAverage: number;
-  }
   
   export function FuelData({ profileId }: { profileId: string }) {
     const { data: MyRefuelingsData } = useList<FuelItem>({
-      resource: "fuel",
-      filters: [{ field: "userid", operator: "eq", value: profileId }],
+      resource: "fuelings",
+      filters: [{ field: "uid", operator: "eq", value: profileId }],
       queryOptions: { enabled: !!profileId },
     });
     console.log("MyRefuelingsData:", MyRefuelingsData);
@@ -54,7 +34,7 @@ interface FuelValues {
       }).reverse();
   
       MyRefuelingsData.data.forEach((entry) => {
-        const entryDate = new Date(entry.createdAt);
+        const entryDate = new Date(entry.created_at);
         if (entryDate >= sixMonthsAgo) {
           const monthKey = entryDate.toLocaleString('default', { month: 'short' }) + ' ' + entryDate.getFullYear().toString().slice(-2);
           monthlyTotals[monthKey] = (monthlyTotals[monthKey] || 0) + entry.amount;

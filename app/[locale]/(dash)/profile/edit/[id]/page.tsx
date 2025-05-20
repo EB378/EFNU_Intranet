@@ -21,16 +21,8 @@ import { Controller } from "react-hook-form";
 import { useGetIdentity } from "@refinedev/core";
 import { useTranslations } from "next-intl";
 import { useTheme } from "@hooks/useTheme";
+import { ProfileData } from '@/types/index';
 
-interface ProfileData {
-  id: string;
-  fullname: string;
-  email: string;
-  phone_number: string;
-  avatar_url?: string;
-  ratings: string[];
-  licence?: string;
-}
 
 export default function ProfileEditPage() {
   const t = useTranslations("Profile");
@@ -163,10 +155,10 @@ export default function ProfileEditPage() {
                 <TextField
                   fullWidth
                   label="Phone Number"
-                  defaultValue={profile.phone_number}
-                  {...register("phone_number")}
-                  error={!!errors.phone_number}
-                  helperText={errors.phone_number?.message?.toString()}
+                  defaultValue={profile.phone}
+                  {...register("phone")}
+                  error={!!errors.phone}
+                  helperText={errors.phone?.message?.toString()}
                 />
               </Grid>
               <Grid item xs={12}>

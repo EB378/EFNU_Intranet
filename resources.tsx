@@ -112,7 +112,7 @@ const resources = [
       }
   },
   {
-      name: "profiles",                          
+      name: "profile",                          
       list: "/profile",
       edit: "/profile/edit/:id",
       meta: {
@@ -168,6 +168,17 @@ const resources = [
       label: "Admin",
       icon: <ListAlt />,
       CanAccess: {resource: "admin", action: "list"}
+    }
+  },
+  {
+    name: "users",                          
+    list: "/admin/users",
+    edit: "admin/users/edit/:id",
+    meta: {
+      label: "Users",
+      icon: <ListAlt />,
+      hide: true,
+      parent: "admin"
     }
   }
 ];

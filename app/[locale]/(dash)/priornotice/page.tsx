@@ -19,25 +19,10 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useTheme } from "@mui/material/styles";
 import { CreateButton, DeleteButton, EditButton } from "@refinedev/mui";
+import { PriorNotice } from "@/types/index";
 
 dayjs.extend(relativeTime);
 
-
-interface PNEntry {
-  id: string;
-  uid: string;
-  aircraft_reg: string;
-  pic_name: string;
-  dep_time: string;
-  arr_time: string;
-  dep_date: string;
-  arr_date: string;
-  from_location: string;
-  to_location: string;
-  status: string;
-  created_at: string;
-  // Add other fields as needed
-}
 
 const PNList = () => {
   const theme = useTheme();
@@ -64,7 +49,7 @@ const PNList = () => {
     },
   });
 
-  const publicPNs = (publicData?.data as PNEntry[]) || [];
+  const publicPNs = (publicData?.data as PriorNotice[]) || [];
   const getStatusColor = (status: string) => {
     switch(status.toLowerCase()) {
       case 'approved': return 'success';
@@ -94,7 +79,7 @@ const PNList = () => {
               <Skeleton key={i} variant="rectangular" height={100} sx={{ mb: 2 }} />
             ))
           ) : (
-            publicPNs.map((pn: PNEntry) => (
+            publicPNs.map((pn: PriorNotice) => (
               <Paper key={pn.id} sx={{ p: 2, mb: 2, borderLeft: UserID === pn.uid ? `4px solid ${theme.palette.secondary.main}` : `4px solid ${theme.palette.primary.main}`, color: theme.palette.text.primary }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <div>

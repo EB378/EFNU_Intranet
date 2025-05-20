@@ -16,21 +16,7 @@ import {
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { useTheme } from '@hooks/useTheme';
-
-interface PNFormValues {
-  from_location: string;
-  to_location: string;
-  dep_time: string;
-  arr_time: string;
-  dep_date?: string;
-  arr_date?: string;
-  aircraft_reg: string;
-  mtow: number;
-  pic_name: string;
-  phone: string;
-  email: string;
-  ifr_arrival: boolean;
-}
+import { PriorNotice } from "@/types/index";
 
 const PNCreate = () => {
   const theme = useTheme();
@@ -40,7 +26,7 @@ const PNCreate = () => {
     register,
     control,
     formState: { errors },
-  } = useForm<PNFormValues>({
+  } = useForm<PriorNotice>({
     refineCoreProps: {
       resource: 'pn_forms',
       redirect: false,

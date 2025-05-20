@@ -16,24 +16,15 @@ import { useForm } from '@refinedev/react-hook-form';
 import { Controller } from 'react-hook-form';
 import { useState } from 'react';
 import { ProfileAvatar } from '@components/functions/FetchFunctions';
+import { ProfileData } from '@/types/index';
 
-interface IMember {
-  id: string;  
-  fullname: string;
-  email: string;
-  licence: string;
-  status: 'active' | 'pending' | 'suspended';
-  created_at: string;
-  role: 'admin' | 'pilot' | 'staff';
-}
-
-const statusColors: Record<IMember['status'], 'success' | 'warning' | 'error'> = {
+const statusColors: Record<ProfileData['status'], 'success' | 'warning' | 'error'> = {
   active: 'success',
   pending: 'warning',
   suspended: 'error'
 };
 
-const roleColors: Record<IMember['role'], 'primary' | 'info' | 'secondary'> = {
+const roleColors: Record<ProfileData['role'], 'primary' | 'info' | 'secondary'> = {
   admin: 'primary',
   pilot: 'info',
   staff: 'secondary'
@@ -47,7 +38,7 @@ export default function MembersList() {
 
   const {
     tableQueryResult,
-  } = useTable<IMember>({
+  } = useTable<ProfileData>({
     resource: 'profiles',
     filters: {
       permanent: [
@@ -62,8 +53,6 @@ export default function MembersList() {
       ]
     }
   });
-
-  const { mutate: deleteMember } = useDelete();
 
   const handleDelete = async (id: string) => {
     try {
@@ -123,7 +112,7 @@ export default function MembersList() {
 
   const onFinish = async (data: any) => {
     try {
-      const response = await fetch('/api/create-users', {  // Updated endpoint
+      const response = await fetch('/api/users/create-users', {  // Updated endpoint
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -166,7 +155,7 @@ export default function MembersList() {
 
   return (
     <Box sx={{ p: 4 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
+      <Box display="flex" sx={{ flexDirection: { xs: "column", sm: "row" } }} justifyContent="space-between" alignItems="center" mb={4}>
         <Typography variant="h4" fontWeight="bold">
           Member Management
         </Typography>
@@ -295,14 +284,14 @@ export default function MembersList() {
                   <Stack direction="row" spacing={1} justifyContent="flex-end">
                     <EditButton 
                       hideText 
-                      resource="profiles" 
+                      resource="users" 
                       recordItemId={member.id} 
                       size="small"
                       sx={{ minWidth: 32 }}
                     />
                     <DeleteButton 
                       hideText 
-                      resource="profiles" 
+                      resource="users" 
                       recordItemId={member.id} 
                       size="small"
                       sx={{ minWidth: 32 }}

@@ -38,6 +38,7 @@ import { ProfileAvatar, ProfileLicence, ProfileName, ProfileEmail, ProfilePhone,
 import { EditButton } from "@refinedev/mui";
 import { ColorModeContext } from "@contexts/color-mode";
 import { FuelData } from "@components/FuelProfile";
+import { PasswordChangeBlock } from "@components/PasswordChange";
 
 const Profile = () => {
   const { open } = useNotification();
@@ -88,7 +89,7 @@ const Profile = () => {
       <Container maxWidth="lg">
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
           <Typography variant="h4" component="h1" fontWeight="bold">
-            Pilot Profile
+          Profile
           </Typography>
         </Box>
 
@@ -139,7 +140,7 @@ const Profile = () => {
               </CardContent>
               <CardActions>
                 <EditButton
-                  resource="profiles"
+                  resource="profile"
                   recordItemId={uid}
                   fullWidth
                   LinkComponent={"button"}
@@ -239,6 +240,7 @@ const Profile = () => {
 
           {/* Fuel Totals Card */}
           <FuelData profileId={uid} />
+          <PasswordChangeBlock />
         </Grid>
       </Container>
     </Box>

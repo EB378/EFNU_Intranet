@@ -2,7 +2,11 @@
 'use client';
 import { useEffect } from 'react';
 import { useGetIdentity } from "@refinedev/core";
-import { AuthIdentity } from "@/types/miscTypes";
+
+interface AuthIdentity {
+  id: string;
+  role?: string;
+}
 
 export function SessionSync() {
   const { data: identity } = useGetIdentity<AuthIdentity>();

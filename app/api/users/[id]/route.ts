@@ -1,5 +1,6 @@
 // app/api/users/[id]/route.ts
-import { createClient } from '@supabase/supabase-js'
+import adminClient from '@/utils/supabase/admin'
+
 import { NextResponse } from 'next/server'
 
 export async function DELETE(
@@ -7,22 +8,17 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   console.log('DELETE request received for user:', params.id) // Debug log
-  
-  const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  )
+
 
   try {
     // 1. Delete auth user first
-    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(params.id)
+    const { error: authError } = await adminClient.auth.admin.deleteUser(params.id)
     console.log('Auth delete result:', authError ? authError : 'Success') // Debug log
     
     if (authError) throw authError
 
     // 2. Delete profile record
-    const { error: profileError } = await supabaseAdmin
+    const { error: profileError } = await adminClient
       .from('profiles')
       .delete()
       .eq('id', params.id)

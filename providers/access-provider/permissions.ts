@@ -39,11 +39,12 @@ p, member, fuel, (list)|(show)|(create)
 p, member, webcam, (list)|(show)
 p, member, flyk, (list)|(show)
 p, member, weather, (list)|(show)
-p, member, profiles, (list)|(show)
-p, member, profiles/*, edit
+p, member, profile, (list)|(show)
+p, member, profile/*, edit
 p, member, lights, (list)|(show)
 
-p, member, profiles/*, delete
+
+p, admin, users/*, (edit)|(delete)
 p, admin, blog, (list)|(show)|(create)
 p, admin, sms, (list)|(show)|(create)
 p, admin, contact, (list)|(show)

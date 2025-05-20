@@ -64,7 +64,7 @@ export default function MobileNav() {
   const { mutate: logout } = useLogout();
 
   // Define main navigation items
-  const mainNavItems = ['home', 'atis', 'fuel', 'profiles'];
+  const mainNavItems = ['home', 'atis', 'fuel', 'profile'];
   const mainNavResources = resources.filter(resource => mainNavItems.includes(resource.name));
   const menuResources = resources.filter(resource => !mainNavItems.includes(resource.name));
 
@@ -120,7 +120,8 @@ export default function MobileNav() {
                       py: 1.5,
                       '&:hover': {
                         bgcolor: theme.palette.action.hover,
-                      }
+                      },
+                      width: '100%',
                     }}
                   >
                     {resource.meta.icon && React.cloneElement(resource.meta.icon, {
