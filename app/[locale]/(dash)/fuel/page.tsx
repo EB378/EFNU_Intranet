@@ -55,9 +55,10 @@ import {
   Place,
   Info
 } from "@mui/icons-material";
-import { List, SaveButton } from "@refinedev/mui";
+import { SaveButton } from "@refinedev/mui";
 import { motion } from "framer-motion";
-import { FuelOption, FuelingValues, FuelItem } from '@/types/index';
+import { FuelOptionType, FuelOption, FuelingValues, FuelItem } from '@/types/index';
+import { FuelName } from "@/components/functions/FetchFunctions";
 
 // Styled components
 const GradientCard = styled(Card)(({ theme }) => ({
@@ -104,6 +105,10 @@ const FuelPage = () => {
     const [ myRefulingsModalOpen, setMyRefulingsModalOpen ] = useState(false);
     const [contactModalOpen, setContactModalOpen ] = useState(false);
     const [tankStatusModalOpen, setTankStatusModalOpen] = useState(false);
+
+    const { data: fuels } = useList<FuelOption>({
+        resource: "fuels",
+      });
   
     const { 
       formLoading,
@@ -121,7 +126,7 @@ const FuelPage = () => {
       resource: "fuelings",
       filters: [
         {
-          field: "userid",
+          field: "uid",
           operator: "eq",
           value: identityData?.id || "",
         },
@@ -147,11 +152,11 @@ const FuelPage = () => {
         aircraft: formData.get("aircraft") as string,
         amount: Number(formData.get("amount")),
         fuel: selectedFuel,
-        userid: identityData?.id || ""
+        uid: identityData?.id || ""
       });
     };
   
-  const fuelOptions: FuelOption[] = [
+ const fuelOptions: FuelOptionType[] = [
       { 
         label: "Avgas", 
         capacity: 3000,
@@ -329,7 +334,7 @@ const FuelPage = () => {
                           {item.aircraft}
                         </Typography>
                         <Chip 
-                          label={item.fuel.toUpperCase()} 
+                          label={<FuelName id={item.fuel} />}
                           size="small" 
                           color="primary"
                           sx={{ borderRadius: 2, mt: 0.5 }}
@@ -474,14 +479,14 @@ const FuelPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {fuelOptions.map((fuel, index) => (
+                        {fuels?.data?.map((fuel: FuelOption, index: number) => (
                         <tr 
                           key={fuel.label}
                           style={{ 
-                            backgroundColor: index % 2 === 0 
-                              ? theme.palette.action.hover 
-                              : 'transparent',
-                            borderBottom: `1px solid ${theme.palette.divider}`
+                          backgroundColor: index % 2 === 0 
+                            ? theme.palette.action.hover 
+                            : 'transparent',
+                          borderBottom: `1px solid ${theme.palette.divider}`
                           }}
                         >
                           <td style={{ padding: '12px', fontWeight: 600 }}>{fuel.label}</td>
@@ -489,7 +494,7 @@ const FuelPage = () => {
                           <td style={{ padding: '12px', textAlign: 'right' }}>{fuel?.remaining?.toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
                           <td style={{ padding: '12px', textAlign: 'right' }}>€{fuel?.price?.toFixed(2)}</td>
                         </tr>
-                      ))}
+                        ))}
                     </tbody>
                   </table>
                 </Box>
@@ -506,7 +511,7 @@ const FuelPage = () => {
                     ? 'rgba(255, 255, 255, 0.05)' 
                     : 'rgba(0, 0, 0, 0.03)'
                 }}>
-                  {fuelOptions.map((item) => (
+                  {fuels?.data?.map((item: FuelOption) => (
                     <Box key={item.value} sx={{ mb: 1.5 }}>
                       <Typography variant="caption" sx={{ 
                         display: 'block', 
@@ -550,39 +555,38 @@ const FuelPage = () => {
               />
               <CardContent>
                 <Grid container spacing={2} sx={{ mt: 2 }}>
-                  {fuelOptions.map((option) => (
+                  {fuels?.data?.map((option: FuelOption) => (
                     <Grid item xs={6} key={option.value}>
                       <motion.div whileHover={{ scale: 1.03 }}>
-                          <HoverButton
+                        <HoverButton
                           fullWidth
                           variant="outlined"
-                          color={option.color}
+                          color={option.color as "primary" | "secondary" | "info" | "success" | "warning" | "error"}
                           onClick={() => {
-                              setSelectedFuel(option.value);
-                              setCreateModalOpen(true);
+                            setSelectedFuel(option.id);
+                            setCreateModalOpen(true);
                           }}
-                          startIcon={React.cloneElement(option.icon, { sx: { fontSize: 32 } })}
                           sx={{
-                              height: 120,
-                              maxWidth: "100vw",
-                              borderRadius: 3,
-                              flexDirection: 'column',
-                              justifyContent: 'center',
-                              '& .MuiButton-startIcon': {
+                            height: 120,
+                            maxWidth: "100vw",
+                            borderRadius: 3,
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            '& .MuiButton-startIcon': {
                               margin: 0,
                               mb: 1
-                              }
+                            }
                           }}
-                          >
+                        >
                           <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                              {option.label}
+                            {option.label}
                           </Typography>
                           <Typography variant="caption" sx={{ opacity: 0.9 }}>
-                              From €{option?.price}/L
+                            From €{option?.price}/L
                           </Typography>
-                          </HoverButton>
+                        </HoverButton>
                       </motion.div>
-                      </Grid>
+                    </Grid>
                   ))}
                 </Grid>
               </CardContent>

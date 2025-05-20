@@ -156,6 +156,7 @@ const Profile = () => {
                 </IconButton>
               </CardActions>
             </Card>
+            <PasswordChangeBlock />
           </Grid>
 
           {/* Fee Status Card */}
@@ -240,7 +241,6 @@ const Profile = () => {
 
           {/* Fuel Totals Card */}
           <FuelData profileId={uid} />
-          <PasswordChangeBlock />
         </Grid>
       </Container>
     </Box>

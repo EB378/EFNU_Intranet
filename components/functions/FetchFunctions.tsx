@@ -77,14 +77,14 @@ export function ProfileRatings({ profileId }: { profileId: string }) {
   return <span>{profileData.ratings}</span>;
 }
 
-export function ResourceName({ id }: { id: string }) {
+export function FuelName({ id }: { id: string }) {
   const { queryResult } = useShow({
-    resource: "resources",
+    resource: "fuels",
     id: id,
-    meta: { select: "name" },
+    meta: { select: "label" },
     queryOptions: { enabled: !!id },
   });
-  const resourceData = queryResult?.data?.data as { name: string } | undefined;
+  const resourceData = queryResult?.data?.data as { label: string } | undefined;
   if (!resourceData) return <span>Loading...</span>;
-  return <span>{resourceData.name}</span>;
+  return <span>{resourceData.label}</span>;
 }

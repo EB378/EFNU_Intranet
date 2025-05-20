@@ -17,7 +17,20 @@ export interface ProfileData {
 
 // Fuels
 
-export type FuelOption = {
+export interface FuelOption {
+  id: string;
+  label: string;
+  capacity?: number;
+  remaining?: number;
+  price?: number;
+  value: string;
+  color: "primary" | "secondary" | "success" | "error" | "warning" | "info";
+  remarks?: string;
+  updated_at: string;
+  created_at: string;
+}
+
+export type FuelOptionType = {
   label: string;
   capacity?: number;
   remaining?: number;
