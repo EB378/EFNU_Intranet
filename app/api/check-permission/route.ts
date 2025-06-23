@@ -12,7 +12,6 @@ export async function POST(req: Request) {
       action,
       id
     });
-    console.log('Permission check:', { role, resource, action, id, can });
     return NextResponse.json({ allowed: can }); // Ensure consistent property name
   } catch (error) {
     console.error('Permission check error:', error);

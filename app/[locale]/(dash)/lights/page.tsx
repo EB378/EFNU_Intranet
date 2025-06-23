@@ -3,8 +3,10 @@
 import { Typography, Box } from "@mui/material";
 import { motion } from "framer-motion";
 import React from "react";
+import { useTranslations } from "next-intl";
 
 const RWYLightsPage: React.FC = () => {
+  const t = useTranslations("RunwayLights");
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -34,7 +36,7 @@ const RWYLightsPage: React.FC = () => {
           zIndex: 10,
         }}
       >
-        Runway Lights Guide
+        {t("Runway Lights Guide")}
       </Typography>
 
       {/* Main Content Container */}

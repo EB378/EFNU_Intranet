@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { Flight } from "@mui/icons-material";
 import dayjs from "dayjs";
-import { useState } from "react";
+import React, { useState } from "react";
 import { PriorNotice } from "@/types/index";
 
 const PNStatusDashboard = () => {
@@ -32,9 +32,9 @@ const PNStatusDashboard = () => {
     filters: {
       permanent: [
         {
-          field: "dep_date",
-          operator: "gte",
-          value: dayjs().startOf("day").toISOString(),
+          field: "arr_date",
+          operator: "eq",
+          value: dayjs().utc().format('YYYY-MM-DD'),
         },
       ],
     },
@@ -96,7 +96,7 @@ const PNStatusDashboard = () => {
               }}>
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="body1" fontWeight="500">
-                    {pn.aircraft_reg} • {dayjs(pn.dep_date).format('DD MMM YY')}
+                    {pn.aircraft_reg} • {dayjs(pn.arr_date).format('DD MMM YY')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {pn.from_location} → {pn.to_location}

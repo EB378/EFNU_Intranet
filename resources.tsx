@@ -14,8 +14,11 @@ import {
   Lightbulb,
   AccountBox,
   EnhancedEncryption,
-
-
+  ContactSupport,
+  AdminPanelSettings,
+  Gavel,
+  MenuBook,
+  CalendarMonth
   } from "@mui/icons-material";
     
 const resources = [
@@ -65,7 +68,6 @@ const resources = [
   {
       name: "blog",                          
       list: "/blog",
-      create: "/blog/create",
       meta: {
         label: "Blog",
         icon: <Book />
@@ -124,6 +126,8 @@ const resources = [
       name: "sms",                          
       list: "/sms",
       create: "/sms/create",
+      show: "/sms/show/:id",
+      edit: "/sms/edit/:id",
       meta: {
         label: "SMS",
         icon: <EnhancedEncryption />
@@ -134,7 +138,7 @@ const resources = [
       list: "/contact",
       meta: {
         label: "Contact",
-        icon: <ListAlt />
+        icon: <ContactSupport />
       }
   },
   {
@@ -142,7 +146,7 @@ const resources = [
       list: "/handbook",
       meta: {
         label:  "Handbook",
-        icon: <ListAlt />
+        icon: <MenuBook />
       }
   },
   {
@@ -150,15 +154,23 @@ const resources = [
       list: "/rules",
       meta: {
         label: "Rules",
+        icon: <Gavel />
+      }
+  },
+  {
+      name: "fees",                          
+      list: "/fees",
+      meta: {
+        label: "Fees",
         icon: <ListAlt />
       }
   },
   {
-      name: "pic",                          
-      list: "/pic",
+      name: "calendar",                          
+      list: "/calendar",
       meta: {
-        label: "PIC Fees",
-        icon: <ListAlt />
+        label: "Calendar",
+        icon: <CalendarMonth />
       }
   },
   {
@@ -166,7 +178,7 @@ const resources = [
     list: "/admin",
     meta: {
       label: "Admin",
-      icon: <ListAlt />,
+      icon: <AdminPanelSettings />,
       CanAccess: {resource: "admin", action: "list"}
     }
   },
@@ -175,7 +187,47 @@ const resources = [
     list: "/admin/users",
     edit: "admin/users/edit/:id",
     meta: {
-      label: "Users",
+      label: "users",
+      icon: <ListAlt />,
+      hide: true,
+      parent: "admin"
+    }
+  },
+  {
+    name: "fuelings",                          
+    list: "/admin/fuel",
+    meta: {
+      label: "fuel",
+      icon: <ListAlt />,
+      hide: true,
+      parent: "admin"
+    }
+  },
+  {
+    name: "incidents",                          
+    list: "/admin/incidents",
+    meta: {
+      label: "incidents",
+      icon: <ListAlt />,
+      hide: true,
+      parent: "admin"
+    }
+  },
+  {
+    name: "alerts",                          
+    list: "/admin/alert",
+    meta: {
+      label: "alerts",
+      icon: <ListAlt />,
+      hide: true,
+      parent: "admin"
+    }
+  },
+  {
+    name: "flights",                          
+    list: "/admin/flights",
+    meta: {
+      label: "flights",
       icon: <ListAlt />,
       hide: true,
       parent: "admin"

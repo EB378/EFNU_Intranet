@@ -57,7 +57,7 @@ export default function ProfileEditPage() {
 
   const profile = queryResult?.data?.data;
   const ratingOptions = ["Student", "LAPL", "PPL", "CPL", "ATPL", "Kvetch"];
-  const roleOptions = ["admin", "pilot", "staff"];
+  const roleOptions = ["admin", "pilot", "staff", "organisation"];
   const statusOptions = ["active", "pending", "suspended"];
 
   const handleSubmit = async (e: React.BaseSyntheticEvent) => {
@@ -67,7 +67,7 @@ export default function ProfileEditPage() {
       // Update role/status if admin
       if (profile) {
         const response = await fetch('/api/users/update-role-status', {
-          method: 'PATCH',
+          method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },

@@ -1,7 +1,8 @@
+//api/users/update-role-status/route.ts
 import adminClient from '@/utils/supabase/admin'
 import { NextResponse } from 'next/server'
 
-export async function PATCH(request: Request) {
+export async function PUT(request: Request) {
 
 
   try {
@@ -19,7 +20,8 @@ export async function PATCH(request: Request) {
     const { data: authUser, error: authError } = await adminClient.auth.admin.updateUserById(
       userId,
       { 
-        app_metadata: { role }, // Sets role in JWT claims
+        app_metadata: { role },
+        user_metadata: { role }, // Sets role in JWT claims
       }
     )
 

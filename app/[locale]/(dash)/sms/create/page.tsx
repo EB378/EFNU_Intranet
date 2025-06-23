@@ -4,285 +4,228 @@ import {
   Box,
   Typography,
   Paper,
-  Grid,
-  TextField,
+  Stack,
   Button,
-  InputLabel,
-  Select,
-  MenuItem,
+  TextField,
   FormControl,
-  FormHelperText,
-  CircularProgress,
-  Snackbar,
-  Alert,
-  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  Chip,
   Avatar,
-  Chip
+  Grid,
 } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import { Add, Warning, Close, CloudUpload, LocationOn } from "@mui/icons-material";
+import { Warning } from "@mui/icons-material";
+import { useCreate, useNavigation } from "@refinedev/core";
+import { useForm } from "@refinedev/react-hook-form";
+import { Controller } from "react-hook-form";
+import { useGetIdentity } from "@refinedev/core";
 import React, { useState } from "react";
-import NextLink from "next/link";
-import { useRouter } from "next/navigation";
-
-type FormValues = {
-  title: string;
-  category: string;
-  severity: string;
-  description: string;
-  location: string;
-  reportedBy: string;
-  attachments: File[];
-};
+import { CreateSafetyReport, SeverityLevel, ReportCategory } from "@/types"; // Adjust the import path as necessary
+import { useTranslations } from "next-intl";
 
 const ReportCreatePage = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [files, setFiles] = useState<File[]>([]);
-  const { 
+  const t = useTranslations("SafetyReports");
+  interface Identity {
+    id?: string | number;
+    [key: string]: any;
+  }
+  const { data: identity = {} as Identity } = useGetIdentity<Identity>();
+  const { goBack } = useNavigation();
+  const [severity, setSeverity] = useState<SeverityLevel>("medium");
+
+  const {
+    saveButtonProps,
     control,
+    register,
     handleSubmit,
     formState: { errors },
-    reset
-  } = useForm<FormValues>({
+  } = useForm<CreateSafetyReport>({
+    refineCoreProps: {
+      resource: "sms",
+      action: "create",
+    },
     defaultValues: {
-      title: '',
-      category: '',
-      severity: 'medium',
-      description: '',
-      location: '',
-      reportedBy: 'John D.', // Default to current user
-      attachments: []
-    }
+      status: "open",
+      reported_by: identity?.id,
+      severity: "medium",
+    },
   });
 
-  const onSubmit = async (data: FormValues) => {
-    setLoading(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Report created:', data);
-      setSuccess(true);
-      reset();
-      setFiles([]);
-      setTimeout(() => router.push('/safety-reports'), 2000);
-    } catch (error) {
-      console.error('Submission error:', error);
-    } finally {
-      setLoading(false);
-    }
+  const severityColors = {
+    low: "#4caf50",
+    medium: "#ff9800",
+    high: "#f44336",
+    critical: "#d32f2f",
   };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const newFiles = Array.from(event.target.files);
-      setFiles(prev => [...prev, ...newFiles]);
-    }
-  };
+  const categories: ReportCategory[] = [
+    'inflight', 
+    'infrastructure', 
+    'aircraft', 
+    'medical', 
+    'security', 
+    'enviromental', 
+    'communication', 
+    'other'
+  ];
 
-  const removeFile = (index: number) => {
-    setFiles(prev => prev.filter((_, i) => i !== index));
-  };
+  const severities: SeverityLevel[] = ["low", "medium", "high", "critical"];
 
   return (
-    <Box sx={{ 
-      p: { xs: 2, md: 4 },
-      maxWidth: 1200,
-      margin: '0 auto'
-    }}>
-      {/* Header */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ 
-          fontWeight: 700,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2
-        }}>
-          <Avatar sx={{ bgcolor: 'primary.main' }}>
-            <Add />
-          </Avatar>
-          New Safety Report
+    <Box sx={{ p: 4, maxWidth: 1200, margin: "0 auto" }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
+        <Typography variant="h4" fontWeight={700}>
+          {t("Create.title")}
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Report safety concerns or incidents using this form
-        </Typography>
-      </Box>
+      </Stack>
 
-      <Paper sx={{ p: 3 }}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <Paper sx={{ p: 4 }}>
+        <form onSubmit={saveButtonProps.onClick}>
           <Grid container spacing={3}>
-            {/* Title */}
-            <Grid item xs={12}>
-              <Controller
-                name="title"
-                control={control}
-                rules={{ required: 'Title is required' }}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Report Title"
-                    fullWidth
-                    error={!!errors.title}
-                    helperText={errors.title?.message}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                )}
-              />
-            </Grid>
-
-            {/* Category & Severity */}
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth error={!!errors.category}>
-                <InputLabel>Category</InputLabel>
-                <Controller
-                  name="category"
-                  control={control}
-                  rules={{ required: 'Category is required' }}
-                  render={({ field }) => (
-                    <Select {...field} label="Category">
-                      <MenuItem value="Fire Safety">Fire Safety</MenuItem>
-                      <MenuItem value="Electrical">Electrical</MenuItem>
-                      <MenuItem value="Housekeeping">Housekeeping</MenuItem>
-                      <MenuItem value="Equipment">Equipment</MenuItem>
-                      <MenuItem value="Structural">Structural</MenuItem>
-                    </Select>
-                  )}
-                />
-                <FormHelperText>{errors.category?.message}</FormHelperText>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} md={6}>
-              <FormControl fullWidth>
-                <InputLabel>Severity Level</InputLabel>
-                <Controller
-                  name="severity"
-                  control={control}
-                  render={({ field }) => (
-                    <Select {...field} label="Severity Level">
-                      <MenuItem value="low">Low</MenuItem>
-                      <MenuItem value="medium">Medium</MenuItem>
-                      <MenuItem value="high">High</MenuItem>
-                      <MenuItem value="critical">Critical</MenuItem>
-                    </Select>
-                  )}
-                />
-              </FormControl>
-            </Grid>
-
-            {/* Description */}
-            <Grid item xs={12}>
-              <Controller
-                name="description"
-                control={control}
-                rules={{ required: 'Description is required' }}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Detailed Description"
-                    multiline
-                    rows={4}
-                    fullWidth
-                    error={!!errors.description}
-                    helperText={errors.description?.message}
-                    InputLabelProps={{ shrink: true }}
-                  />
-                )}
-              />
-            </Grid>
-
-            {/* Location */}
-            <Grid item xs={12} md={6}>
-              <Controller
-                name="location"
-                control={control}
-                rules={{ required: 'Location is required' }}
-                render={({ field }) => (
-                  <TextField
-                    {...field}
-                    label="Location"
-                    fullWidth
-                    error={!!errors.location}
-                    helperText={errors.location?.message}
-                    InputProps={{
-                      startAdornment: (
-                        <LocationOn color="action" sx={{ mr: 1 }} />
-                      )
-                    }}
-                  />
-                )}
-              />
-            </Grid>
-
-            {/* Attachments */}
-            <Grid item xs={12}>
-              <input
-                accept="image/*,.pdf,.doc,.docx"
-                style={{ display: 'none' }}
-                id="file-upload"
-                type="file"
-                multiple
-                onChange={handleFileUpload}
-              />
-              <label htmlFor="file-upload">
-                <Button
-                  component="span"
-                  variant="outlined"
-                  startIcon={<CloudUpload />}
-                  sx={{ mb: 2 }}
+            {/* Left Column - Severity Indicator */}
+            <Grid item xs={12} md={3}>
+              <Stack alignItems="center" justifyContent="center" height="100%">
+                <Avatar
+                  sx={{
+                    bgcolor: severityColors[severity] || "#9e9e9e",
+                    width: 120,
+                    height: 120,
+                    mb: 2,
+                  }}
                 >
-                  Upload Evidence
-                </Button>
-              </label>
-
-              {files.map((file, index) => (
+                  <Warning sx={{ fontSize: 60 }} />
+                </Avatar>
                 <Chip
-                  key={index}
-                  label={file.name}
-                  onDelete={() => removeFile(index)}
-                  sx={{ m: 0.5 }}
-                  deleteIcon={<Close />}
+                  label={t(severity).toUpperCase()}
+                  sx={{
+                    bgcolor: severityColors[severity],
+                    color: "white",
+                    fontWeight: "bold",
+                    fontSize: "1rem",
+                    px: 3,
+                    py: 1,
+                  }}
                 />
-              ))}
+              </Stack>
             </Grid>
 
-            {/* Submit Area */}
-            <Grid item xs={12}>
-              <Box sx={{ 
-                display: 'flex', 
-                gap: 2,
-                justifyContent: 'flex-end',
-                borderTop: 1,
-                borderColor: 'divider',
-                pt: 3
-              }}>
-                <NextLink href="/safety-reports" passHref>
-                  <Button variant="outlined">Cancel</Button>
-                </NextLink>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  startIcon={loading ? <CircularProgress size={20} /> : <Warning />}
-                  disabled={loading}
-                >
-                  {loading ? 'Submitting...' : 'Create Report'}
-                </Button>
-              </Box>
+            {/* Right Column - Form Fields */}
+            <Grid item xs={12} md={9}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label={t("Create.ReportTitle")}
+                    {...register("title", {
+                      required: "Title is required",
+                      minLength: {
+                        value: 10,
+                        message: "Title must be at least 10 characters",
+                      },
+                    })}
+                    error={!!errors.title}
+                    helperText={errors.title?.message?.toString()}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label={t("Create.Description")}
+                    multiline
+                    minRows={4}
+                    {...register("description", {
+                      required: "Description is required",
+                    })}
+                    error={!!errors.description}
+                    helperText={errors.description?.message?.toString()}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel>{t("Create.Category")}</InputLabel>
+                    <Controller
+                      name="category"
+                      control={control}
+                      rules={{ required: "Category is required" }}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          label={t("Create.Category")}
+                          error={!!errors.category}
+                        >
+                          {categories.map((category) => (
+                            <MenuItem key={category} value={category}>
+                              {t(category)}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
+                    />
+                    {errors.category && (
+                      <Typography color="error" variant="caption">
+                        {errors.category.message?.toString()}
+                      </Typography>
+                    )}
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <FormControl fullWidth>
+                    <InputLabel>{t("Create.SeverityLevel")}</InputLabel>
+                    <Controller
+                      name="severity"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          {...field}
+                          label={t("Create.SeverityLevel")}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            setSeverity(e.target.value as SeverityLevel);
+                          }}
+                        >
+                          {severities.map((level) => (
+                            <MenuItem key={level} value={level}>
+                              {t(level).charAt(0).toUpperCase() + level.slice(1)}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      )}
+                    />
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label={t("Create.Location")}
+                    {...register("location")}
+                    placeholder="RWY, CUMULUS, etc."
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Stack direction="row" spacing={2} justifyContent="flex-end">
+                    <Button variant="outlined" onClick={goBack}>
+                      {t("Create.Cancel")}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      type="submit"
+                      sx={{ minWidth: 120 }}
+                    >
+                      {t("Create.SubmitReport")}
+                    </Button>
+                  </Stack>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </form>
       </Paper>
-
-      <Snackbar
-        open={success}
-        autoHideDuration={3000}
-        onClose={() => setSuccess(false)}
-      >
-        <Alert severity="success" sx={{ width: '100%' }}>
-          Report submitted successfully!
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

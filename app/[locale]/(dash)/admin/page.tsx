@@ -2,15 +2,25 @@
 'use client';
 
 import { 
-  Grid, Paper, Typography, Chip, Stack, LinearProgress, Box, 
+  Grid, Paper, Typography, Chip, Stack, Box, 
   Button, keyframes, styled 
 } from '@mui/material';
 import {
-  People, LocalGasStation, Assignment, Flight, 
-  Article, Circle, Add, Notifications
+  People, Assignment, Flight, 
+  Article, Circle, Notifications,
+  FlightTakeoff
 } from '@mui/icons-material';
-import PNStatusDashboard from '@/components/PNStatusDashboard';
-import { useProfileStats } from '@/hooks/useProfileStats';
+import PNStatusDashboard from '@components/AdminComponents/PNStatusDashboard';
+import { useProfileStats, usePnApprovalsToCome, usePNStatsToday, useRecentIncidents } from '@hooks/getAdminStats';
+import { useRouter } from "next/navigation";
+import CreateUserModalWithButton from '@components/AdminComponents/CreateUserModalWithButton';
+import { Warning, ListAlt } from '@mui/icons-material'; // Add these imports
+import AddFuelToStation from '@components/AdminComponents/AddFuelToStation';
+import AlertCreateModal from '@components/AdminComponents/AlertCreateModal';
+import React, { useState } from 'react';
+import BlogCreateModal from '@components/AdminComponents/BlogCreateModal';
+
+
 const pulse = keyframes`
   0% { transform: scale(0.95); opacity: 0.8; }
   50% { transform: scale(1.05); opacity: 1; }
@@ -68,16 +78,24 @@ const StatusIndicator = ({ label, status }: { label: string; status: string }) =
 };
 
 export default function AdminDashboard() {
+
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [createModalBlogOpen, setCreateModalBlogOpen] = useState(false);
+
   const { totalCount, todayCount } = useProfileStats();
+  const { PnApprovalsToCome: PnApprovalsToCome } = usePnApprovalsToCome();
+  const { TodaysApprovedPendingFlights, UpcomingFlightsCount } = usePNStatsToday();
+  const { recentIncidentsCount } = useRecentIncidents();
+  const router = useRouter();
 
 
 
   const metrics = {
     totalUsers: totalCount,
-    pendingApprovals: 12,
-    fuelLevel: 65,
-    activeFlights: 18,
-    recentPosts: 3,
+    pendingApprovals: PnApprovalsToCome,
+    weeklyIncidents: recentIncidentsCount,
+    activeFlights: TodaysApprovedPendingFlights,
+    upcomingFlights: UpcomingFlightsCount,
     systemHealth: 'optimal'
   };
 
@@ -135,6 +153,8 @@ export default function AdminDashboard() {
                   variant="outlined"
                   color="warning"
                   startIcon={<Notifications />}
+                  LinkComponent={'button'}
+                  onClick={() => router.push('/admin/flights')}
                   sx={{ alignSelf: 'flex-start', borderRadius: 2 }}
                 >
                   View Requests
@@ -149,25 +169,22 @@ export default function AdminDashboard() {
             <Box p={3}>
               <Stack spacing={2}>
                 <Box display="flex" alignItems="center" gap={2}>
-                  <LocalGasStation sx={{ fontSize: 32, color: 'success.main' }} />
-                  <Typography variant="h6" fontWeight="600">Fuel Status</Typography>
+                  <Warning sx={{ fontSize: 32, color: 'error.main' }} /> {/* Changed icon to warning */}
+                  <Typography variant="h6" fontWeight="600">Recent Incidents</Typography>
                 </Box>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={metrics.fuelLevel} 
-                  sx={{
-                    height: 12,
-                    borderRadius: 6,
-                    background: 'rgba(0, 0, 0, 0.1)',
-                    '& .MuiLinearProgress-bar': {
-                      borderRadius: 6,
-                      background: 'linear-gradient(90deg, #4caf50, #8bc34a)'
-                    }
-                  }}
-                />
-                <Typography variant="body2" color="text.secondary">
-                  {metrics.fuelLevel}% Capacity Remaining
+                <Typography variant="h3" fontWeight="800" color="error.main">
+                  {metrics.weeklyIncidents} {/* Assuming you have weeklyIncidents in your metrics */}
                 </Typography>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  startIcon={<ListAlt />} 
+                  LinkComponent={'button'}
+                  onClick={() => router.push('/admin/incidents')}
+                  sx={{ alignSelf: 'flex-start', borderRadius: 2 }}
+                >
+                  View Incidents
+                </Button>
               </Stack>
             </Box>
           </StyledPaper>
@@ -179,16 +196,24 @@ export default function AdminDashboard() {
               <Stack spacing={2}>
                 <Box display="flex" alignItems="center" gap={2}>
                   <Flight sx={{ fontSize: 32, color: 'info.main' }} />
-                  <Typography variant="h6" fontWeight="600">Flights</Typography>
+                  <Typography variant="h6" fontWeight="600">Flights Today</Typography>
                 </Box>
                 <Typography variant="h3" fontWeight="800" color="info.main">
                   {metrics.activeFlights}
                 </Typography>
                 <Chip 
-                  label="2 delayed flights" 
-                  color="error"
+                  label={`${metrics.upcomingFlights} upcoming flights`}
+                  color="secondary"
                   size="small"
-                  sx={{ alignSelf: 'flex-start', borderRadius: 1 }}
+                  sx={{ 
+                    borderRadius: 1,
+                    cursor: 'pointer',
+                    '&:hover': {
+                      backgroundColor: 'secondary.light'
+                    }
+                  }}
+                  onClick={() => router.push('/admin/flights?filter=upcoming')}
+                  icon={<FlightTakeoff fontSize="small" />}
                 />
               </Stack>
             </Box>
@@ -201,18 +226,7 @@ export default function AdminDashboard() {
             <Box p={3}>
               <Typography variant="h6" fontWeight="700" mb={2}>Quick Actions</Typography>
               <Box display="flex" gap={2} flexWrap="wrap">
-                <Button
-                  variant="contained"
-                  startIcon={<Add />}
-                  sx={{
-                    borderRadius: 3,
-                    px: 3,
-                    py: 1.5,
-                    background: 'linear-gradient(135deg, #2196f3, #1976d2)'
-                  }}
-                >
-                  Add User
-                </Button>
+                <CreateUserModalWithButton />
                 <Button
                   variant="contained"
                   startIcon={<Article />}
@@ -222,9 +236,18 @@ export default function AdminDashboard() {
                     py: 1.5,
                     background: 'linear-gradient(135deg, #4caf50, #388e3c)'
                   }}
+                  LinkComponent={'button'}
+                  onClick={() => setCreateModalBlogOpen(true)}
                 >
                   New Post
                 </Button>
+                <BlogCreateModal
+                  open={createModalBlogOpen}
+                  onClose={() => setCreateModalBlogOpen(false)}
+                  onSuccess={() => {
+                    setCreateModalBlogOpen(false);
+                  }}
+                />
                 <Button
                   variant="contained"
                   startIcon={<Flight />}
@@ -234,9 +257,32 @@ export default function AdminDashboard() {
                     py: 1.5,
                     background: 'linear-gradient(135deg, #ff9800, #f57c00)'
                   }}
+                  LinkComponent={'button'}
+                  onClick={() => router.push('/admin/flights')}
                 >
                   Flight Alerts
                 </Button>
+                <AddFuelToStation />
+                <Button
+                  variant="contained"
+                  sx={{
+                    borderRadius: 3,
+                    px: 3,
+                    py: 1.5,
+                    background: 'linear-gradient(135deg,rgb(255, 0, 0),rgb(155, 189, 20))'
+                  }}
+                  LinkComponent={'button'}
+                  onClick={() => setCreateModalOpen(true)}
+                >
+                  Create Alert
+                </Button>
+                <AlertCreateModal 
+                  open={createModalOpen}
+                  onClose={() => setCreateModalOpen(false)}
+                  onSuccess={() => {
+                    setCreateModalOpen(false);
+                  }}
+                />
               </Box>
             </Box>
           </StyledPaper>

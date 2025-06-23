@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 import React from "react";
 import type { Viewport } from "next";
-import SplashScreen from "@/components/splashScreen";
+import SplashScreen from "@components/Layout/splashScreen";
 import { Refine } from "@refinedev/core";
 import { RefineKbar } from "@refinedev/kbar";
 import { useNotificationProvider } from "@refinedev/mui";
@@ -16,7 +16,7 @@ import resources from "@resources";
 
 import { defaultUrl, APP_NAME, APP_DEFAULT_TITLE, APP_TITLE_TEMPLATE, APP_DESCRIPTION } from "@/constants";
 
-import { Providers } from "@components/providers";
+import { Providers } from "@components/Layout/providers";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,

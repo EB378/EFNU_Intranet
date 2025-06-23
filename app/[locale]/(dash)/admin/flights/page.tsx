@@ -25,7 +25,9 @@ import {
   FormControl, 
   InputLabel,
   IconButton,
-  Tooltip
+  Tooltip,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import { 
   Search, 
@@ -41,9 +43,13 @@ import {
 import { useTable, useDelete, useNotification, useUpdate } from '@refinedev/core';
 import { useForm } from '@refinedev/react-hook-form';
 import { Controller } from 'react-hook-form';
-import { useState } from 'react';
-import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
 import { PriorNotice } from '@/types/index';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+dayjs.extend(utc);
+dayjs.extend(isSameOrAfter);
 
 const statusColors: Record<string, 'success' | 'warning' | 'error' | 'default'> = {
   approved: 'success',
@@ -66,6 +72,8 @@ export default function FlightsManagement() {
   const [filter, setFilter] = useState<'all' | 'approved' | 'pending' | 'rejected'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFlight, setSelectedFlight] = useState<PriorNotice | null>(null);
+  const isNotOver = dayjs(selectedFlight?.dep_date).isAfter(dayjs());
+  const [showPastFlights, setShowPastFlights] = useState(false);
 
   const { mutate: updateStatus } = useUpdate();
   const { mutate: deleteFlight } = useDelete();
@@ -83,12 +91,7 @@ export default function FlightsManagement() {
               operator: "eq" as const,
               value: filter
             }]
-        ),
-        {
-          field: 'dep_date',
-          operator: 'gte',
-          value: dayjs().startOf('day').toISOString()
-        }
+        )
       ]
     },
     sorters: {
@@ -205,7 +208,14 @@ export default function FlightsManagement() {
     });
   };
 
-  const flights = tableQueryResult?.data?.data || [];
+  const flights = (tableQueryResult?.data?.data || []).filter(flight => {
+    if (showPastFlights) return true; // Show all flights when checkbox is checked
+    
+    // When checkbox is unchecked, show flights that are today or in the future
+    const flightDateTime = dayjs.utc(`${flight.arr_date} ${flight.arr_time}`, 'YYYY-MM-DD HHmm');
+    const now = dayjs.utc();
+    return flightDateTime.isSameOrAfter(now, 'day');
+  });
 
   return (
     <Box sx={{ p: 4 }}>
@@ -250,7 +260,18 @@ export default function FlightsManagement() {
             />
           </Grid>
           <Grid item xs={12} md={6}>
-            <Stack direction="row" spacing={2} justifyContent="flex-end">
+            <Stack direction="row" spacing={2} justifyContent="flex-end" alignItems="center">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={showPastFlights}
+                    onChange={(e) => setShowPastFlights(e.target.checked)}
+                    color="primary"
+                  />
+                }
+                label="Show past flights"
+                sx={{ mr: 1 }}
+              />
               <FormControl sx={{ minWidth: 120 }}>
                 <InputLabel>Status</InputLabel>
                 <Select
@@ -291,7 +312,14 @@ export default function FlightsManagement() {
           </TableHead>
           <TableBody>
             {flights.map((flight) => (
-              <TableRow key={flight.id}>
+              <TableRow 
+                key={flight.id} 
+                hover 
+                sx={(theme) => ({ 
+                  '&:last-child td, &:last-child th': { border: 0 },
+                  borderLeft: isNotOver ? `4px solid ${theme.palette.primary.main}` : 'none',
+                })}
+              >
                 <TableCell>
                   <Typography fontWeight="medium">{flight.aircraft_reg}</Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -330,32 +358,41 @@ export default function FlightsManagement() {
                   />
                 </TableCell>
                 <TableCell align="right">
+                  
                   <Stack direction="row" spacing={1} justifyContent="flex-end">
-                    <Tooltip title="Edit">
-                      <IconButton onClick={() => handleEditClick(flight)}>
-                        <Edit fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Delete">
-                      <IconButton onClick={() => handleDelete(flight.id)}>
-                        <Delete fontSize="small" color="error" />
-                      </IconButton>
-                    </Tooltip>
-                    <FormControl size="small" sx={{ minWidth: 120 }}>
-                      <Select
-                        value={flight.status}
-                        onChange={(e) => handleStatusUpdate(flight.id, e.target.value)}
-                        sx={{
-                          height: 32,
-                          '.MuiSelect-select': { py: 0.5 }
-                        }}
-                      >
-                        <MenuItem value="pending">Pending</MenuItem>
-                        <MenuItem value="approved">Approved</MenuItem>
-                        <MenuItem value="rejected">Rejected</MenuItem>
-                      </Select>
-                    </FormControl>
+                    {dayjs.utc(`${flight.arr_date} ${flight.arr_time}`, 'YYYY-MM-DD HHmm').isAfter(dayjs.utc()) ? (
+                      // Future flight - show actions
+                      <>
+                        <Tooltip title="Edit">
+                          <IconButton onClick={() => handleEditClick(flight)}>
+                            <Edit fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <IconButton onClick={() => handleDelete(flight.id)}>
+                            <Delete fontSize="small" color="error" />
+                          </IconButton>
+                        </Tooltip>
+                        <FormControl size="small" sx={{ minWidth: 120 }}>
+                          <Select
+                            value={flight.status}
+                            onChange={(e) => handleStatusUpdate(flight.id, e.target.value)}
+                            sx={{ height: 32, '.MuiSelect-select': { py: 0.5 } }}
+                          >
+                            <MenuItem value="pending">Pending</MenuItem>
+                            <MenuItem value="approved">Approved</MenuItem>
+                            <MenuItem value="rejected">Rejected</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </>
+                    ) : (
+                      // Past flight - show message or disabled state
+                      <Typography variant="body2" color="text.secondary" sx={{ alignSelf: 'center' }}>
+                        Flight completed
+                      </Typography>
+                    )}
                   </Stack>
+                  
                 </TableCell>
               </TableRow>
             ))}

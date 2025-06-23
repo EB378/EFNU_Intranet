@@ -42,6 +42,7 @@ import resources from '@/resources';
 import { CanAccess } from "@refinedev/core";
 import { useLogout } from '@refinedev/core';
 import { useTheme } from '@hooks/useTheme';
+import { useTranslations } from 'use-intl';
 
 const StyledFab = styled(Fab)(({ theme }) => ({
   position: 'relative',
@@ -58,6 +59,7 @@ const StyledFab = styled(Fab)(({ theme }) => ({
 }));
 
 export default function MobileNav() {
+  const t = useTranslations("NavBar");
   const [menuOpen, setMenuOpen] = useState(false);
   const theme = useTheme();
   const pathname = usePathname();
@@ -103,7 +105,7 @@ export default function MobileNav() {
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
               <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <MenuIcon color="primary" />
-                Navigation Menu
+                {t("NavigationMenu")}
               </Typography>
               <IconButton onClick={handleMenuToggle}>
                 <Close />
@@ -136,7 +138,7 @@ export default function MobileNav() {
                       fontWeight: 500,
                       color: theme.palette.text.primary
                     }}>
-                      {resource.meta.label}
+                      {t(`${resource.meta.label}`)}
                     </Box>
                   </MenuItem>
                 </CanAccess>
@@ -159,7 +161,7 @@ export default function MobileNav() {
                       href={resource.create!}
                     >
                       <Add sx={{ mr: 2 }} />
-                      Create {resource.meta.label}
+                      {t("Create")} {t(`${resource.meta.label}`)}
                     </MenuItem>
                   </CanAccess>
                 ))}
@@ -174,7 +176,7 @@ export default function MobileNav() {
                 sx={{ color: theme.palette.error.main }}
               >
                 <AccountBox sx={{ mr: 2 }} />
-                Log Out
+                {t("LogOut")}
               </MenuItem>
             </Grid>
           </Box>
@@ -211,7 +213,7 @@ export default function MobileNav() {
           {mainNavResources.slice(0, 2).map((resource) => (
             <BottomNavigationAction
               key={resource.name}
-              label={resource.meta.label}
+              label={t(`${resource.meta.label}`)}
               icon={resource.meta.icon}
               component={Link}
               href={resource.list}
@@ -266,7 +268,7 @@ export default function MobileNav() {
           {mainNavResources.slice(2).map((resource) => (
             <BottomNavigationAction
               key={resource.name}
-              label={resource.meta.label}
+              label={t(`${resource.meta.label}`)}
               icon={resource.meta.icon}
               component={Link}
               href={resource.list}

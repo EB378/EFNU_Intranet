@@ -76,6 +76,18 @@ export function ProfileRatings({ profileId }: { profileId: string }) {
   if (!profileData) return <span>Loading...</span>;
   return <span>{profileData.ratings}</span>;
 }
+export function ProfileRole({ profileId }: { profileId: string }) {
+  const { queryResult } = useShow({
+    resource: "profiles",
+    id: profileId,
+    meta: { select: "role" },
+    queryOptions: { enabled: !!profileId },
+  });
+  const profileData = queryResult?.data?.data as { role: string[]; } | undefined;
+  if (!profileData) return <span>Loading...</span>;
+  const roleString = Array.isArray(profileData.role) ? profileData.role.join(", ") : profileData.role;
+  return <span>{roleString ? roleString.charAt(0).toUpperCase() + roleString.slice(1) : ""}</span>;
+}
 
 export function FuelName({ id }: { id: string }) {
   const { queryResult } = useShow({

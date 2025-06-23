@@ -12,10 +12,12 @@ import {
   IconButton,
   FormControl,
   FormHelperText,
+  CardHeader,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff, LockReset } from "@mui/icons-material";
 import { useNotification } from "@refinedev/core";
 import { useGetIdentity } from "@refinedev/core";
+import { useTranslations } from "use-intl";
 
 interface PasswordChangeData {
   currentPassword: string;
@@ -25,6 +27,7 @@ interface PasswordChangeData {
 
 export const PasswordChangeBlock = () => {
   const { open } = useNotification();
+  const t = useTranslations("Profile");
   const { data: identity } = useGetIdentity<{ id: string }>();
   const currentUserId = identity?.id; // Adjust this based on your auth setup
   const [showPassword, setShowPassword] = useState({
@@ -128,15 +131,24 @@ export const PasswordChangeBlock = () => {
   };
 
   return (
-    <Card sx={{ mt: 4 }}>
+    <Card elevation={2} sx={{ 
+      borderRadius: '12px',
+      boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
+    }}>
+      <CardHeader
+        title={
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="h6">{t("ChangePassword")}</Typography>
+            <LockReset color="action" />
+          </Box>
+        }
+        subheader={t("ChangePasswordDescription")}
+      />
       <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Change Password
-        </Typography>
         <Box component="form" onSubmit={handleSubmit}>
           <FormControl fullWidth margin="normal" error={!!errors.currentPassword}>
             <TextField
-              label="Current Password"
+              label={t("CurrentPassword")}
               name="currentPassword"
               type={showPassword.current ? "text" : "password"}
               value={formData.currentPassword}
@@ -162,7 +174,7 @@ export const PasswordChangeBlock = () => {
 
           <FormControl fullWidth margin="normal" error={!!errors.newPassword}>
             <TextField
-              label="New Password"
+              label={t("NewPassword")}
               name="newPassword"
               type={showPassword.new ? "text" : "password"}
               value={formData.newPassword}
@@ -188,7 +200,7 @@ export const PasswordChangeBlock = () => {
 
           <FormControl fullWidth margin="normal" error={!!errors.confirmPassword}>
             <TextField
-              label="Confirm New Password"
+              label={t("ConfirmNewPassword")}
               name="confirmPassword"
               type={showPassword.confirm ? "text" : "password"}
               value={formData.confirmPassword}
@@ -219,7 +231,7 @@ export const PasswordChangeBlock = () => {
             disabled={loading}
             sx={{ mt: 2 }}
           >
-            {loading ? "Updating..." : "Change Password"}
+            {loading ? t("Updating") : t("ChangePassword")}
           </Button>
         </Box>
       </CardContent>

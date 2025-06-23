@@ -34,738 +34,412 @@
 
 
   
-  "Navbar": {
-    "blog": "Blogi",
-    "pricing": "Hinnasto",
-    "about": "Tietoa meistä",
-    "contact": "Ota yhteyttä",
-    "cta": "Aloita nyt",
-    "theme": "Ulkoasu",
-    "light": "Vaalea",
-    "dark": "Tumma"
+  "NavBar": {
+    "Home": "Koti",
+    "ATIS": "ATIS",
+    "Fuel": "Polttoaine",
+    "Profile": "Profiili",
+    "LogOut": "Kirjaudu ulos",
+    "NavigationMenu": "Navigointivalikko",
+    "PN": "PN",
+    "WebCam": "WebCam",
+    "Blog": " Blogi",
+    "NOTAMS": "NOTAMS",
+    "INFO": "INFO",
+    "FLYK": "FLYK",
+    "Weather": "Sää",
+    "RWY Lights": "Kiitotien valot",
+    "SMS": "SMS",
+    "Contact": "Ota yhteyttä",
+    "Handbook": "Käsikirja",
+    "Rules": "Säännöt",
+    "Fees": "Maksut",
+    "Calendar": "Kalenteri",
+    "Admin": "Admin",
+    "Create": "Luo",
+    "users": "Käyttäjät",
+    "incidents": "Tapahtumat",
+    "fuel": "Polttoaine",
+    "flights": "Lennot",
+    "alerts": "Hälytykset"
   },
-  "Footer": {
-    "description": "Muutamme ideat poikkeuksellisiksi digitaalisiksi kokemuksiksi. Autamme yrityksiä kasvamaan innovatiivisten suunnittelu- ja kehitysratkaisujen avulla.",
-    "company": "Yritys",
-    "about": "Tietoa meistä",
-    "careers": "Ura",
-    "blog": "Blogi",
-    "resources": "Resurssit",
-    "pricing": "Hinnasto",
-    "company_portal": "Yritysportaali",
-    "support": "Tuki",
-    "contact": "Ota yhteyttä",
-    "rights": "Kaikki oikeudet pidätetään.",
-    "privacy": "Tietosuojakäytäntö",
-    "terms": "Käyttöehdot"
-  },
-  "Home": {
-    "hero": {
-      "title": "Digitaalinen huippuosaaminen",
-      "subtitle": "Rakennamme kauniita, suorituskykyisiä verkkosivustoja ja sovelluksia, jotka tuovat tuloksia yrityksellesi.",
-      "ctaPrimary": "Katso tarjoukset",
-      "ctaSecondary": "Ota yhteyttä"
-    },
-    "features": {
-      "title": "Miksi valita meidät",
-      "subtitle": "Yhdistämme huipputeknologiaa poikkeukselliseen suunnitteluun saadaksemme erinomaisia tuloksia",
-      "1": {
-        "title": "Räätälöidyt ratkaisut",
-        "description": "Räätälöity yrityksesi tarpeisiin maksimaalisen vaikuttavuuden ja tehokkuuden saavuttamiseksi."
-      },
-      "2": {
-        "title": "Asiantunteva tiimi",
-        "description": "Kokeneet ammattilaiset, joilla on vuosien kokemus suunnittelusta ja kehityksestä."
-      },
-      "3": {
-        "title": "Suorituskykyyn keskittynyt",
-        "description": "Optimoituja ratkaisuja, jotka latautuvat nopeasti ja toimivat moitteettomasti kaikilla laitteilla."
-      },
-      "4": {
-        "title": "Jatkuva tuki",
-        "description": "Takaamme työmme luotettavalla ylläpidolla ja tuella."
-      }
-    },
-    "testimonials": {
-      "title": "Asiakkaidemme mielipiteet",
-      "subtitle": "Älä ota vain meidän sanaamme - kuule tyytyväisiltä asiakkailtamme",
-      "1": {
-        "content": "Hän kommunikoi kaikkien kanssa erinomaisesti ja kohteliaasti, mutta pystyi toisaalta työskentelemään hyvin itsenäisesti ja esittämään myös omia visioitaan ja ideoitaan. Hänen työnsä ansiosta saimme aikaan loistavaa näkyvyyttä.",
-        "rating": 5
-      },
-      "2": {
-        "content": "Vaikutus brändiimme ja visuaaliseen ilmeeseemme on ollut erittäin positiivinen. Suosittelen lämpimästi näitä palveluita mille tahansa yritykselle tai järjestölle, joka tarvitsee luotettavaa, nopeatahtista ja laadukasta visuaalista sisältöä sosiaaliseen mediaansa ja/tai mainontaan.",
-        "rating": 5
-      },
-      "3": {
-        "content": "Yhteistyö EkoForgen kanssa on ollut murroksellinen yrityksellemme. Heidän ratkaisunsa ovat sekä kauniita että toimivia.",
-        "rating": 4
-      }
-    },
-    "cta": {
-      "title": "Valmiina muuttamaan yrityksesi?",
-      "subtitle": "Rakennetaan yhdessä jotain upeaa",
-      "button": "Ota yhteyttä"
-    },
-    "PerformanceBoost": "Suorituskyvyn parannus",
-    "Uptime": "Käyttöaika",
-    "Responsiveness": "Vasteaika",
-    "SEO": "Hakukoneoptimointi"
-  },
-  "Blog": {
-    "label": "Blogi",
-    "title": "Blogi",
-    "subtitle": "Uusimmat uutiset, tarinat ja päivitykset Wing Applicationsilta",
-    "latestPosts": "Uusimmat artikkelit",
-    "olderPosts": "Vanhemmat artikkelit",
-    "show": "Näytä",
-    "hide": "Piilota",
-    "readMore": "Lue lisää →",
-    "noPosts": "Ei blogikirjoituksia vielä",
-    "checkBackLater": "Tarkista myöhemmin päivitysten varalta",
-    "close": "Sulje",
-    "published": "Julkaistu",
-    "create": {
-      "title": "Otsikko",
-      "content": "Sisältö",
-      "ImgLink": "Kuvan linkki"
-    }
-  },
-  "About": {
-    "label": "Tietoa meistä",
-    "title": "Tietoa meistä",
-    "subtitle": "Sitoutuneina huippuosaamiseen ja innovaatioon.",
-    "ourStory": {
-      "title": "Tarinaamme",
-      "description": "Perustettu vuonna 2024, matkamme alkoi visiolla muuttaa alaa. Olemme sitoutuneet toimittamaan huippuosaamista jokaisessa projektissa.",
-      "sinceYear": "Vuodesta 2024"
-    },
-    "mission": {
-      "title": "Missiomme",
-      "description": "Missiomme on voimaannuttaa pieniä yrityksiä innovatiivisten ratkaisujen, eettisyyden ja intohimon kautta menestykseen."
-    },
-    "values": {
-      "title": "Arvomme",
-      "items": ["Huippuosaaminen", "Eettisyys", "Innovaatio"]
-    },
-    "philosophy": {
-      "title": "Filosofiamme",
-      "description": "Uskomme henkilökohtaiseen lähestymistapaan, joka yhdistää huipputeknologian ja sitoutumisen laatuun. Jokainen projekti on osoitus intohimostamme ja visiostamme paremmasta tulevaisuudesta."
-    },
-    "approach": {
-      "title": "Lähestymistapamme",
-      "description": "Teemme tiivistä yhteistyötä asiakkaidemme kanssa ymmärtääksemme heidän ainutlaatuiset tarpeensa. Luomalla räätälöityjä ratkaisuja varmistamme kestävän vaikutuksen ja mitattavan menestyksen."
-    },
-    "team": {
-      "title": "Tutustu johtoon",
-      "ceo": {
-        "name": "E. A. Benni",
-        "position": "Toimitusjohtaja ja perustaja",
-        "phone": "+358442413840",
-        "email": "e.benni@company.com"
-      },
-      "deliveryLead": {
-        "name": "N. Benni",
-        "position": "Toimitusvastaava",
-        "phone": "+358401677836",
-        "email": "n.benni@company.com"
-      }
-    },
-    "contact": {
-      "title": "Valmiina muuttamaan yrityksesi?",
-      "subtitle": "Haluaisimme kuulla sinusta! Ota yhteyttä ja aloitetaan keskustelu.",
-      "button": "Ota yhteyttä"
-    }
-  },
-  "Pricing": {
-    "label": "Hinnasto",
-    "title": "Yksinkertainen, läpinäkyvä hinnoittelu",
-    "subtitle": "Valitse yrityksellesi täydellinen suunnitelma. Aloita pienestä ja päivitä milloin tahansa.",
-    "mostPopular": "Suosituin",
-    "faqTitle": "Usein kysytyt kysymykset",
-    "plans": {
-      "lite": {
-        "name": "Lite",
-        "description": "Ihanteellinen juuri aloittaville ja pienille henkilökohtaisille verkkosivustoille.",
-        "Price": "199€",
-        "savings": "Säästä 10%",
-        "features": [
-          "Enintään 3 sivua",
-          "Perusverkkosivuston suunnittelu",
-          "Mobiiliystävällinen asettelu",
-          "Kaksikielinen tuki",
-          "Vakiotuki"
-        ],
-        "cta": "Kokeile nyt"
-      },
-      "core": {
-        "name": "Core",
-        "description": "Yksinkertaistettu ratkaisu pienille projekteille olennaisilla ominaisuuksilla.",
-        "Price": "749€",
-        "savings": "Säästä 10%",
-        "features": [
-          "Kaikki Lite-suunnitelmasta",
-          "Enintään 30 sivua",
-          "Räätälöity suunnittelu",
-          "SEO-optimointi",
-          "Valinnainen perustietokantaintegraatio",
-          "Monikielinen tuki",
-          "Progressive-Web-App-ominaisuudet",
-          "Perusanalytiikka",
-          "Valinnainen hosting ja domain-palvelut"
-        ],
-        "cta": "Aloita nyt"
-      },
-      "enterprise": {
-        "name": "Enterprise",
-        "description": "Yritystason suorituskyky edistyneellä analytiikalla ja täydellä API-käytöllä.",
-        "Price": "Ota yhteyttä",
-        "features": [
-          "Kaikki Core-suunnitelmasta",
-          "Täysin räätälöity suunnittelu",
-          "Rajoittamattomat sivut",
-          "Edistynyt SEO",
-          "Prioriteettituki",
-          "Täysi tietokantaintegraatio",
-          "Laaja-alainen analytiikka",
-          "Sisäinen kojelauta ja raportointi",
-          "Räätälöidyt hosting ja domain-palvelut"
-        ],
-        "cta": "Ota yhteyttä"
-      }
-    },
-    "faq": [
-  {
-    "question": "Voinko vaihtaa suunnitelmaa myöhemmin?",
-    "answer": "Kyllä, voit pyytää päivitystä milloin tahansa."
-  },
-  {
-    "question": "Tarjoatteko alennuksia?",
-    "answer": "Tarjoamme erikoishinnoittelun tarpeidesi ja projektin koon mukaan. Lisätietoja voit pyytää sähköpostitse osoitteeseen ekoforge@gmail.com."
-  },
-  {
-    "question": "Mitä jos en ole tyytyväinen työhön?",
-    "answer": "Jos et ole tyytyväinen, emme mekään ole. Teemme yhdessä kanssasi töitä varmistaaksemme, että olet tyytyväinen lopputulokseen. Jos emme pääse yhteisymmärrykseen, hyvitämme rahasi. Rahoja ei kuitenkaan hyvitetä sen jälkeen, kun projekti on luovutettu asiakkaalle."
-  },
-  {
-    "question": "Mitä maksutapoja hyväksytte?",
-    "answer": "Hyväksymme pankkisiirron, Mobile Payn ja muita maksutapoja."
-  }
-]
-  },
-  "Contact": {
-    "header": {
-      "tag": "Ota yhteyttä",
-      "title": "Rakennetaan yhdessä jotain upeaa",
-      "subtitle": "Onko sinulla projekti mielessä tai haluatko keskustella mahdollisesta yhteistyöstä? Ota yhteyttä ja aloitetaan keskustelu."
-    },
-    "form": {
-      "title": "Lähetä meille viesti",
-      "name": "Nimesi",
-      "email": "Sähköpostiosoitteesi",
-      "message": "Viestisi",
-      "submit": "Lähetä viesti",
-      "successTitle": "Viesti lähetetty!",
-      "successMessage": "Kiitos yhteydenotostasi. Otamme sinuun yhteyttä 24 tunnin kuluessa.",
-      "successDescription": "Viestisi on lähetetty onnistuneesti.",
-      "errorMessage": "Lähetys epäonnistui",
-      "errorDescription": "Yritä uudelleen tai ota yhteyttä suoraan.",
-      "newMessage": "Lähetä uusi viesti"
-    },
-    "contactMethods": {
-      "title": "Muut tavat ottaa yhteyttä",
-      "phone": {
-        "title": "Puhelin",
-        "action": "Soita meille",
-        "value": "+358 44 241 3840"
-      },
-      "email": {
-        "title": "Sähköposti",
-        "action": "Lähetä sähköpostia",
-        "value": "ekoforge@gmail.com"
-      },
-      "location": {
-        "title": "Sijainti",
-        "action": "Katso kartalta",
-        "value": "Helsinki, Suomi"
-      }
-    },
-    "social": {
-      "title": "Yhdistä kanssamme"
-    },
-    "location": {
-      "title": "Sijaintimme"
-    }
-  },
-  "Careers": {
-    "header": {
-      "title": "Rakenna uraa kanssamme",
-      "subtitle1": "Liity joukkoon, joka arvostaa innovaatiota, luovuutta ja ammatillista kasvua.",
-      "subtitle2": "Rakennamme tulevaisuutta - ja haluamme sinun auttavan muovaamaan sitä.",
-      "CTA": "Näytä avoimet työpaikat"
-    },
-    "Benefits": {
-      "title": "Etumme",
-      "subtitle": "Huolehdimme tiimistämme kattavilla eduilla, jotka on suunniteltu tukemaan koko elämääsi.",
-      "benefitListItem1Title": "Ansiopohjaiset palkkiot",
-      "benefitListItem1Description": "Ansaitse kilpailukykyisiä palkkioita, jotka liittyvät suoraan suoritukseesi.",
-      "benefitListItem2Title": "Täysin etätyö",
-      "benefitListItem2Description": "Työskentele mistä tahansa, hyväksyen todella digitaalisen ensimmäisen lähestymistavan.",
-      "benefitListItem3Title": "Tehokkaat toiminnot",
-      "benefitListItem3Description": "Ketterät, joustavat prosessit nopeaa päätöksentekoa ja tuloksia varten.",
-      "benefitListItem4Title": "Innovointia kannustetaan",
-      "benefitListItem4Description": "Vapaus innovoida, kokeilla ja toteuttaa uusia ideoita nopeasti.",
-      "benefitListItem5Title": "Suoritustuki",
-      "benefitListItem5Description": "Suora tuki ja resurssit, jotka keskittyvät tehokkuutesi maksimointiin.",
-      "benefitListItem6Title": "Yksinkertainen, tuloksiin keskittynyt",
-      "benefitListItem6Description": "Ei byrokratiaa - vain suoraviivainen liiketoiminta, joka keskittyy maalaisjärkeen ja tuloksiin."
-    },
-    "Positions": {
-      "title": "Avoimet työpaikat",
-      "subtitle": "Etsimme jatkuvasti lahjakkaita henkilöitä kasvavaan tiimiimme.",
-      "FullStackDeveloper": {
-        "title": "Full Stack -kehittäjä",
-        "type": "Palkkio",
-        "location": "Etätyö",
-        "department": "Konsultti",
-        "salary": "24% - 43% projektista",
-        "tags": ["React", "TypeScript", "Next.js"],
-        "description": "Etsimme aktiivista Full Stack -kehittäjää rakentamaan ja parantamaan laadukkaita verkkosovelluksia. Tämä rooli on täysin etätyö, tarjoten runsaan palkkiopohjaisen korvausrakenteen, jossa ansiosi heijastavat suoraan suoritustasi. Käytät moderneja työkaluja kuten React, TypeScript ja Next.js toimittaaksesi tehokkaita, skaalautuvia ja innovatiivisia ratkaisuja. Ihannetavoitteet ovat itsenäiset, tuloksiin keskittyneet ja viihtyvät ympäristöissä, joissa on vähän byrokratiaa ja eniten luovaa vapautta."
-      },
-      "SalesRepsentative": {
-        "title": "Myyntiedustaja",
-        "type": "Palkkio",
-        "location": "Etätyö",
-        "department": "Myynti ja markkinointi",
-        "salary": "28% - 43% projektista",
-        "tags": ["Myynti", "Asiakassuhteet", "Neuvottelu", "Liidien generointi"],
-        "description": "Etsimme dynaamista ja tuloksiin keskittynyttä myyntiedustajaa täysin etämyyntitiimiimme. Runsaan palkkiorakenteen ansiosta ansiosi heijastavat suoraan myyntisuoritustasi. Keskittyä rakentamaan asiakassuhteita, luomaan liidejä ja sulkemaan kauppoja tehokkaasti ja vaikuttavasti. Ihannetavoitteet ovat vahvat viestintätaidot, neuvottelutaidot ja todistettu kyky toimittaa tuloksia suoraviivaisessa, suorituskykyyn keskittyvässä ympäristössä."
-      },
-      "LeadGenerationSpecialist": {
-        "title": "Liidien generoinnin asiantuntija",
-        "type": "Palkkio",
-        "location": "Etätyö",
-        "department": "Myynti ja markkinointi",
-        "salary": "5% - 10% muunnetusta liidistä",
-        "tags": ["Liidien generointi", "Etsintä", "Verkostoituminen", "Yhteydenotto"],
-        "description": "Etsimme aktiivisia liidien generoinnin asiantuntijoita tunnistamaan ja kehittämään mahdollisia asiakassuhteita. Tämä täysin etärooli tarjoaa palkkiopohjaisen rakenteen, palkiten sinut suoraan jokaisesta onnistuneesta liidin muunnoksesta. Ihannetavoitteet ovat erinomaisia etsintä-, verkostoitumis- ja yhteydenottotaitoja, ja heidän motivaationsa on selkeiden, ansioon perustuvien kannustimien varassa. Liity joukkoomme hyödyntääksesi verkottumistaitojasi ympäristössä, joka keskittyy yksinkertaisuuteen, tehokkuuteen ja vaikuttaviin tuloksiin."
-      },
-      "ApplyButton": "Hae nyt"
-    },
-    "Culture": {
-      "title": "Kulttuurimme",
-      "subtitle": "Rakennamme enemmän kuin tuotteita - rakennamme työpaikan, jota ihmiset rakastavat.",
-      "culture1": {
-        "title": "Jatkuva oppiminen",
-        "description": "Investoimme 10% työajasta taitojen kehittämiseen"
-      },
-      "culture2": {
-        "title": "Radikaali läpinäkyvyys",
-        "description": "Avoimet palkat, avoin tiekartta, avoimet keskustelut"
-      },
-      "culture3": {
-        "title": "Tulokset tunteja tärkeämpiä",
-        "description": "Mittaamme vaikutusta, ei työpöydällä vietettyä aikaa"
-      },
-      "culture4": {
-        "title": "Monipuoliset näkökulmat",
-        "description": "Etsimme ja juhlimme aktiivisesti erilaisia näkökulmia"
-      }
-    },
-    "CTA": {
-      "title": "Valmiina liittymään joukkoomme?",
-      "subtitle": "Olemme innoissamme kuullaksemme sinusta. Hae tänään ja rakennetaan yhdessä jotain upeaa.",
-      "button": "Näytä avoimet työpaikat"
-    }
-  },
-  "Support": {
-    "header": {
-      "title": "Kuinka voimme auttaa sinua tänään?",
-      "subtitle": "Löydä vastaukset tietokannastamme (vain englanniksi), yhdistä yhteisöömme tai saa henkilökohtaista apua tukitiimiltämme.",
-      "search": "Etsi apuartikkeleita..."
-    },
-    "ContactSmall": {
-      "title": "Tarvitsetko lisää apua?",
-      "subtitle": "Tukitiimimme on saatavilla auttamaan sinua kaikissa kysymyksissä niin pian kuin he pystyvät.",
-      "button": "Ota yhteyttä tukeen"
-    },
-    "Contact": {
-      "title": "Tarvitsetko yhä apua?",
-      "subtitle": "Omistautunut tukitiimimme on valmis auttamaan sinua kaikissa kysymyksissä tai ongelmissa, joita sinulla saattaa olla.",
-      "name": "Nimesi",
-      "email": "Sähköpostiosoite",
-      "subject": "Aihe",
-      "message": "Viesti",
-      "submit": "Lähetä viesti",
-      "successTitle": "Viesti lähetetty!",
-      "successMessage": "Kiitos yhteydenotostasi. Otamme sinuun yhteyttä 24 tunnin kuluessa.",
-      "successDescription": "Viestisi on lähetetty onnistuneesti.",
-      "errorMessage": "Lähetys epäonnistui",
-      "errorDescription": "Yritä uudelleen tai ota yhteyttä suoraan.",
-      "newMessage": "Lähetä uusi viesti"
-    },
-    "System": {
-      "title": "Kaikki järjestelmät toimivat",
-      "Update": "Viimeksi päivitetty"
-    }
-  },
-
-
   
 
-
-
-
-
-
-
-
-  "Dashboard": {
-    "label": "Jäsenpaneeli",
+  "Home": {
+    "title": "Tervetuloa EFNU:hun",
+    "Not Offical, Check AIP GEN": "Ei virallinen, tarkista AIP GEN 2.7",
+    "hours": "Aukioloajat",
+    "LocalTime": "Paikallinen aika",
+    "UTCTime": "UTC aika",
+    "FINTime": "Suomen aika",
     "WelcomeBack": "Tervetuloa takaisin",
-    "Subtitle": "Pysy ajan tasalla kerhon viimeisimmistä uutisista ja hallinnoi lentoja.",
-    "NewBooking": "Uusi varaus",
-    "WritePost": "Kirjoita julkaisu",
-    "LogFlight": "Kirjaa lento",
-    "LatestClubNews": "Kerhon uusimmat uutiset",
-    "SeeMore": "Näytä lisää",
-    "YourFlightStatistics": "Lentotilastosi",
-    "MonthlyFlightHours": "Kuukauden lentotunnit",
-    "FlightSummary": "Lentoyhteenveto",
-    "TotalFlightHours": "Kokonaistunnit",
-    "FlightsThisYear": "Tämän vuoden lennot",
-    "UpcomingBookings": "Tulevat varaukset",
-    "view": "Näytä",
-    "YourUpcomingBookings": "Tulevat varauksesi",
-    "ViewAllBookings": "Näytä kaikki varaukset",
-    "NoUpcomingBookings": "Ei tulevia varauksia",
-    "BookFlight": "Varaa lento",
-    "resource" : "Kalusto",
-    "datetime" : "Pv & Aika",
-    "type" : "Tyypi",
-    "actions": "Toiminnot"
+    "ReportTroubleatEFNU": "Ilmoita ongelmasta EFNU:ssa",
+    "CreatePriorNotice": "Luo PN Ilmoitus",
+    "UpcomingEvents": "Tulevat tapahtumat",
+    "Details": "Yksityiskohdat",
+    "ViewAllEvents": "Näytä kaikki tapahtumat",
+    "AirportUpdates": "Lentokenttäpäivitykset",
+    "readMore": "Lue lisää",
+    "postedOn": "Julkaistu",
+    "ViewAllUpdates": "Näytä kaikki päivitykset"
   },
-  "SafteyNotice": {
-    "label": "Turvallisuusilmoitus"
-  },
-  "FlightPlanning": {
-    "label": "Lentosuunnittelu"
-  },
-  "FlightPlanList": {
-    "label": "Hallintapaneeli",
-    "flightPlanning": "Lentosuunnittelu",
-    "aircraftReservation": {
-      "title": "Konevaraus",
-      "description": "Näytä ja varaa haluamasi kone.",
-      "buttonText": "Näytä varaukset"
+  "Fuel": {
+    "Title": "Polttoaineen hallintajärjestelmä",
+    "ReportFuel": "Ilmoita polttoaine",
+    "FuelReportSystem": "Polttoaineen ilmoitusjärjestelmä",
+    "FuelManagement": "Polttoaineen hallinta",
+    "subheader": "Polttoaineen hallintajärjestelmä",
+    "RefuelingHistory": "Tankkaushistoria",
+    "ViewPastTransactions": "Katso aiemmat tapahtumat",
+    "FuelAvailability": "Polttoaineen saatavuus",
+    "CurrentTankEstimates": "Nykyiset säiliöarviot",
+    "SupportCenter": "Tuetukeskus",
+    "assistance": "24/7 apua",
+    "Create": {
+      "RecordFuelAddition": "Ilmoita polttoaineen lisäys",
+      "AddingTo": "Lisätään",
+      "AmountAdded": "Lisätty määrä (L)",
+      "AircraftRegistration": "Ilma-aluksen rekisteröinti",
+      "egOHABC": "esim. OHABC"
     },
-    "aviationWeather": {
-      "title": "Ilmailusää",
-      "description": "Tarkista viimeisimmät ilmailusään tiedot ja reittimuutokset.",
-      "buttonText": "Ilmailusää"
+    "FuelingHistory": "Tankkaushistoria",
+    "Billed_to": "Laskutetaan",
+    "Contact": {
+      "ContactUs": "Ota yhteyttä",
+      "Subtitle": "Olemme saatavilla polttoaineen tarpeitasi varten. Ota yhteyttä",
+      "EmergencySupport": "Hätäapu",
+      "BulkOrders": "Suuret tilaukset",
+      "ServiceInquiries": "Palvelukyselyt"
     },
-    "flightLogbook": {
-      "title": "Lentopäiväkirja",
-      "description": "Näytä ja hallinnoi lentopäiväkirjaasi.",
-      "buttonText": "Näytä päiväkirja"
-    },
-    "maintenance": {
-      "title": "Huoltoaikataulu ja tunnit",
-      "description": "Näytä huoltoaikataulut ja koneiden tuntitiedot.",
-      "buttonText": "Näytä tunnit"
-    },
-    "flightPlan": {
-      "title": "Lentosuunnitelma",
-      "description": "Kirjallinen lentosuunnitelma (FPL) toimitetaan verkossa ANS Finlandin sivujen kautta. Muista vahvistaa suunnitelma soittamalla Helsinki-Vantaan tiedusteluun. Klikkaa alla olevaa linkkiä, jotta esitäytetään FPL-lomake kerhon koneiden perus tiedoilla.",
-      "buttonText": "Lähetä lentosuunnitelma täältä"
-    },
-    "flightPlans": "Omat lentosuunnitelmani",
-    "dataGrid": {
-      "route": "Reitti",
-      "notes": "Muistiinpanot",
-      "actions": "Toiminnot"
-    },
-    "error": {
-      "fetchFlightPlans": "Lentosuunnitelmien hakemisessa tapahtui virhe."
-    },
-    "GeneralResources": "Yleiset resurssit",
-    "GeneralResourcesDescription": "Käytä yleisiä resursseja lentosuunnitteluun ja ilmailusäähän.",
-    "ais": "AIS - Online AIP",
-    "ilmailusaa": "Ilmailusää - Säätiedot",
-    "FLYK": "FLYK - Lentokartat",
-    "lentopaikat": "Lentopaikat - Kartat ym.",
-    "GeneralResourcesDescriptionTwo": "Laitteiden ohjedokumentit, ym.",
-    "GeneralResourcesDescriptionTwoText": "Täältä löydät laitteiden ohjedokumentit, ym.",
-    "instructions": "Laitteiden ohjeet/dokumentit",
-    "GeneralResourcesDescriptionThree": "Konekantaan liittyvät tietoluettelot",
-    "GeneralResourcesDescriptionThreeText": "Täältä löydät konekantaasi liittyviä tietoluetteloita.",
-    "ihqInfo": "OH-IHQ, DV20",
-    "stlInfo": "OH-STL, DA40",
-    "GeneralResourcesDescriptionFour": "Kansainväliset lentosuunnitteluresurssit",
-    "GeneralResourcesDescriptionFourText": "Täältä löydät kansainvälisiä lentosuunnitteluresursseja.",
-    "internationalFlightPlanning": "Kansainvälinen lentosuunnittelu"
-  },
-  "InternationalFlightPlanning": {
-    "label": "Kansainvälinen",
-    "title": "Kansainvälinen lentosuunnittelu",
-    "section1": {
-      "title": "Kansainvälisen lentosuunnittelun huomioon otettavat seikat",
-      "content": "Kansainvälisillä lennoilla huomioi mahdolliset laskeutumis- ja navigointimaksut, sillä suomalainen kausipassijärjestelmä ei kata ulkomaisia kustannuksia. Nämä maksut maksetaan yleensä luottokortilla tai käteisellä määränpään tiedustelussa. Ulkomailla tapahtuva tankkaus veloitetaan kerhon tuntihinnan mukaan – kuitenkin koneiden käyttöohjeissa olevat luottokorttitiedot eivät välttämättä ole ideaaleja. On suositeltavaa kantaa käteistä varmuuden vuoksi ja säilyttää polttoainekuitti – saat hyvityksen polttoainelaskusta paluumatkalla, kun liität pankkitilisi numeron kuittiin vapamuotoisessa haussa lentoesityksen alueella."
-    },
-    "section2": {
-      "title": "Kirjallinen lentosuunnitelma",
-      "content": "Muista aina toimittaa kirjallinen lentosuunnitelma kansainvälisille lennoille. Suunnitelma on jätettävä vähintään tuntia ennen valtion rajan ylitystä. Koska Schengen-sopimus kattaa suurimman osan naapurimaista, tämä on yleensä ainoa vaadittu muodollisuus rajanylityksessä.",
-      "linkText": "Lue lisää lentosuunnittelusta",
-      "linkUrl": "https://example.com/flight-plan"
-    },
-    "section3": {
-      "title": "Vesialueiden ylitykset",
-      "content": "Jokaisessa koneen paikassa on liitetty pelastusliivit, joissa on CO2-patruunoita (yleisesti tunnettuina 'pop-liiveinä'), ja niitä on käytettävä vesialueiden ylityksissä. Säännökset edellyttävät niiden käyttöä yli 50 meripeninkulman laajuisten vesialueiden ylityksissä, mutta on suositeltavaa käyttää niitä aina, kun lennetään huomattava matka rannikolta.",
-      "linkText": "Lisätietoja turvallisuusvarusteista",
-      "linkUrl": "https://example.com/water-crossings"
-    },
-    "section4": {
-      "title": "Viro",
-      "content": "Viro kuuluu EU:hun ja Schengen-alueeseen, joten tulli- ja passimuodollisuuksista ei tarvitse huolehtia. Voit aloittaa lentosi mistä tahansa Suomen lentoasemalta ja laskeutua mihin tahansa Viron lentoasemalle. Viro on, erityisesti Malmin näkökulmasta, erinomainen matkakohde – jopa lyhyt lento tarjoaa runsaasti nähtävää. Tallinnan laskeutumismaksut ovat korkeammat verrattuna esimerkiksi Saaremaan lentoasemiin.",
-      "linkText": "Tutustu Viroon",
-      "linkUrl": "https://example.com/estonia"
-    },
-    "section5": {
-      "title": "Ruotsi",
-      "content": "Ruotsi kuuluu myös EU:hun ja Schengen-alueeseen, joten menettely on sama kuin Virossa. Jos suunnittelet lentämistä useille Ruotsin lentoasemille, voi olla kannattavaa hankkia paikallinen 'viikkupassi', joka kattaa useimpien lentoasemien laskeutumismaksut kohtuullisella ryhmähintalla viikoksi. Ruotsin Liikenneviraston lentosuunnittelusivusto tarjoaa säätietoja, Ruotsin AIP-tiedot ja NOTAM-tiedotteet länsirantaamme varten.",
-      "linkText": "Tutustu Ruotsiin",
-      "linkUrl": "https://example.com/sweden"
-    },
-    "section6": {
-      "title": "Latvia",
-      "content": "Riika on suosittu kohde – elinvoimainen eurooppalainen kaupunki vain pari tuntia lentomatkan päässä, ja se on yleinen välilaskukohde monille kesälentomatkoille. Riian kansainvälisen lentoaseman lisäksi on myös vanhempi Riian lentoasema, Spilve, joka sijaitsee lähellä kaupunkia. Spilvessä polttoainetta ei ollut saatavilla kesäaikaan 2012, vaikka laskeutumismaksut olivat vain noin kymmenen euroa. Lentokenttä on PPR! Valitettavasti Latvia tuo haasteita 100LL-polttoaineen suhteen (käytännössä saatavilla vain Riikasta), mutta dieselmoottoriset koneet eivät kohtaa ongelmia. Koska Latvia kuuluu Schengen-alueeseen, pelkkä kirjallinen suunnitelma riittää.",
-      "linkText": "Lue lisää Latviasta",
-      "linkUrl": "https://example.com/latvia"
-    },
-    "section7": {
-      "title": "Liettua",
-      "content": "Liettua tarjoaa lentoliikenteenohjaukselta tietoa myös muista koneista kontrolloidun ilmatilan ulkopuolella. Maksut ovat kohtuulliset ja yleensä alhaisemmat kuin Latviassa. 100LL-polttoaineen saatavuus on hieman parempi, mutta sekin vaatii suunnittelua. Suosittuja kohteita ovat muun muassa Palanga, joka tunnetaan hiekkarannoistaan, Klaipėda – josta lyhyt lento vie Kuurinkynneeseen, sekä Kaunas, jossa on tankkausmahdollisuudet ja AFIS-tyyppinen palvelu yleislentokentällä S. Darius ja S. Girėnas (Aleksotas).",
-      "linkText": "Vieraile Liettuassa",
-      "linkUrl": "https://example.com/lithuania"
-    },
-    "section8": {
-      "title": "Eurocontrolin AIP-palvelu",
-      "content": "Eurocontrol, yhteistyöorganisaatio, joka vastaa Euroopan ilmatilasta, tarjoaa palvelun, joka sisältää jäsenvaltioiden ilmailuoppaat (AIP) PDF-muodossa. Palvelu vaatii ilmaisen rekisteröitymisen. Lisäksi Eurocontrolin sivusto tarjoaa listan suoria linkkejä jäsenvaltioiden AIP-palveluihin.",
-      "linkText": "Käytä Eurocontrolia",
-      "linkUrl": "https://example.com/eurocontrol"
-    },
-    "internationalFlightPlans": "Kansainväliset lentosuunnitelmat",
-    "dataGrid": {
-      "id": "ID",
-      "route": "Reitti",
-      "notes": "Muistiinpanot",
-      "actions": "Toiminnot"
-    },
-    "error": {
-      "fetchInternationalFlightPlans": "Virhe haettaessa kansainvälisiä lentosuunnitelmia."
+    "Status": {
+      "FuelTankEstimates": "Polttoainetankin arviot",
+      "subtitle": "Perustuu kirjattuihin tankkaukseen. Todelliset tasot voivat vaihdella.",
+      "FuelType": "Polttoainetyyppi",
+      "Capacity": "Kapsiteetti",
+      "Estimated": "Arvioitu",
+      "percentFull": "% täynnä",
+      "LastAdded": "Viimeksi lisätty",
+      "Details": "Huom: Arviot olettavat, että polttoainetta ei kuluteta tallennusten välillä."
     }
-  },
-  "FleetInfo": {
-    "label": "Lentokaluston tiedot"
   },
   "Profile": {
-    "label": "Profiili",
-    "username": "Käyttäjänimi",
-    "email": "Sähköposti",
-    "phone": "Puhelin",
-    "address": "Osoite",
-    "role": "Rooli",
-    "section": {
-      "title": "Ilmoitukset & Keskustelu"
+    "Profile": "Profiili",
+    "PersonalInformation": "Henkilökohtaiset tiedot",
+    "Yourpilotdetails": "Pilotin tiedot",
+    "License": "Lisenssi",
+    "Email": "Sähköposti",
+    "Phone": "Puhelin",
+    "Certification": "Sertifiointi",
+    "FeeStatus": "Maksuasema",
+    "Yourcurrentairportfees": "Nykyiset lentokenttämaksusi",
+    "ChangePassword": "Vaihda salasana",
+    "ChangePasswordDescription": "Vaihda salasanasi turvallisuuden parantamiseksi.",
+    "CurrentPassword": "Nykyinen salasana",
+    "NewPassword": "Uusi salasana",
+    "ConfirmNewPassword": "Vahvista uusi salasana",
+    "Updating": "Päivitetään...",
+    "FuelConsumption": "Polttoaineenkulutus",
+    "LastSixMonthsOverview": "Viimeisen kuuden kuukauden yleiskatsaus",
+    "TotalConsumption": "Kokonaiskulutus",
+    "CurrentMonth": "Nykyinen kuukausi",
+    "MonthlyAverage": "Kuukausittainen keskiarvo",
+    "ViewDetailedHistory": "Näytä yksityiskohtainen historia",
+    "FuelTypeUsage": "Polttoainetyypin käyttö",
+    "TotalConsumptionByFuelType": "Kokonaiskulutus polttoainetyypin mukaan",
+    "edit": "Muokkaa"
+  },
+  "PN": {
+    "UpcomingFlights": "Tulevat lennot",
+    "CreatePN": "Luo PN",
+    "approved": "Hyväksytty",
+    "pending": "Odottaa",
+    "rejected": "Hylätty",
+    "NoUpcomingFlightsScheduled": "Ei tulevia lentoja suunniteltu",
+    "title": "EFNU - Ennen ilmoituslomake (PN)",
+    "subtitle": "Kaikki toiminnot paikallisen ajan ulkopuolella 0700-2200 ovat kiellettyjä",
+    "Enterlocationhere": "Syötä sijainti tähän",
+    "DepartureLocation": "Lähtösijainti",
+    "ArrivalLocation":  "Saapumissijainti",
+    "DEP (UTC HHMM)": "DEP (UTC HHMM)",
+    "ARR (UTC HHMM)": "ARR (UTC HHMM)",
+    "Enterdeptimehere": "Syötä lähtöaika tähän",
+    "Enterarrtimehere": "Syötä saapumisaika tähän",
+    "DEP Date": "Lähtöpäivä",
+    "ARR Date": "Saapumispäivä",
+    "Aircraft registration": "Ilma-aluksen rekisteröinti",
+    "MTOW (Kg)": "MTOW (Kg)",
+    "PIC (Full name)": "PIC (Koko nimi)",
+    "PIC email": "PIC Sähköposti",
+    "Phone": "Puhelin",
+    "IFR Arrival": "IFR Saapuminen",
+    "Edittitle": "Muokkaa PN"
+  },
+  "WebCam": {
+    "EFNUWebcams": "EFNU Webcams",
+    "Description": "Livenäkymät lentokentältä. Kuvia päivitetään 60 sekunnin välein.",
+    "Runway27": "Kiitotie 27",
+    "ViewOfMainRunwayApproach": "Näköala pääkiitotien lähestymiseen",
+    "RunwayIntersection": "Kiitotien risteys",
+    "TaxiwayAndRunwayIntersection": "Rullausväylän ja kiitotien risteysnäkymä",
+    "GliderRunway22": "Purjelento Kiitotie 22",
+    "GliderOperationsArea": "Purjelentoalueen näkymä",
+    "LastUpdated": "Viimeksi päivitetty"
+  },
+  "Alerts": {
+    "NBALERTS": "HUOMIO",
+    "ActiveAlerts": "Aktiiviset hälytykset",
+    "Loading alerts": "Ladataan hälytyksiä",
+    "Failed to load alerts": "Hälytysten lataaminen epäonnistui",
+    "No active alerts at this time": "Ei aktiivisia hälytyksiä tällä hetkellä",
+    "Ongoing": "Meneillään",
+    "Ends: ": "Loppuu: ",
+    "Close": "Sulje",
+    "Not verified by a offical source": "Ei virallisen lähteen vahvistama."
+  },
+  "Contact": {
+    "title": "Ota Yhteytä (EI KÄYTETÄVÄ)",
+    "subtitle": "Olemme täällä auttamassa. Ota meihin yhteyttä näiden kanavien kautta tai lähetä meille viesti suoraan.",
+    "contactInfo": "Yhteystiedot",
+    "emailTitle": "Sähköpostituki",
+    "phoneTitle": "Puhelintuki",
+    "addressTitle": "Vieraile meillä",
+    "supportHours": "Tukiaukioloajat",
+    "weekdays": "Maanantai-perjantai",
+    "weekends": "Lauantai-sunnuntai",
+    "sendMessage": "Lähetä meille viesti",
+    "nameLabel": "Nimesi",
+    "emailLabel": "Sähköpostisi",
+    "subjectLabel": "Aihe",
+    "messageLabel": "Viestisi",
+    "sendButton": "Lähetä viesti",
+    "faqTitle": "Usein kysytyt kysymykset",
+    "question": "Kysymys",
+    "question1Title": "Kuinka nopeasti vastaamme tukipyyntöihin?",
+    "question1Answer": "Vastaamme yleensä tukipyyntöihin 24 tunnin kuluessa. Hätätilanteissa pyrimme vastaamaan välittömästi.",
+    "question2Title": "Voinko vierailla toimistossanne ilman ajanvarausta?",
+    "question2Answer": "Kyllä, toimistomme on avoinna maanantaista perjantaihin klo 9-17 ilman ajanvarausta. Suosittelemme kuitenkin varaamaan ajan etukäteen varmistaaksemme, että voimme palvella sinua parhaalla mahdollisella tavalla.",
+    "question3Title": "Puhuvatko tukitiimisi useita kieliä?",
+    "question3Answer": "Kyllä, tukitiimimme puhuu suomea, englantia ja ruotsia. Voit valita haluamasi kielen yhteydenotossasi.",
+    "question4Title": "Kuinka voin lähettää tukipyynnön?",
+    "question4Answer": "Voit lähettää tukipyynnön täyttämällä yhteydenottolomakkeen verkkosivuillamme tai lähettämällä sähköpostia suoraan tukiosastollemme. Pyrimme vastaamaan kaikkiin pyyntöihin mahdollisimman pian."
+  },
+  "RunwayLights":{
+    "Runway Lights Guide": "Kiitotien valojen opas"
+  },
+  "SafetyReports": {
+    "SafetyReports": "Turvallisuusraportit",
+    "Active safety reports and incident tracking": "Aktiiviset turvallisuusraportit ja tapahtumien seuranta",
+    "Search reports": "Hae raportteja...",
+    "allStatuses": "Kaikki tilat",
+    "open": "Avoin",
+    "in-progress": "Käynnissä",
+    "resolved"  : "Ratkaistu",
+    "All Categories": "Kaikki kategoriat",
+    "inflight": "Lennolla",
+    "infrastructure": "Infrastruktuuri",
+    "aircraft"  : "Ilma-alus",
+    "medical": "Lääketieteellinen",
+    "security"  : "Turvallisuus",
+    "enviromental"  : "Ympäristö",
+    "communication": "Viestintä",
+    "other": "Muu",
+    "low": "Matala",
+    "medium": "Keskitaso",
+    "high": "Korkea",
+    "critical": "Kriittinen",
+    "Reported by": "Raportoi",
+    "ago": "sitten",
+    "Loading report": "Ladataan raporttia...",
+    "Report not found": "Raporttia ei löytynyt",
+    "Create": {
+      "title": "Luo uusi turvallisuusraportti",
+      "Cancel": "Peruuta",
+      "SubmitReport": "Lähetä raportti",
+      "ReportTitle": "Raportin otsikko",
+      "Description": "Kuvaus",
+      "Category": "Kategoria",
+      "Status": "Tila",
+      "SeverityLevel": "Vakavuusaste",
+      "Location": "Sijainti"
     },
+    "Show": {
+      "title":"Turvallisuusraportin tiedot",
+      "Location": "Sijainti",
+      "ReportedBy": "Raportoi",
+      "ReportedAt": "Raportoitu",
+      "ResolvedAt": "Ratkaistu",
+      "Comments": "Kommentit",
+      "EditReport": "Muokkaa raporttia"
+    },
+    "Edit":{
+      "title": "Muokkaa turvallisuusraporttia",
+      "Cancel": "Peruuta",
+      "LastUpdated": "Viimeksi päivitetty",
+      "Save Changes": "Tallenna muutokset"
+    }
+  },
+  "AssociationRules": {
+    "title": "Nummelan lentokenttäyhdistyksen säännöt",
+    "effectiveDate": "Voimaantulopäivämäärä: 8. marraskuuta 2022 klo 13:41:50",
     "section1": {
-      "title": "WhatsApp-ryhmät",
-      "linkInfo": "MIK info (Ilmoitukset, laitetiedot ym.)",
-      "linkInfoUrl": "https://chat.whatsapp.com/H7ORSRxQMQjInO4hwjN8ER",
-      "linkChat": "MIK pulinajakso (Jäsenten keskustelu)",
-      "linkChatUrl": "https://chat.whatsapp.com/ICDocWfKA6xCbDWwKOZAmU"
+      "title": "§ 1 Nimi ja kotipaikka",
+      "content": "Yhdistyksen nimi on Nummelan lentokenttäyhdistys ja sen kotipaikka on Vihdin kunta."
     },
     "section2": {
-      "title": "Sähköposti-ilmoitukset",
-      "ihq": "IHQ-ilmoitukset",
-      "ihqUrl": "https://groups.google.com/a/mik.fi/forum/#!forum/ihq-info",
-      "stl": "STL-ilmoitukset",
-      "stlUrl": "https://groups.google.com/a/mik.fi/forum/#!forum/stl-info"
+      "title": "§ 2 Tarkoitus ja toiminnan laatu",
+      "p1": "Yhdistyksen toiminnan tarkoituksena on edistää ilmailua, ilmailukoulutusta, urheilutoimintaa ja nuorisotyötä Vihdissä. Tarkoituksensa toteuttamiseksi yhdistys toimii Nummelassa ja ylläpitää Nummelan lentokenttää.",
+      "p2": "Toiminnassaan yhdistys ylläpitää ja edistää tasapuolisesti yleisilmailun, harrasteilmailun ja kaupallisen ilmailun toimintaedellytyksiä ja lentoturvallisuutta Nummelan lentokentällä.",
+      "p3": "Toimintansa turvaamiseksi yhdistys tekee aloitteita ja ehdotuksia eri viranomaisille, seuraa ja kommentoi toimintaansa vaikuttavia sääntelymuutoksia, sopii ilmatilaan liittyvistä asioista lennonjohdon kanssa ja tekee yhteistyötä kentällä toimivia muiden yhteisöjen kanssa.",
+      "p4": "Toimintansa tukemiseksi yhdistys kerää jäsenmaksuja ja käyttömaksuja jäseniltään ja kentän käyttäjiltä sekä hankkii varoja julkisista ja yksityisistä avustuksista. Yhdistys voi harjoittaa kaikkea sääntöjen mukaista julkaisutoimintaa, tulojen hankkimista ja varainhankintaa tarvittavat luvat hankkien. Yhdistys voi ottaa vastaan lahjoituksia ja testamentteja. Yhdistys voi omistaa ja hallita kiinteistöjä ja irtainta omaisuutta. Yhdistyksen toiminta ei ole voittoa tavoittelevaa eikä sen tarkoituksena ole osallistujien välitön taloudellinen hyöty."
     },
     "section3": {
-      "title": "Sähköinen lentopäiväkirja ja laskutus",
-      "body1": "Kaikki lennot on kirjattava koneen matkailupäiväkirjaan ja sähköiseen lentopäiväkirjaan osoitteessa",
-      "logbook": "www.mik.fi/kirja",
-      "logbookUrl": "http://www.mik.fi/kirja",
-      "body2": "Syötä tiedot heti lennon jälkeen ja tarkista merkinnät huolellisesti. Laskutus tehdään kuukausittain sähköpostitse. Varmista, että sähköpostiosoitteesi on ajan tasalla.",
-      "body3": "Yhdistämme konekirjan ja sähköisen päiväkirjan vähintään kuukausittain. Varmista, että lento- ja kokonaistuntien laskenta on oikein. Opiskelijan ja kouluttajan on varmistettava, että loikatunnit vastaavat koulutustietoja."
+      "title": "§ 3 Jäsenet",
+      "content": "Yhdistyksen tarkoituksen hyväksyvä ja yhdistyksen sääntöjä ja hallituksen laatimia ohjeita noudattamaan sitoutunut oikeustoimikelpoinen taho voidaan hyväksyä varsinaiseksi jäseneksi."
     },
     "section4": {
-      "title": "Henkilökohtaiset tilit",
-      "body": "Kerhon verkkosivu käyttää nyt samoja kirjautumistietoja kuin varausjärjestelmä. Jos käytät jaettua tietokonetta, älä valitse 'pysy kirjautuneena' kirjautuessasi."
+      "title": "§ 4 Jäsenyyden päättyminen ja erottaminen",
+      "p1": "Jäsenellä on oikeus erota yhdistyksestä ilmoittamalla siitä kirjallisesti hallitukselle.",
+      "p2": "Hallitus voi erottaa jäsenen, jos jäsen ei ole täyttänyt liittyessään antamiaan velvoitteita tai jos hän on toiminnallaan yhdistyksen sisällä tai ulkopuolella olennaisesti vahingoittanut yhdistystä tai jos määrättyä jäsenmaksua ei ole maksettu."
     },
     "section5": {
-      "title": "Varaus- ja keskustelufoorumi & Jäsenuutiset",
-      "body": "Varaukset ja keskustelufoorumit löytyvät jäsenten valikosta vasemmalla. Jäsenuutiset näkyvät Etusivu / Ajankohtaisten sivulla kirjautumisen jälkeen."
-    }
-  },
-  "Bookings": {
-    "label": "Varaukset"
-  },
-  "Logbook": {
-    "label": "Lentopäiväkirja"
-  },
-  "FlightStats": {
-    "label": "Lentotilastot"
-  },
-  "Manuals": {
-    "label": "Manuaalit",
-    "title": "Koneiden käyttöohjeet ja asiakirjat",
-    "description1": "Täältä löydät kerhon koneisiin liittyvät asiakirjat, jotka auttavat lentosuunnittelussa. Viralliset kopiot ovat tietenkin koneissa, ja pyrimme pitämään ne ajan tasalla. Ihmisten erehdyksiä voi aina sattua, joten tarkista asiakirjojen ajantasaisuus ennen lentoa!",
-    "description2": "Ilmoita havaitsemistasi virheistä tai puutteista osoitteeseen kalusto@mik.fi. Koneprofiileja on saatavilla myös kerhon GitHubissa, joten voit ehdottaa muutoksia, jos haluat.",
-    "reportErrors": "Ilmoita virheistä",
-    "githubProfiles": "Koneprofiilit GitHubissa",
-    "notice": "Tärkeä huomautus",
-    "noticeText": "Koneen käyttö edellyttää kerhon laiteohjeiden ymmärtämistä ja noudattamista.",
-    "aircraftCommunication": "Konekohtainen viestintä",
-    "mailingList": "Jakelulista",
-    "flightPlanEquipment": "Lentosuunnitelman kohta 10 (VARUSTEET)",
-    "download": "Lataa",
-    "otherResources": "Muut resurssit",
-    "view": "Näytä"
-  },
-  "Instructions": {
-    "label": "Ohjeet",
-    "title": "Toimintaohjeet",
-    "description": "Lentotoiminnan ohjeet ja tärkeät asiakirjat Malmin Lentokerhon jäsenille.",
-    "operationalGuides": "Toimintaohjeet",
-    "efprCharts": "EFPR-lähestymiskaaviot",
-    "expenseReimbursement": "Kulujen korvaus",
-    "expenseInstructions": "Lähetä täytetty kulukorvauslomake sähköpostitse osoitteeseen laskutus@mik.fi",
-    "malmiGuide": "Malmin lentoaseman ohjeet",
-    "download": "Lataa",
-    "downloadGuide": "Lataa ohje",
-    "submissionInfo": "Toimita täytetyt kululomakkeet kerhon kassalle.",
-    "submitExpenses": "Lähetä kulut osoitteeseen laskutus@mik.fi"
-  },
-  "Members": {
-    "label": "Jäsenet"
-  },
-  "instructors": {
-    "title": "Lentokouluttajat",
-    "columns": {
-      "name": "Kouluttaja",
-      "phone": "Puhelin",
-      "rating": "Arvostelutaso",
-      "pplLapl": "PPL/LAPL",
-      "nightFlight": "Yölento",
-      "instrumentRating": "IR",
-      "recurrentTraining": "Toistuva koulutus",
-      "pricing": "Hinnoittelu",
-      "maxPricing": "Maksimi hinnoittelu"
+      "title": "§ 5 Jäsen- ja liittymismaksut",
+      "content": "Varsinaisten ja kannattajien liittymis- ja vuotuiset jäsenmaksut päättää syyskokous erikseen kullekin jäsenryhmälle. Kannattajajäsenille, jotka ovat yhteisöjä, maksu voi olla erilainen."
     },
-    "pricingInfo": {
-      "flightInstruction": "Lentokoulutus (per lohko)",
-      "licensedStudent": "Luvallinen opiskelija",
-      "unlicensedStudent": "Ilman lentolupaa oleva opiskelija",
-      "theoryInstruction": "Teoriaohjaus (tunnissa, jaettuna osallistujien kesken)"
-    }
+    "section6": {
+      "title": "§ 6 Nummelan lentokentän käyttöohje",
+      "content": "Kaikkien kentän käyttäjien turvallisuuden, ympäristöystävällisyyden ja tasapuolisen toiminnan varmistamiseksi laaditaan käyttöohje. Käyttöohjetta ylläpitää kenttäpäällikkö ja sen muutokset hyväksyy yhdistyksen hallitus enemmistöpäätöksellä. Nummelan lentokentällä toimitaan käyttöohjeen mukaisesti. Käyttöohje sisältää ohjeet turvalliselle lentotoimintaa ja muulle ilmailu- ja maatoiminnalle Nummelan lentokentän alueella."
+    },
+    "section7": {
+      "title": "§ 7 Hallitus",
+      "p1": "Yhdistyksen asioita hoitaa hallitus. Hallitukseen kuuluu puheenjohtaja ja vähintään neljä (4) ja enintään kahdeksan (8) varsinaista jäsentä, jotka syyskokous valitsee kahdeksi (2) kalenterivuodeksi kerrallaan. Hallituksen jäsenten toimikausi on kaksi vuotta, ja puolet hallituksen jäsenistä jää eläkkeelle vuosittain.",
+      "p2": "Näiden sääntömuutosten hyväksymisen jälkeisessä ensimmäisessä jäsenkokouksessa puolet valituista hallituksen jäsenistä eroaa vuoden kuluttua arvalla määrätyn järjestyksen mukaan.",
+      "p3": "Hallitus valitsee jäsentensä joukosta varapuheenjohtajan. Lisäksi hallitus valitsee lentokentänpäällikön, sihteerin, rahastonhoitajan ja muut tarvittavat virkamiehet. Hallitus voi tarvittaessa perustaa työryhmiä ja kutsua asiantuntijoita käsittelemään ja valmistelemaan yhdistyksen operatiivisten tavoitteiden saavuttamiseen vaikuttavia asioita.",
+      "p4": "Hallitus kokoontuu puheenjohtajan tai tämän estyneenä ollessa varapuheenjohtajan kutsusta, kun he katsovat sen tarpeelliseksi tai kun vähintään puolet hallituksen jäsenistä sitä pyytää.",
+      "p5": "Hallituksella on päätösvalta, kun läsnä on vähintään puolet sen jäsenistä, mukaan lukien puheenjohtaja tai varapuheenjohtaja. Jos kokouksessa ei ole läsnä puheenjohtajaa eikä varapuheenjohtajaa, kokouksen puheenjohtajaksi valitaan yksi hallituksen jäsenistä. Päätökset tehdään yksinkertaisella ääntenenemmistöllä. Tasaäänten sattuessa puheenjohtajan ääni ratkaisee.",
+      "p6": "Hallituksen kokoukseen voi osallistua puhelimitse tai muulla teknisillä välineillä, kun henkilö on tunnistettu. Hallituksen kokouksia voidaan pitää myös etänä. Hallitus laatii yhdessä valitun lentokentänpäällikön kanssa Nummela Airfield Operations Manualin ja pitää sen ajan tasalla. Hallitus päättää lentokentän käyttömaksuista."
+    },
+    "section8": {
+      "title": "§ 8 Yhdistyksen nimikirjoitus",
+      "content": "Yhdistyksen nimeä saavat allekirjoittaa puheenjohtaja, varapuheenjohtaja ja rahastonhoitaja kukin yksin tai kaksi hallituksen jäsentä yhdessä."
+    },
+    "section9": {
+      "title": "§ 9 Talousvuosi",
+      "content": "Yhdistyksen tilikausi on kalenterivuosi."
+    },
+    "section10": {
+      "title": "§ 10 Yhdistyksen kokoukset",
+      "p1": "Yhdistys pitää kaksi varsinaista kokousta vuosittain. Yhdistyksen kevätkokous pidetään maalis-toukokuussa ja syyskokous syys-joulukuussa hallituksen määräämänä päivänä. Kokouksen ajan ja paikan päättää hallitus.",
+      "p2": "Yhdistyksen ylimääräinen kokous pidetään, kun yhdistyksen kokous niin päättää tai kun yhdistyksen hallitus katsoo sen tarpeelliseksi tai kun vähintään yksi kymmenesosa (1/10) yhdistyksen äänioikeutetuista jäsenistä kirjallisesti sitä pyytää tietyn asian käsittelyä varten. Hallituksen on järjestettävä kokous kolmenkymmenen (30) päivän kuluessa kirjallisen ilmoituksen vastaanottamisesta.",
+      "p3": "Yhdistyksen kokouksissa jokaisella varsinaisella jäsenellä on yksi ääni. Kokousvaltuutettujen on esitettävä valtakirja jäsenyhteisöltään. Yhdistyksen kokouksen päätökseksi tulee ehdotus, joka saa yli puolet annetuista äänistä. Tasaäänten sattuessa puheenjohtajan ääni ratkaisee; vaaleissa kuitenkin arpa ratkaisee.",
+      "p4": "Kannatusjäsenillä on oikeus osallistua yhdistyksen kokouksiin, mutta heillä ei ole äänioikeutta yhdistyksen kokouksissa. Yhdistyksen kokouksiin voi osallistua myös etäyhteyksin, puhelimitse tai muilla teknisillä välineillä kokouksen aikana tai ennen sitä, kun henkilö on tunnistettu, jos hallitus tai yhdistyksen kokous niin päättää. Yhdistyksen kokouksia voidaan pitää myös etänä."
+    },
+    "section11": {
+      "title": "§ 11 Yhdistyksen kokousten koollekutsuminen",
+      "p1": "Hallituksen on kutsuttava yhdistyksen kokoukset koolle vähintään seitsemän päivää ennen kokousta.",
+      "p2": "Kokouskutsu lähetetään yhdistyksen jäsenelle sähköpostiosoitteeseen, jonka jäsen on antanut yhdistykselle. Jos jäsenellä ei ole sähköpostiosoitetta, kutsu toimitetaan postitse."
+    },
+    "section12": {
+      "title": "§ 12 Varsinaiset kokoukset",
+      "springMeeting": {
+        "title": "Kevätkokous",
+        "item1": "Kokouksen avaaminen",
+        "item2": "Kokouksen puheenjohtajan, sihteerin, kahden pöytäkirjantarkastajan ja kahden ääntenlaskijan valitseminen",
+        "item3": "Kokouksen laillisuuden ja päätösvaltaisuuden sekä osallistujien vahvistaminen",
+        "item4": "Kokousohjelman hyväksyminen",
+        "item5": "Tilinpäätöksen, vuosikertomuksen ja tilintarkastuskertomuksen esittely",
+        "item6": "Tilinpäätöksen hyväksymisestä ja hallituksen ja muiden vastuussa olevien henkilöiden vastuuvapauden myöntämisestä päättäminen",
+        "item7": "Kokouskutsussa mainittujen muiden asioiden käsittely"
+      },
+      "autumnMeeting": {
+        "title": "Syyskokous",
+        "item1": "Kokouksen avaaminen",
+        "item2": "Kokouksen puheenjohtajan, sihteerin, kahden pöytäkirjantarkastajan ja kahden ääntenlaskijan valitseminen",
+        "item3": "Kokouksen laillisuuden ja päätösvaltaisuuden sekä osallistujien vahvistaminen",
+        "item4": "Kokousohjelman hyväksyminen",
+        "item5": "Toimintasuunnitelman, tulo- ja menoarvion sekä seuraavan tilikauden liittymis- ja jäsenmaksujen määrän hyväksyminen",
+        "item6": "Hallituksen puheenjohtajan valitseminen seuraaviksi kahdeksi kalenterivuodelle",
+        "item7": "Muiden hallituksen jäsenten (4-8) valitseminen sääntöjen mukaisesti",
+        "item8": "Tilintarkastajan ja varatilintarkastajan tai tilintarkastusyhteisön valitseminen tilikaudelle",
+        "item9": "Hallituksen jäsenten, tilintarkastajien jne. palkkioista päättäminen"
+      },
+      "footer": "Jos jäsen haluaa jonkin asian käsiteltäväksi kevät- tai syyskokouksessa, hänen on ilmoitettava siitä hallitukselle kirjallisesti 30 päivää ennen kokousta."
+    },
+    "section13": {
+      "title": "§ 13 Sääntöjen muuttaminen ja yhdistyksen purkaminen",
+      "p1": "Yhdistyksen säännöt muutetaan yhdistyksen kokouksen päätöksellä yksinkertaisella ääntenenemmistöllä.",
+      "p2": "Päätös yhdistyksen purkamisesta on tehtävä yhdistyksen kokouksessa vähintään kolmen neljäsosan (3/4) enemmistöllä annetuista äänistä.",
+      "p3": "Kokouskutsussa on mainittava sääntöjen muutos tai yhdistyksen purkaminen.",
+      "p4": "Yhdistyksen purkautuessa yhdistyksen varat käytetään ensisijaisesti Nummela Airfieldin hyväksi ja toissijaisesti yleisen ilmailun ja urheiluilmailun edistämiseen purkamisesta päättävän kokouksen päättämällä tavalla. Yhdistyksen purkautuessa sen varat käytetään samaan tarkoitukseen."
+    },
+    "downloadButton": "Lataa täydelliset säännöt (PDF)"
   },
-  "Instructors": {
-    "label": "Kouluttajat"
+  "PdfViewer": {
+    "title": "Nummelan lentokenttäyhdistyksen säännöt",
+    "description": "Voit tarkastella ja ladata Nummelan lentokenttäyhdistyksen säännöt PDF-muodossa.",
+    "OpenButton": "Avaa PDF"
   },
-  "StudentChecklist": {
-    "label": "Opiskelijan tarkistuslista",
-    "welcome": {
-      "title": "Tervetuloa Malmin Lentokerhoon",
-      "subtitle": "PPL-opiskelijan tarkistuslista"
-    },
-    "introduction": {
-      "paragraph1": "Tämä tarkistuslista on ensisijaisesti tarkoitettu PPL-opiskelijoille, mutta koskee myös muuta lupakoulutustamme. Sinulla on sama lentokouluttaja aina yksinlentovaiheeseen saakka, ellei poikkeukselliset olosuhteet vaadi muutosta.",
-      "paragraph2": "Jos koet, ettet voi jatkaa nykyisen kouluttajan kanssa, ota yhteyttä pääkouluttajaan. Voit lähettää palautetta tai ilmoituksia anonyymisti kerhon postilaatikon kautta (merkitty 'TRAINING FEEDBACK/REPORT') tai verkkosivulomakkeen kautta (tällä hetkellä ei saatavilla).",
-      "importantNote": "Ota välittömästi yhteyttä pääkouluttajaan, jos epäilet, että turvallisuutta on vaarannettu tai se olisi voinut vaarantua, tai jos sinulla on havaintoja koulutuksesta tai varustuksesta."
-    },
-    "checklistTitle": "Koulutustarkistuslista",
-    "sections": {
-      "beforeTraining": {
-        "title": "Ennen koulutuksen alkua",
-        "items": [
-          "Ilmailulääketieteellinen todistus (voimassa)",
-          "Koulutussopimus Malmin Lentokerhon kanssa",
-          "Opiskelijan luvanhakemus (pääkouluttajan allekirjoittama)",
-          "Maakoulu voidaan opiskella rinnakkain lentokoulutuksen kanssa"
-        ],
-        "note": "Huom: Teoriaa voi opiskella rinnakkain lentokoulutuksen kanssa, mutta tietyt kokeet on suoritettava ennen ensimmäistä yksinolentoa. Lentokoulutuksen aloittaminen myöhään syksyllä ei välttämättä ole suositeltavaa sääolosuhteiden vuoksi."
-      },
-      "beforeFirstFlight": {
-        "title": "Ennen ensimmäistä lentotuntia",
-        "items": [
-          "Lääkärintodistuksen kopio koulutuskansiosta",
-          "Opiskelijan luvan kopio koulutuskansiosta",
-          "Koulutussuunnitelma kansiossa",
-          "Varmista, että lentopäiväkirja ja koneen matkapäiväkirja ovat mukana jokaisella lennolla"
-        ]
-      },
-      "beforeSoloFlight": {
-        "title": "Vaatimukset ennen ensimmäistä yksinolentoa",
-        "items": [
-          "Suoritetut kokeet: Ilmailusäännökset, Lentoteoria, Radiopuhelut",
-          "Osoita taitoa radiopuheluissa ATC:n kanssa",
-          "Suoritettu suullinen konejärjestelmäkoe",
-          "Edistymisen tarkastuslento toisen kouluttajan kanssa",
-          "Hyväksytty pääkouluttajan toimesta"
-        ]
-      },
-      "beforeFlightTest": {
-        "title": "Ennen lentotestiä",
-        "items": [
-          "Voimassa oleva opiskelijan lupa ja lääkärintodistus",
-          "Suoritettu koulutuksen todistus maassa ja lentokoulutuksessa",
-          "Kerhon suositus lentotestiin",
-          "Suoritettu virallinen teoreettinen koe",
-          "Jos sovellettavissa: Epäonnistuneen lentotestin raportti"
-        ]
-      }
-    },
-    "licenseApplication": {
-      "title": "Lupahakemukseen liitettävät asiakirjat",
-      "description": "Seuraavien asiakirjojen tulee sisältyä lupahakemukseesi:",
-      "items": [
-        "Maakoulutuksen todistus",
-        "Lentokoulutuksen todistus",
-        "Tarkastelentäjän lausunto",
-        "Kopio lentopäiväkirjasta",
-        "Virallisten teoreettisten kokeiden tulokset (kopio)",
-        "Kielitaidon todistus",
-        "Passin kopio (ei-suomalaisille kansalaisille)"
-      ],
-      "note": "Huom: Virallisten teoreettisten kokeiden tulosten pitäisi jo olla viranomaisella, mutta liitä kopio vertailua varten. Yölentokorotusta ei voida sisällyttää LAPL(A)/PPL(A) -koulutukseen."
-    },
-    "instructors": {
-      "title": "Koulutuskontaktit",
-      "columns": {
-        "name": "Kouluttaja",
-        "phone": "Puhelin",
-        "rating": "Arvostelutaso",
-        "pplLapl": "PPL/LAPL",
-        "nightFlight": "Yölento",
-        "instrumentRating": "IR",
-        "recurrentTraining": "Toistuva koulutus",
-        "pricing": "Hinnoittelu",
-        "maxPricing": "Maksimi hinnoittelu"
-      },
-      "pricingInfo": {
-        "flightInstruction": "Lentokoulutus (per lohko)",
-        "licensedStudent": "Luvallinen opiskelija",
-        "unlicensedStudent": "Ilman lentolupaa oleva opiskelija",
-        "theoryInstruction": "Teoriaohjaus (tunnissa, jaettuna osallistujien kesken)"
-      },
-      "chiefInstructor": "Pääkouluttaja: Rami Sadik",
-      "aircraftEquipment": {
-        "title": "Koneen varustus",
-        "list": "Koulutuskoneet: OH-SRH, OH-IHQ (ei YL), OH-STL"
-      },
-      "lastUpdated": "Viimeksi päivitetty: 28.10.2020 | Koulutuslupa voimassa toistaiseksi"
-    }
+   "Blog": {
+    "title": "EFNU-lentoaseman tiedotteet",
+    "subtitle": "Löydä uusimmat uutiset, päivitykset ja tarinat EFNU-lentoasemalta",
+    "Search blog posts": "Hae blogikirjoituksia",
+    "Featured": "Esittelyssä",
+    "readMore": "Lue lisää",
+    "LatestUpdates": "Viimeisimmät päivitykset",
+    "noPosts": "Blogikirjoituksia ei löytynyt",
+    "Try adjusting your search or check back later for new content": "Yritä muuttaa hakua tai tarkista myöhemmin uutta sisältöä",
+    "PostNotFound": "Julkaisua ei löytynyt",
+    "The blog post you're looking for doesn't exist or may have been removed.": "The blog post you're looking for doesn't exist or may have been removed.",
+    "BackToBlog": "Takaisin blogiin",
+    "Back": "Takaisin",
+    "Article": "Artikkeli",
+    "AboutTheAuthor": "Tietoja kirjoittajasta",
+    "ViewAllPosts": "Näytä kaikki julkaisut",
+    "RelatedPosts": "Aiheeseen liittyviä julkaisuja",
+    "NoRelatedPosts": "Aiheeseen liittyviä julkaisuja ei löytynyt"
+  },
+  "Calendar": {
+    "title": "EFNU-kalenteri",
+    "subtitle": "Pysy ajan tasalla tulevista tapahtumista ja tärkeistä päivämääristä EFNU-lentokentällä",
+    "Search events": "Hae tapahtumia...",
+    "BackToEvents": "Takaisin tapahtumiin",
+    "NoEventsFound": "Ei tapahtumia löytynyt",
+    "Back": "Takaisin",
+    "EditEvent": "Muokkaa tapahtumaa",
+    "EventTitle": "Tapahtuman otsikko",
+    "Description": "Kuvaus",
+    "AllDayEvent": "Koko päivän tapahtuma",
+    "StartDate": "Aloituspäivämäärä",
+    "EndDate": "Lopetuspäivämäärä",
+    "StartTime": "Aloitusaika",
+    "EndTime": "Lopetusaika",
+    "Location": "Sijainti",
+    "EventType": "Tapahtuman tyyppi",
+    "meeting": "Kokous",
+    "training": "Koulutus",
+    "event": "Tapahtuma",
+    "reminder": "Muistutus",
+    "holiday": "Loma",
+    "personal": "Yksityinen",
+    "Status": "Tila",
+    "confirmed": "Vahvistettu",
+    "tentative": "Alustava",
+    "cancelled": "Peruutettu",
+    "Timezone": "Aikavyöhyke",
+    "Date & Time": "Päivämäärä ja aika",
+    "Cancel": "Peruuta",
+    "SaveChanges": "Tallenna muutokset",
+    "Share": "Jaa",
+    "Delete": "Poista",
+    "Edit": "Muokkaa",
+    "Organizer": "Järjestäjä",
+    "ViewProfile": "Näytä profiili",
+    "SimilarEvents": "Samankaltaisia tapahtumia",
+    "NoSimilarEvents": "Samankaltaisia tapahtumia ei löytynyt",
+    "AddToCalendar": "Lisää kalenteriin",
+    "Try adjusting your search or check back later for new events": "Kokeile hakuehtojen muuttamista tai tarkista myöhemmin uudet tapahtumat",
+    "EventDetails": "Tapahtuman tiedot",
+    "EventNotFound": "Tapahtumaa ei löytynyt",
+    "The event you're looking for doesn't exist or may have been removed.": "The event you're looking for doesn't exist or may have been removed.",
+    "BackToCalendar": "Takaisin kalenteriin"
   }
 }

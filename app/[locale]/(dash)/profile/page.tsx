@@ -32,19 +32,20 @@ import {
 } from "@mui/icons-material";
 import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
-import { BarChart } from "recharts";
-import { Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { ProfileAvatar, ProfileLicence, ProfileName, ProfileEmail, ProfilePhone, ProfileRatings} from "@components/functions/FetchFunctions"
 import { EditButton } from "@refinedev/mui";
 import { ColorModeContext } from "@contexts/color-mode";
-import { FuelData } from "@components/FuelProfile";
-import { PasswordChangeBlock } from "@components/PasswordChange";
+import { FuelData } from "@components/profile/FuelData";
+import { PasswordChangeBlock } from "@components/profile/PasswordChange";
+import LanguageSwitcher from "@components/ui/LanguageSwitcher";
+import { useTranslations } from "next-intl";
 
 const Profile = () => {
   const { open } = useNotification();
   const { data: identityData } = useGetIdentity<{ id: string }>();
   const uid = identityData?.id as string;
   const { mode, setMode } = useContext(ColorModeContext);
+  const t = useTranslations("Profile");
 
   const [fuelData] = useState([
     { month: 'Jan', amount: 1200 },
@@ -89,7 +90,7 @@ const Profile = () => {
       <Container maxWidth="lg">
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
           <Typography variant="h4" component="h1" fontWeight="bold">
-          Profile
+          {t("Profile")}
           </Typography>
         </Box>
 
@@ -103,25 +104,25 @@ const Profile = () => {
               <CardHeader
                 title={
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant="h6">Personal Information</Typography>
+                    <Typography variant="h6">{t("PersonalInformation")}</Typography>
                     <ProfileAvatar profileId={uid}/>
                   </Box>
                 }
-                subheader="Your pilot details"
+                subheader={t("Yourpilotdetails")}
               />
               <CardContent>
                 <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
                   <ProfileAvatar profileId={uid}/>
                   <Box>
                     <Typography variant="h6"><ProfileName profileId={uid} /></Typography>
-                    <Typography variant="body2" color="text.secondary">License #: <ProfileLicence profileId={uid} /></Typography>
+                    <Typography variant="body2" color="text.secondary">{t("License")} #: <ProfileLicence profileId={uid} /></Typography>
                   </Box>
                 </Box>
                 <Box>
                   {[
-                    { label: "Email", value: <ProfileEmail profileId={uid} /> },
-                    { label: "Phone", value: <ProfilePhone profileId={uid} /> },
-                    { label: "Certification", value: <ProfileRatings profileId={uid} /> }
+                    { label: t("Email"), value: <ProfileEmail profileId={uid} /> },
+                    { label: t("Phone"), value: <ProfilePhone profileId={uid} /> },
+                    { label: t("Certification"), value: <ProfileRatings profileId={uid} /> }
                   ].map((item, index) => (
                     <Box 
                       key={index} 
@@ -154,9 +155,9 @@ const Profile = () => {
                 >
                   {mode === "dark" ? <LightModeOutlined /> : <DarkModeOutlined />}
                 </IconButton>
+                <LanguageSwitcher/>
               </CardActions>
             </Card>
-            <PasswordChangeBlock />
           </Grid>
 
           {/* Fee Status Card */}
@@ -168,11 +169,11 @@ const Profile = () => {
               <CardHeader
                 title={
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant="h6">Fee Status</Typography>
+                    <Typography variant="h6">{t("FeeStatus")}</Typography>
                     <DollarIcon color="action" />
                   </Box>
                 }
-                subheader="Your current airport fees"
+                subheader={t("Yourcurrentairportfees")}
               />
               <CardContent>
                 {/* 
@@ -238,10 +239,12 @@ const Profile = () => {
               </CardActions>
             </Card>
           </Grid>
-
-          {/* Fuel Totals Card */}
-          <FuelData profileId={uid} />
+          <Grid item xs={12} md={4}>
+            <PasswordChangeBlock />
+          </Grid>
         </Grid>
+        {/* Fuel Totals Card */}
+        <FuelData profileId={uid} />
       </Container>
     </Box>
   );

@@ -10,22 +10,25 @@ import {
   Chip, 
   Stack, 
   Skeleton,
-  Divider,
-  IconButton,
+  Button,
   Box
 } from "@mui/material";
-import { Edit, Delete, Flight } from "@mui/icons-material";
+import { Add as AddIcon, Flight } from "@mui/icons-material";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useTheme } from "@mui/material/styles";
-import { CreateButton, DeleteButton, EditButton } from "@refinedev/mui";
+import { DeleteButton, EditButton } from "@refinedev/mui";
 import { PriorNotice } from "@/types/index";
+import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 
 dayjs.extend(relativeTime);
 
 
 const PNList = () => {
   const theme = useTheme();
+  const route = useRouter();
+  const t = useTranslations("PN");
   const { data: identityData } = useGetIdentity<{ id: string }>();
 
   const UserID = identityData?.id as string;
@@ -67,11 +70,16 @@ const PNList = () => {
           <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography variant="h5" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
               <Flight sx={{ mr: 1, color: theme.palette.primary.main }} />
-              Upcoming Flights
+              {t("UpcomingFlights")}
             </Typography>
-            <CreateButton 
-              resource="priornotice"
-            />
+            <Button
+              variant="contained"
+              onClick={() => route.push("/priornotice/create")}
+              sx={{ m: 2 }}
+            >
+              <AddIcon />
+              {t("CreatePN")}
+            </Button>
           </Box>
           
           {publicLoading ? (
@@ -112,7 +120,7 @@ const PNList = () => {
 
                   </div>
                   <Chip 
-                    label={pn.status} 
+                    label={t(pn.status)} 
                     size="small" 
                     color={getStatusColor(pn.status)} 
                     
@@ -124,7 +132,7 @@ const PNList = () => {
           
           {!publicLoading && publicPNs.length === 0 && (
             <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mt: 4 }}>
-              No upcoming flights scheduled
+              {t("NoUpcomingFlightsScheduled")}
             </Typography>
           )}
         </Paper>

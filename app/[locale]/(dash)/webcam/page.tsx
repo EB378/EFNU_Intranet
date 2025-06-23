@@ -3,10 +3,12 @@
 import { Box, Grid, Typography, Paper, Skeleton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import NextImage from "next/image";
+import { useTranslations } from "next-intl";
 
 const WebCamPage: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(true);
+  const t = useTranslations("WebCam");
 
   useEffect(() => {
     const handleResize = () => {
@@ -27,18 +29,18 @@ const WebCamPage: React.FC = () => {
   const webcams = [
     {
       url: "https://atis.efnu.fi/webcam/cam-efnu-wx1.jpg",
-      label: "Runway 27",
-      description: "View of main runway approach"
+      label: t("Runway27"),
+      description: t("ViewOfMainRunwayApproach")
     },
     {
       url: "https://atis.efnu.fi/webcam/cam-efnu-wx2.jpg",
-      label: "Runway Intersection",
-      description: "Taxiway and runway intersection"
+      label: t("RunwayIntersection"),
+      description: t("TaxiwayAndRunwayIntersection")
     },
     {
       url: "https://atis.efnu.fi/webcam/cam-efnu-wx3.jpg",
-      label: "Glider Runway 22",
-      description: "Glider operations area"
+      label: t("GliderRunway22"),
+      description: t("GliderOperationsArea")
     }
   ];
 
@@ -53,11 +55,11 @@ const WebCamPage: React.FC = () => {
         mb: 4,
         color: "text.primary"
       }}>
-        EFNU Webcams
+        {t("EFNUWebcams")}
       </Typography>
       
       <Typography variant="body1" paragraph sx={{ mb: 4, color: "text.secondary" }}>
-        Live views from around the airfield. Images refresh every 60 seconds.
+        {t("Description")}
       </Typography>
 
       <Grid container spacing={4}>
@@ -111,7 +113,7 @@ const WebCamPage: React.FC = () => {
                   color: "text.disabled",
                   fontStyle: "italic"
                 }}>
-                  Last updated: {new Date().toLocaleTimeString()}
+                  {t("LastUpdated")}: {new Date().toLocaleTimeString()}
                 </Typography>
               </Box>
             </Paper>

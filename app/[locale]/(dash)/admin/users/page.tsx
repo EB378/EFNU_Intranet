@@ -3,20 +3,18 @@
 import { 
   Box, Typography, Paper, Grid, Table, TableBody, TableCell, 
   TableContainer, TableHead, TableRow, Button, 
-  Chip, TextField, InputAdornment, Stack, 
-  Dialog, DialogTitle, DialogContent, DialogActions, 
-  MenuItem, Select, FormControl, InputLabel 
+  Chip, TextField, InputAdornment, Stack,
+  MenuItem, Select, FormControl, InputLabel, IconButton, Tooltip
 } from '@mui/material';
 import { 
-  Search, FilterList, Add
+  Search, FilterList, Refresh,
 } from '@mui/icons-material';
-import { useTable, useDelete, useNotification } from '@refinedev/core';
+import { useTable, useNotification } from '@refinedev/core';
 import { EditButton, DeleteButton } from '@refinedev/mui';
-import { useForm } from '@refinedev/react-hook-form';
-import { Controller } from 'react-hook-form';
 import { useState } from 'react';
 import { ProfileAvatar } from '@components/functions/FetchFunctions';
 import { ProfileData } from '@/types/index';
+import CreateUserModalWithButton from '@components/AdminComponents/CreateUserModalWithButton';
 
 const statusColors: Record<ProfileData['status'], 'success' | 'warning' | 'error'> = {
   active: 'success',
@@ -24,15 +22,15 @@ const statusColors: Record<ProfileData['status'], 'success' | 'warning' | 'error
   suspended: 'error'
 };
 
-const roleColors: Record<ProfileData['role'], 'primary' | 'info' | 'secondary'> = {
+const roleColors: Record<ProfileData['role'], 'primary' | 'info' | 'secondary' | 'warning'> = {
   admin: 'primary',
   pilot: 'info',
-  staff: 'secondary'
+  staff: 'secondary',
+  organisation: 'warning'
 };
 
 export default function MembersList() {
   const { open } = useNotification();
-  const [openDialog, setOpenDialog] = useState(false);
   const [filter, setFilter] = useState<'all' | 'active' | 'pending' | 'suspended'>('all');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -88,70 +86,22 @@ export default function MembersList() {
     }
   }
 
- // In your MembersList component
-  const { 
-    refineCore: { onFinish: refineOnFinish, formLoading }, 
-    register, 
-    handleSubmit,
-    control,
-    reset 
-  } = useForm({
-    refineCoreProps: {
-      resource: 'profiles',
-      action: 'create',
-      onMutationSuccess: () => {
-        reset();
-        setOpenDialog(false);
-        open?.({
-          type: 'success',
-          message: 'Member created successfully',
-        });
-      }
-    }
-  });
-
-  const onFinish = async (data: any) => {
-    try {
-      const response = await fetch('/api/users/create-users', {  // Updated endpoint
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          user_metadata: {
-            fullname: data.fullname,
-            licence: data.licence,
-            status: data.status,
-            role: data.role
-          }
-        }),
-      });
-
-      const result = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to create user');
-      }
-
-      tableQueryResult.refetch();
-      open?.({
-        type: 'success',
-        message: 'User created successfully',
-      });
-      
-      setOpenDialog(false);
-      reset();
-    } catch (error: any) {
-      open?.({
-        type: 'error',
-        message: error.message || 'Error creating user',
-      });
-    }
-  };
-
   const members = tableQueryResult?.data?.data || [];
+
+  const handleRefresh = async () => {
+  try {
+    await tableQueryResult.refetch();
+    open?.({
+      type: "success",
+      message: "Member list refreshed",
+    });
+  } catch (error) {
+    open?.({
+      type: "error",
+      message: "Failed to refresh member list",
+    });
+  }
+};
 
   return (
     <Box sx={{ p: 4 }}>
@@ -160,19 +110,7 @@ export default function MembersList() {
           Member Management
         </Typography>
         <Stack direction="row" spacing={2}>
-          <Button
-            variant="contained"
-            startIcon={<Add />}
-            onClick={() => setOpenDialog(true)}
-            sx={{
-              borderRadius: 2,
-              px: 3,
-              py: 1,
-              background: 'linear-gradient(135deg, #2196f3, #1976d2)'
-            }}
-          >
-            Add Member
-          </Button>
+          <CreateUserModalWithButton />
         </Stack>
       </Box>
 
@@ -196,7 +134,25 @@ export default function MembersList() {
             />
           </Grid>
           <Grid item xs={12} md={6}>
-            <Stack direction="row" spacing={2} justifyContent="flex-end">
+            <Stack direction="row" spacing={2} justifyContent="flex-end"> 
+              <Tooltip title="Refresh">
+                <IconButton 
+                  onClick={handleRefresh}
+                  color="primary"
+                  disabled={tableQueryResult.isFetching}
+                >
+                  <Refresh 
+                    sx={{
+                      animation: tableQueryResult.isFetching ? "spin 2s linear infinite" : "",
+                      "@keyframes spin": {
+                        "0%": { transform: "rotate(0deg)" },
+                        "100%": { transform: "rotate(360deg)" }
+                      }
+                    }}
+                  />
+                </IconButton>
+              </Tooltip>
+
               <FormControl sx={{ minWidth: 120 }}>
                 <InputLabel>Status</InputLabel>
                 <Select
@@ -228,9 +184,10 @@ export default function MembersList() {
           <TableHead sx={{ bgcolor: 'action.hover' }}>
             <TableRow>
               <TableCell>Member</TableCell>
-              <TableCell>License</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Type</TableCell>
               <TableCell>Role</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>License</TableCell>
               <TableCell>Joined at</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
@@ -250,7 +207,17 @@ export default function MembersList() {
                   </Box>
                 </TableCell>
                 <TableCell>
-                  <Typography variant="body2">{member.licence || 'N/A'}</Typography>
+                  <Typography variant="body2">
+                    {member.profile_type.charAt(0).toUpperCase() + member.profile_type.slice(1)}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Chip 
+                    label={member.role} 
+                    color={roleColors[member.role]} 
+                    size="small"
+                    sx={{ textTransform: 'capitalize' }}
+                  />
                 </TableCell>
                 <TableCell>
                   <Chip 
@@ -261,12 +228,7 @@ export default function MembersList() {
                   />
                 </TableCell>
                 <TableCell>
-                  <Chip 
-                    label={member.role} 
-                    color={roleColors[member.role]} 
-                    size="small"
-                    sx={{ textTransform: 'capitalize' }}
-                  />
+                  <Typography variant="body2">{member.licence || 'N/A'}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2">
@@ -304,101 +266,6 @@ export default function MembersList() {
           </TableBody>
         </Table>
       </TableContainer>
-
-      {/* Add Member Dialog */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)} fullWidth maxWidth="sm">
-        <DialogTitle>Add New Member</DialogTitle>
-        <DialogContent>
-          <Box component="form" onSubmit={handleSubmit(onFinish)} sx={{ mt: 2 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Full Name"
-                  {...register('fullname', { required: true })}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Email"
-                  type="email"
-                  {...register('email', { required: true })}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Password"
-                  type="password"
-                  {...register('password', { required: true })}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="License Number"
-                  {...register('licence')}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Status</InputLabel>
-                  <Controller
-                    control={control}
-                    name="status"
-                    defaultValue="active"
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        label="Status"
-                      >
-                        <MenuItem value="active">Active</MenuItem>
-                        <MenuItem value="pending">Pending</MenuItem>
-                        <MenuItem value="suspended">Suspended</MenuItem>
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <FormControl fullWidth>
-                  <InputLabel>Role</InputLabel>
-                  <Controller
-                    control={control}
-                    name="role"
-                    defaultValue="pilot"
-                    render={({ field }) => (
-                      <Select
-                        {...field}
-                        label="Role"
-                      >
-                        <MenuItem value="admin">Admin</MenuItem>
-                        <MenuItem value="pilot">Pilot</MenuItem>
-                        <MenuItem value="staff">Staff</MenuItem>
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
-          <Button 
-            onClick={handleSubmit(onFinish)} 
-            variant="contained"
-            disabled={formLoading}
-          >
-            {formLoading ? 'Creating...' : 'Create Member'}
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 }

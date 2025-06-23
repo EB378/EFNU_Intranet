@@ -20,38 +20,50 @@ e = some(where (p.eft == allow))
 
 export const adapter = new StringAdapter(`
 //Roles
-g, member, guest
-g, admin, member
-g, pilot, member
 
+g, pilot, guest
+g, organisation, pilot
+g, admin, organisation
 
 //Policies  
 
 p, guest, home, (list)|(show)
 p, guest, atis, (list)|(show)
-p, guest, priornotice, (list)|(show)|(create)
-p, guest, priornotice/*, (edit)|(delete) 
 p, guest, notams, (list)|(show)
 p, guest, info, (list)|(show)
+p, guest, blog, (list)|(show)
+p, guest, handbook, (list)|(show)
+p, guest, rules, (list)|(show)
+p, guest, lights, (list)|(show)
+p, guest, contact, (list)|(show)
 
-
-p, member, fuel, (list)|(show)|(create)
-p, member, webcam, (list)|(show)
-p, member, flyk, (list)|(show)
-p, member, weather, (list)|(show)
-p, member, profile, (list)|(show)
-p, member, profile/*, edit
-p, member, lights, (list)|(show)
-
+p, pilot, alerts, (create)
+p, pilot, alerts/*, (edit)|(show)
+p, pilot, priornotice, (list)|(show)|(create)
+p, pilot, priornotice/*, (edit)|(delete) 
+p, pilot, fuel, (list)|(show)|(create)
+p, pilot, webcam, (list)|(show)
+p, pilot, flyk, (list)|(show)
+p, pilot, weather, (list)|(show)
+p, pilot, profile, (list)|(show)
+p, pilot, profile/*, edit
+p, pilot, sms, (list)|(show)|(create)
+p, pilot, calendar, (list)|(show)
 
 p, admin, users/*, (edit)|(delete)
-p, admin, blog, (list)|(show)|(create)
-p, admin, sms, (list)|(show)|(create)
-p, admin, contact, (list)|(show)
-p, admin, handbook, (list)|(show)
-p, admin, rules, (list)|(show)
-p, admin, pic, (list)|(show)
+p, admin, users, (create)
+p, admin, fuelings/*, (edit)|(delete)
+p, admin, fuelings, (create)
+p, admin, flights/*, (edit)|(delete)
+p, admin, flights, (create)
+p, admin, blog, (create)
+p, admin, blog/*, (edit)|(delete)
+p, admin, sms/*, (edit)|(delete)
+p, admin, alerts/*, (delete)
 p, admin, admin, (list)|(show)
+p, admin, calendar, (create)
+p, admin, calendar/*, (edit)|(delete)
+p, admin, fees, (list)|(show)
 `);
 
 
