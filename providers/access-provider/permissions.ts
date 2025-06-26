@@ -28,9 +28,9 @@ g, admin, organisation
 //Policies  
 
 p, guest, home, (list)|(show)
-p, guest, atis, (list)|(show)
-p, guest, notams, (list)|(show)
 p, guest, info, (list)|(show)
+p, guest, notams, (list)|(show)
+p, guest, information, (list)|(show)
 p, guest, blog, (list)|(show)
 p, guest, handbook, (list)|(show)
 p, guest, rules, (list)|(show)

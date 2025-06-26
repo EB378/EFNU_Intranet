@@ -31,10 +31,10 @@ const resources = [
         },
     },
     {
-        name: "atis",                          
-        list: "/atis",
+        name: "info",                          
+        list: "/info",
         meta: {
-          label: "ATIS",
+          label: "INFO",
           icon: <CloudQueue />
         }
     },
@@ -82,8 +82,8 @@ const resources = [
       }
   },
   {
-      name: "info",                          
-      list: "/info",
+      name: "information",                          
+      list: "/information",
       meta: {
         label: "INFO",
         icon: <Info />

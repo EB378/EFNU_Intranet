@@ -2,12 +2,12 @@
 
 import React from "react";
 
-const AtisPage: React.FC = () => {
+const InfoPage: React.FC = () => {
 
   return (
     <div className="fixed top-0 left-0 h-90vh overflow-hidden m-0 p-0 border-none">
       <iframe 
-        src="https://atis.efnu.fi/" 
+        src="https://lentopaikat.fi/nummela-efnu" 
         style={{
           position: "absolute",
           bottom: "10vh",
@@ -16,7 +16,8 @@ const AtisPage: React.FC = () => {
           border: "none",
           margin: 0,
           padding: 0,
-          display: "block"
+          display: "block",
+          background: "white",
         }}
         allowFullScreen
         title="Flyk Aviation Map"
@@ -26,4 +27,4 @@ const AtisPage: React.FC = () => {
   );
 };
 
-export default AtisPage;
+export default InfoPage;

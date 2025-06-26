@@ -36,7 +36,7 @@
   
   "NavBar": {
     "Home": "Koti",
-    "ATIS": "ATIS",
+    "INFO": "INFO",
     "Fuel": "Polttoaine",
     "Profile": "Profiili",
     "LogOut": "Kirjaudu ulos",
@@ -45,7 +45,7 @@
     "WebCam": "WebCam",
     "Blog": " Blogi",
     "NOTAMS": "NOTAMS",
-    "INFO": "INFO",
+    "information": "Tiedot",
     "FLYK": "FLYK",
     "Weather": "Sää",
     "RWY Lights": "Kiitotien valot",

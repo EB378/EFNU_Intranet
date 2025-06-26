@@ -66,7 +66,7 @@ export default function MobileNav() {
   const { mutate: logout } = useLogout();
 
   // Define main navigation items
-  const mainNavItems = ['home', 'atis', 'fuel', 'profile'];
+  const mainNavItems = ['home', 'info', 'fuel', 'profile'];
   const mainNavResources = resources.filter(resource => mainNavItems.includes(resource.name));
   const menuResources = resources.filter(resource => !mainNavItems.includes(resource.name));
 

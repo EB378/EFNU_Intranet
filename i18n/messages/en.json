@@ -31,7 +31,7 @@
   
   "NavBar": {
     "Home": "Home",
-    "ATIS": "ATIS",
+    "INFO": "INFO",
     "Fuel": "Fuel",
     "Profile": "Profile",
     "LogOut": "Log Out",
@@ -40,7 +40,7 @@
     "WebCam": "WebCam",
     "Blog": "Blog",
     "NOTAMS": "NOTAMS",
-    "INFO": "INFO",
+    "information": "Information",
     "FLYK": "FLYK",
     "Weather": "Weather",
     "RWY Lights": "RWY Lights",
