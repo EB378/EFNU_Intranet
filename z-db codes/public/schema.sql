@@ -7,7 +7,7 @@ create table public.profiles (
   email text null,
   phone text null,
   ratings jsonb null,
-  licence text null,
+  license text null,
   role text null,
   status text null,
   profile_type text not null default 'user'::text,

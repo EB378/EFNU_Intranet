@@ -29,16 +29,16 @@ export function ProfileAvatar({ profileId }: { profileId: string }) {
   return <Avatar src={profileData.avatar_url} alt={"pfp"} />;
 }
 
-export function ProfileLicence({ profileId }: { profileId: string }) {
+export function ProfileLicense({ profileId }: { profileId: string }) {
   const { queryResult } = useShow({
       resource: "profiles",
       id: profileId,
-      meta: { select: "licence" },
+      meta: { select: "license" },
       queryOptions: { enabled: !!profileId },
   });
-  const profileData = queryResult?.data?.data as { licence: string;} | undefined;
+  const profileData = queryResult?.data?.data as { license: string;} | undefined;
   if (!profileData) return <span>Loading...</span>;
-  return <span>{profileData.licence}</span>;
+  return <span>{profileData.license}</span>;
 }
 
 export function ProfilePhone({ profileId }: { profileId: string }) {

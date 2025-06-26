@@ -1,38 +1,4 @@
 {
-  "AboutBusiness": {
-    "title": "Miksi yrityksesi tarvitsee enemmän kuin vain verkkosivuston – se tarvitsee myyntikoneen",
-    "introParagraph1": "Nykyisessä digitaalisessa maailmassa verkkosivustosi ei ole vain online-esite – se on yrityksesi tehokkain myyntityökalu. Kuitenkin liian monet yrityksen omistajat tyytyvät geneerisiin, itse tehtyihin verkkosivustoratkaisuihin, jotka jättävät heidät turhautuneiksi ja jumissa sivuston kanssa, joka näyttää kivalta mutta ei todellakaan tuo asiakkaita.",
-    "introParagraph2": "Jos verkkosivustosi ei houkuta kävijöitä, luo luottamusta ja muuta kävijöitä asiakkaksi, se ei ole vain huono verkkosivusto – se maksaa sinulle rahaa joka päivä.",
-    "harshRealityTitle": "Karu todellisuus: Huono verkkosivusto on pahempi kuin ei verkkosivustoa",
-    "harshRealityText": "Muistatko viimeksi kun etsit yritystä verkosta. Löysitkö verkkosivuston, joka näytti vanhentuneelta, kesti ikuisuuden latautua tai teki tarpeidesi löytämisen vaikeaksi? Lähdit pois. Juuri näin käy, kun potentiaaliset asiakkaat kohtaavat huonosti suunnitellun verkkosivuston.",
-    "harshRealityListItem1": "❌ Näytät epäammattimaiselta – Ensivaikutelmat merkitsevät.",
-    "harshRealityListItem2": "❌ Menetät asiakkaita kilpailijoille – Hidas tai sekava sivusto karkottaa asiakkaita.",
-    "harshRealityListItem3": "❌ Tuhlaat aikaasi ja rahasi – DIY-työkalut jättävät usein sinut toimimattoman sivuston kanssa.",
-    "harshRealityListItem4": "❌ Ei näy Googlessa – Huono SEO tarkoittaa, että potentiaaliset asiakkaat eivät löydä sinua.",
-    "harshRealityListItem5": "❌ Ei muuta kävijöitä maksaviksi asiakkaille – Sivustosi pitäisi tuoda liidejä ja myyntiä.",
-    "benefitsTitle": "Mitä suorituskykyinen verkkosivusto voi tehdä yrityksellesi",
-    "benefitsIntro": "Suorituskykyisen verkkosivuston pitäisi olla ahkerin työntekijäsi, joka toimii 24/7 houkutellakseen, muuttaakseen ja pitääkseen asiakkaita.",
-    "benefitListItem1": "✅ Luo luottamusta ja uskottavuutta – Tyylikäs, moderni sivusto parantaa ammattikuvaasi.",
-    "benefitListItem2": "✅ Houkuttele enemmän asiakkaita – Ammattimainen SEO tuo jatkuvaa liikennettä.",
-    "benefitListItem3": "✅ Muuta kävijät asiakkaiksi – Selkeä, vakuuttava suunnittelu ohjaa toimintaan.",
-    "benefitListItem4": "✅ Toimii kaikilla laitteilla – Mobiiliystävällinen sivusto saavuttaa laajemman yleisön.",
-    "benefitListItem5": "✅ Skaalautuu yrityksesi mukana – Mukautetut ratkaisut kasvavat tarpeidesi mukana.",
-    "packageTitle": "Mitä mukautettu verkkosivustopakettisi sisältää?",
-    "packageListItem1": "🔹 Upea, mobiiliystävällinen design",
-    "packageListItem2": "🔹 SEO-optimointi",
-    "packageListItem3": "🔹 Korkean konversioon johtava kopiointi",
-    "packageListItem4": "🔹 Salamannopea nopeus",
-    "packageListItem5": "🔹 Helppokäyttöiset yhteydenotto- ja varauslomakkeet",
-    "finalCallTitle": "Valmiina viemään yrityksesi seuraavalle tasolle?",
-    "finalCallText": "Huono verkkosivusto maksaa sinulle myyntiä joka päivä. Älä anna toisen asiakkaan lipsahtaa käsistäsi. Investoi korkean konversion verkkosivustoon tänään ja katso yrityksesi nousun.",
-    "bookNow": "Varaa nyt"
-  },
-
-
-
-
-
-
   
   "NavBar": {
     "Home": "Koti",

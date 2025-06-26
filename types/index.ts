@@ -7,7 +7,7 @@ export interface ProfileData {
   phone: string;
   avatar_url?: string;
   ratings: string[];
-  licence?: string;
+  license?: string;
   role: "admin" | "pilot" | "staff" | "organisation";
   status: "active" | "pending" | "suspended";
   updated_at: string;

@@ -3,7 +3,6 @@
 import { getData } from "@hooks/getData";
 import { redirect } from "next/navigation";
 import React from "react";
-import { CanAccess } from "@refinedev/core";
 import { SessionSync } from "@components/Layout/SessionSync";
 import MobileNav from "@components/navbar";
 import { Box } from "@mui/material";

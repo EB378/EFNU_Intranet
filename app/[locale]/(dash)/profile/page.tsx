@@ -32,7 +32,7 @@ import {
 } from "@mui/icons-material";
 import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
-import { ProfileAvatar, ProfileLicence, ProfileName, ProfileEmail, ProfilePhone, ProfileRatings} from "@components/functions/FetchFunctions"
+import { ProfileAvatar, ProfileLicense, ProfileName, ProfileEmail, ProfilePhone, ProfileRatings} from "@components/functions/FetchFunctions"
 import { EditButton } from "@refinedev/mui";
 import { ColorModeContext } from "@contexts/color-mode";
 import { FuelData } from "@components/profile/FuelData";
@@ -115,7 +115,7 @@ const Profile = () => {
                   <ProfileAvatar profileId={uid}/>
                   <Box>
                     <Typography variant="h6"><ProfileName profileId={uid} /></Typography>
-                    <Typography variant="body2" color="text.secondary">{t("License")} #: <ProfileLicence profileId={uid} /></Typography>
+                    <Typography variant="body2" color="text.secondary">{t("License")} #: <ProfileLicense profileId={uid} /></Typography>
                   </Box>
                 </Box>
                 <Box>

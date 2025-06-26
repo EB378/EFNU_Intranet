@@ -50,7 +50,7 @@ export default function ProfileEditPage() {
 
   const profile = queryResult?.data?.data;
 
-  const ratingOptions = ["Student", "LAPL", "PPL", "CPL", "ATPL", "Kvetch"];
+  const ratingOptions = ["Student", "LAPL", "PPL", "CPL", "ATPL", "MGPL", "UPL", "GPL"];
 
   useEffect(() => {
     if (profile) {
@@ -164,11 +164,11 @@ export default function ProfileEditPage() {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Licence"
-                  defaultValue={profile.licence}
-                  {...register("licence")}
-                  error={!!errors.licence}
-                  helperText={errors.licence?.message?.toString()}
+                  label="License"
+                  defaultValue={profile.license}
+                  {...register("license")}
+                  error={!!errors.license}
+                  helperText={errors.license?.message?.toString()}
                 />
               </Grid>
               <Controller

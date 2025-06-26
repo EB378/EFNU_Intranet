@@ -56,7 +56,7 @@ export default function ProfileEditPage() {
   });
 
   const profile = queryResult?.data?.data;
-  const ratingOptions = ["Student", "LAPL", "PPL", "CPL", "ATPL", "Kvetch"];
+  const ratingOptions = ["Student", "LAPL", "PPL", "CPL", "ATPL", "MGPL", "UPL", "GPL"];
   const roleOptions = ["admin", "pilot", "staff", "organisation"];
   const statusOptions = ["active", "pending", "suspended"];
 
@@ -282,10 +282,10 @@ export default function ProfileEditPage() {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Licence"
-                  {...register("licence")}
-                  error={!!errors.licence}
-                  helperText={errors.licence?.message?.toString()}
+                  label="license"
+                  {...register("license")}
+                  error={!!errors.license}
+                  helperText={errors.license?.message?.toString()}
                 />
               </Grid>
 

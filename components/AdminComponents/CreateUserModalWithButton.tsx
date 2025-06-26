@@ -45,7 +45,7 @@ export default function CreateUserModalWithButton() {
           password: data.password,
           user_metadata: {
             fullname: data.fullname,
-            licence: data.licence,
+            license: data.license,
             status: data.status,
             role: data.role
           }
@@ -125,7 +125,7 @@ export default function CreateUserModalWithButton() {
                 <TextField
                   fullWidth
                   label="License Number"
-                  {...register('licence')}
+                  {...register('license')}
                   variant="outlined"
                 />
               </Grid>

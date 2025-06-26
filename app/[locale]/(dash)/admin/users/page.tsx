@@ -38,6 +38,7 @@ export default function MembersList() {
     tableQueryResult,
   } = useTable<ProfileData>({
     resource: 'profiles',
+    pagination: { mode: "off" },
     filters: {
       permanent: [
         ...(filter === 'all'
@@ -228,7 +229,7 @@ export default function MembersList() {
                   />
                 </TableCell>
                 <TableCell>
-                  <Typography variant="body2">{member.licence || 'N/A'}</Typography>
+                  <Typography variant="body2">{member.license || 'N/A'}</Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2">

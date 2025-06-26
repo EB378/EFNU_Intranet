@@ -33,7 +33,7 @@ export async function POST(request: Request) {
         id: authUser.user.id,
         email,
         fullname: user_metadata?.fullname,
-        licence: user_metadata?.licence,
+        license: user_metadata?.license,
         status: user_metadata?.status || 'active',
         role: user_metadata?.role || 'pilot',
         profile_type: user_metadata?.profile_type || 'user'

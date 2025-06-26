@@ -60,6 +60,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#000000",
+  minimumScale: 1,
+  userScalable: false,
 };
 
 
@@ -76,7 +78,6 @@ export default async function RootLayout({
   const cookieStore = await cookies();
   const theme = cookieStore.get("theme");
   const defaultMode = theme?.value === "dark" ? "dark" : "light";
-
 
   return (
     <html lang={locale}>

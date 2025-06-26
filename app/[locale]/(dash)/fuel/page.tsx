@@ -187,6 +187,9 @@ const FuelPage = () => {
           <Typography variant="h5" gutterBottom>
             <LocalGasStation /> {t("Create.RecordFuelAddition")}
           </Typography>
+          <IconButton onClick={() => setCreateModalOpen(false)}>
+            <Close />
+          </IconButton>
 
           <form onSubmit={handleFormSubmit}>
             <Grid container spacing={2}>
@@ -414,6 +417,9 @@ const FuelPage = () => {
           <Typography variant="h5" gutterBottom>
             <LocalGasStation /> {t("Status.FuelTankEstimates")}
           </Typography>
+          <IconButton onClick={() => setTankStatusModalOpen(false)}>
+            <Close />
+          </IconButton>
           
           <Typography variant="body2" color="text.secondary" paragraph>
             {t("Status.subtitle")}
