@@ -12,6 +12,13 @@ const withPWA = withPWAInit({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
+  reactStrictMode: true,
+  productionBrowserSourceMaps: false,
+  compress: true,
+  images: {
+    domains: ['atis.efnu.fi'],
+  },
 };
 
 

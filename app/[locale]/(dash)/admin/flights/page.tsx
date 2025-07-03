@@ -48,6 +48,7 @@ import { PriorNotice } from '@/types/index';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import { di } from '@node_modules/@fullcalendar/core/internal-common';
 dayjs.extend(utc);
 dayjs.extend(isSameOrAfter);
 
@@ -72,7 +73,7 @@ export default function FlightsManagement() {
   const [filter, setFilter] = useState<'all' | 'approved' | 'pending' | 'rejected'>('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFlight, setSelectedFlight] = useState<PriorNotice | null>(null);
-  const isNotOver = dayjs(selectedFlight?.dep_date).isAfter(dayjs());
+  const isNotOver = dayjs(selectedFlight?.dof).isAfter(dayjs());
   const [showPastFlights, setShowPastFlights] = useState(false);
 
   const { mutate: updateStatus } = useUpdate();
@@ -81,7 +82,7 @@ export default function FlightsManagement() {
   const {
     tableQueryResult,
   } = useTable<PriorNotice>({
-    resource: 'pn_forms',
+    resource: 'priornotice',
     filters: {
       permanent: [
         ...(filter === 'all'
@@ -96,10 +97,10 @@ export default function FlightsManagement() {
     },
     sorters: {
       permanent: [
-        { field: 'dep_date', order: 'asc' },
-        { field: 'dep_time', order: 'asc' }
+        { field: 'dof', order: 'asc' }
       ]
-    }
+    },
+    pagination: { mode: "off" },
   });
 
   // Form for creating new flights
@@ -111,7 +112,7 @@ export default function FlightsManagement() {
     reset: resetCreateForm 
   } = useForm<PriorNotice>({
     refineCoreProps: {
-      resource: 'pn_forms',
+      resource: 'priornotice',
       action: 'create',
       onMutationSuccess: () => {
         resetCreateForm();
@@ -134,7 +135,7 @@ export default function FlightsManagement() {
     setValue
   } = useForm<PriorNotice>({
     refineCoreProps: {
-      resource: 'pn_forms',
+      resource: 'priornotice',
       action: 'edit',
       onMutationSuccess: () => {
         setOpenEditDialog(false);
@@ -151,17 +152,12 @@ export default function FlightsManagement() {
     setSelectedFlight(flight);
     // Set form values for editing
     setValue('id', flight.id);
-    setValue('aircraft_reg', flight.aircraft_reg);
+    setValue('aircraft_reg', flight.aircraft);
     setValue('pic_name', flight.pic_name);
-    setValue('dep_date', flight.dep_date);
-    setValue('arr_date', flight.arr_date);
+    setValue('dof', flight.dof);
     setValue('dep_time', flight.dep_time);
     setValue('arr_time', flight.arr_time);
-    setValue('from_location', flight.from_location);
-    setValue('to_location', flight.to_location);
     setValue('mtow', flight.mtow);
-    setValue('phone', flight.phone);
-    setValue('email', flight.email);
     setValue('ifr_arrival', flight.ifr_arrival);
     setValue('status', flight.status);
     setOpenEditDialog(true);
@@ -169,7 +165,7 @@ export default function FlightsManagement() {
 
   const handleStatusUpdate = (id: string, status: string) => {
     updateStatus({
-      resource: 'pn_forms',
+      resource: 'priornotice',
       id,
       values: { status },
     }, {
@@ -190,7 +186,7 @@ export default function FlightsManagement() {
 
   const handleDelete = (id: string) => {
     deleteFlight({
-      resource: 'pn_forms',
+      resource: 'priornotice',
       id,
     }, {
       onSuccess: () => {
@@ -212,7 +208,7 @@ export default function FlightsManagement() {
     if (showPastFlights) return true; // Show all flights when checkbox is checked
     
     // When checkbox is unchecked, show flights that are today or in the future
-    const flightDateTime = dayjs.utc(`${flight.arr_date} ${flight.arr_time}`, 'YYYY-MM-DD HHmm');
+    const flightDateTime = dayjs.utc(`${flight.dof} ${flight?.arr_time ?? flight?.dep_time ?? ""}`, 'YYYY-MM-DD HHmm');
     const now = dayjs.utc();
     return flightDateTime.isSameOrAfter(now, 'day');
   });
@@ -303,7 +299,7 @@ export default function FlightsManagement() {
           <TableHead sx={{ bgcolor: 'action.hover' }}>
             <TableRow>
               <TableCell>Aircraft</TableCell>
-              <TableCell>Route</TableCell>
+              <TableCell>IFR/VFR</TableCell>
               <TableCell>Date & Time</TableCell>
               <TableCell>PIC</TableCell>
               <TableCell>Status</TableCell>
@@ -321,32 +317,32 @@ export default function FlightsManagement() {
                 })}
               >
                 <TableCell>
-                  <Typography fontWeight="medium">{flight.aircraft_reg}</Typography>
+                  <Typography fontWeight="medium">{flight.aircraft}</Typography>
                   <Typography variant="body2" color="text.secondary">
                     MTOW: {flight.mtow}kg
                   </Typography>
                 </TableCell>
-                <TableCell>
-                  <Typography fontWeight="medium">
-                    {flight.from_location} → {flight.to_location}
-                  </Typography>
+                <TableCell>                  
                   <Typography variant="body2" color="text.secondary">
                     {flight.ifr_arrival ? 'IFR' : 'VFR'}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>
-                    {dayjs(flight.dep_date).format('DD MMM YYYY')}
+                    {dayjs(flight.dof).format('DD MMM YYYY')}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {flight.dep_time} - {flight.arr_time}  UTC
+                    {flight.dep_time && flight.arr_time
+                      ? `${flight.dep_time} - ${flight.arr_time}`
+                      : flight.dep_time
+                      ? `Dep: ${flight.dep_time}`
+                      : flight.arr_time
+                      ? `Arr: ${flight.arr_time}`
+                      : 'Time not available'}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography>{flight.pic_name}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {flight.phone}
-                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Chip 
@@ -360,7 +356,7 @@ export default function FlightsManagement() {
                 <TableCell align="right">
                   
                   <Stack direction="row" spacing={1} justifyContent="flex-end">
-                    {dayjs.utc(`${flight.arr_date} ${flight.arr_time}`, 'YYYY-MM-DD HHmm').isAfter(dayjs.utc()) ? (
+                    {dayjs.utc(`${flight.dof} ${flight.arr_time ?? flight.dep_time ?? ""}`, 'YYYY-MM-DD HHmm').isAfter(dayjs.utc()) ? (
                       // Future flight - show actions
                       <>
                         <Tooltip title="Edit">
@@ -420,7 +416,7 @@ export default function FlightsManagement() {
                 <TextField
                   fullWidth
                   label="Aircraft Registration"
-                  {...createRegister('aircraft_reg', { required: true })}
+                  {...createRegister('aircraft', { required: true })}
                   variant="outlined"
                 />
               </Grid>
@@ -435,20 +431,9 @@ export default function FlightsManagement() {
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
-                  label="Departure Date"
+                  label="Date Of Flight"
                   type="date"
-                  {...createRegister('dep_date', { required: true })}
-                  defaultValue={dayjs().format('YYYY-MM-DD')}
-                  variant="outlined"
-                  InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Arrival Date"
-                  type="date"
-                  {...createRegister('arr_date', { required: true })}
+                  {...createRegister('dof', { required: true })}
                   defaultValue={dayjs().format('YYYY-MM-DD')}
                   variant="outlined"
                   InputLabelProps={{ shrink: true }}
@@ -474,42 +459,9 @@ export default function FlightsManagement() {
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
-                  label="From Location"
-                  {...createRegister('from_location', { required: true })}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="To Location"
-                  {...createRegister('to_location', { required: true })}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
                   label="MTOW (kg)"
                   type="number"
                   {...createRegister('mtow', { required: true, valueAsNumber: true })}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Contact Phone"
-                  {...createRegister('phone', { required: true })}
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <TextField
-                  fullWidth
-                  label="Contact Email"
-                  type="email"
-                  {...createRegister('email', { required: true })}
                   variant="outlined"
                 />
               </Grid>
@@ -587,9 +539,9 @@ export default function FlightsManagement() {
               <Grid item xs={12} md={6}>
                 <TextField
                   fullWidth
-                  label="Departure Date"
+                  label="Date Of Flight"
                   type="date"
-                  {...editRegister('dep_date', { required: true })}
+                  {...editRegister('dof', { required: true })}
                   variant="outlined"
                   InputLabelProps={{ shrink: true }}
                 />

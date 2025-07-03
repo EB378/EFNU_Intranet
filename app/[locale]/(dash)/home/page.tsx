@@ -135,8 +135,6 @@ export default function HomePage() {
   }
 
   const utcString = currentTime.toUTCString();
-  const formattedDate = utcString.split(' ').slice(0, 3).join(' ');
-
   
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -144,21 +142,21 @@ export default function HomePage() {
   }, []);
 
 // Fixed UTC and FIN time formatters
-  const localTimeFormatter = new Intl.DateTimeFormat('en-US', { 
+  const localTimeFormatter = new Intl.DateTimeFormat('en-FI', { 
     hour: '2-digit', 
     minute: '2-digit', 
     second: '2-digit',
     hour12: false 
   });
   
-  const localDateFormatter = new Intl.DateTimeFormat('en-US', { 
+  const localDateFormatter = new Intl.DateTimeFormat('en-FI', { 
     day: '2-digit', 
     month: '2-digit', 
     year: 'numeric' 
   });
 
   // UTC formatter - explicitly set timeZone to 'UTC'
-  const utcTimeFormatter = new Intl.DateTimeFormat('en-US', { 
+  const utcTimeFormatter = new Intl.DateTimeFormat('en-FI', { 
     hour: '2-digit', 
     minute: '2-digit', 
     second: '2-digit',
@@ -166,7 +164,7 @@ export default function HomePage() {
     timeZone: 'UTC'  // Explicit UTC timezone
   });
   
-  const utcDateFormatter = new Intl.DateTimeFormat('en-US', { 
+  const utcDateFormatter = new Intl.DateTimeFormat('en-FI', { 
     day: '2-digit', 
     month: '2-digit', 
     year: 'numeric',
@@ -174,7 +172,7 @@ export default function HomePage() {
   });
 
   // Finnish time formatter - explicit timezone
-  const finTimeFormatter = new Intl.DateTimeFormat('en-US', { 
+  const finTimeFormatter = new Intl.DateTimeFormat('en-FI', { 
     hour: '2-digit', 
     minute: '2-digit', 
     second: '2-digit',
@@ -182,7 +180,7 @@ export default function HomePage() {
     timeZone: 'Europe/Helsinki'  // Helsinki timezone
   });
   
-  const finDateFormatter = new Intl.DateTimeFormat('en-US', { 
+  const finDateFormatter = new Intl.DateTimeFormat('en-FI', { 
     day: '2-digit', 
     month: '2-digit', 
     year: 'numeric',
@@ -434,7 +432,7 @@ export default function HomePage() {
                   {t("WelcomeBack")}, <br/><ProfileName profileId={identityData?.id || ""} />
                 </Typography>
                 <Typography variant="subtitle1" sx={{ mb: 3, opacity: 0.9, color: theme.palette.primary.contrastText }}>
-                  {formattedDate}
+                  {localDate}
                 </Typography>
                 <Stack spacing={1}>
                   <Button variant="outlined" color="secondary" onClick={() => setCreateModalOpen(true)}>{t("ReportTroubleatEFNU")}</Button>
@@ -455,7 +453,6 @@ export default function HomePage() {
                 </Stack>
               </CardContent>
             </Card>
-          <CanAccess resource="blog" action="list">
             <Card sx={{ 
               borderRadius: '12px',
               boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
@@ -591,136 +588,133 @@ export default function HomePage() {
                 </Box>
               </CardContent>
             </Card>
-          </CanAccess>
           </Stack>
         </Grid>
         
         {/* Right Column */}
         <Grid item xs={12} md={6}>
-          <CanAccess resource="calendar" action="list">
-            <Card sx={{ 
-              borderRadius: '12px',
-              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <CardContent sx={{ flex: 1, p: 0 }}>
-                <Box sx={{ 
-                  display: "flex",
-                  flexDirection: { xs: "column", md: "row" },
-                  alignItems: 'center', 
-                  justifyContent: 'space-between',
-                  p: 3,
-                  pb: 1
+          <Card sx={{ 
+            borderRadius: '12px',
+            boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            <CardContent sx={{ flex: 1, p: 0 }}>
+              <Box sx={{ 
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                alignItems: 'center', 
+                justifyContent: 'space-between',
+                p: 3,
+                pb: 1
+              }}>
+                <Typography variant="h6" sx={{ 
+                  display: 'flex', 
+                  alignItems: 'center',
+                  fontWeight: 600,
+                  color: theme.palette.mode === 'dark' ? 'text.primary' : 'primary.main'
                 }}>
-                  <Typography variant="h6" sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center',
-                    fontWeight: 600,
-                    color: theme.palette.mode === 'dark' ? 'text.primary' : 'primary.main'
-                  }}>
-                    <CalendarToday sx={{ 
-                      mr: 1.5, 
-                      fontSize: '1.4rem',
-                      color: theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark' 
-                    }} />
-                    {t("UpcomingEvents")}
-                  </Typography>
-                </Box>
+                  <CalendarToday sx={{ 
+                    mr: 1.5, 
+                    fontSize: '1.4rem',
+                    color: theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark' 
+                  }} />
+                  {t("UpcomingEvents")}
+                </Typography>
+              </Box>
 
-                {/* Scrollable Events Area */}
-                <Box sx={{ 
-                  height: { xs: 300, md: 400 },
-                  overflow: 'auto',
-                  px: 2,
-                  pb: 2
-                }}>
-                  {events.map((event, index) => (
-                    <Card 
-                      key={event.id}
-                      sx={{ 
-                        mb: 2,
-                        borderRadius: '8px',
-                        borderLeft: `4px solid ${theme.palette.primary.main}`,
-                        transition: '0.3s',
-                        '&:hover': {
-                          transform: 'translateX(4px)',
-                          boxShadow: theme.shadows[2]
-                        }
-                      }}
+              {/* Scrollable Events Area */}
+              <Box sx={{ 
+                height: { xs: 300, md: 400 },
+                overflow: 'auto',
+                px: 2,
+                pb: 2
+              }}>
+                {events.map((event, index) => (
+                  <Card 
+                    key={event.id}
+                    sx={{ 
+                      mb: 2,
+                      borderRadius: '8px',
+                      borderLeft: `4px solid ${theme.palette.primary.main}`,
+                      transition: '0.3s',
+                      '&:hover': {
+                        transform: 'translateX(4px)',
+                        boxShadow: theme.shadows[2]
+                      }
+                    }}
+                  >
+                    <ListItem 
+                      secondaryAction={
+                        <Button 
+                          variant="contained" 
+                          size="small"
+                          onClick={() => handleEventClick(event.id)}
+                          sx={{
+                            minWidth: '90px',
+                            borderRadius: '6px',
+                            textTransform: 'none',
+                            boxShadow: 'none'
+                          }}
+                        >
+                          {t("Details")}
+                        </Button>
+                      }
                     >
-                      <ListItem 
-                        secondaryAction={
-                          <Button 
-                            variant="contained" 
-                            size="small"
-                            onClick={() => handleEventClick(event.id)}
-                            sx={{
-                              minWidth: '90px',
-                              borderRadius: '6px',
-                              textTransform: 'none',
-                              boxShadow: 'none'
+                      <ListItemText
+                        primary={
+                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                            {event.title}
+                          </Typography>
+                        }
+                        secondary={
+                          <Typography 
+                            variant="body2"
+                            sx={{ 
+                              color: theme.palette.mode === 'dark' ? 'text.secondary' : 'text.primary',
+                              mt: 0.5
                             }}
                           >
-                            {t("Details")}
-                          </Button>
+                            <Box component="span" sx={{ fontWeight: 500, mr: 1 }}>
+                              {format(event.start_time, 'dd/mm/yyyy, hh:mm a')}
+                            </Box>
+                            • {format(event.end_time, 'dd/mm/yyyy, hh:mm a')}
+                          </Typography>
                         }
-                      >
-                        <ListItemText
-                          primary={
-                            <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                              {event.title}
-                            </Typography>
-                          }
-                          secondary={
-                            <Typography 
-                              variant="body2"
-                              sx={{ 
-                                color: theme.palette.mode === 'dark' ? 'text.secondary' : 'text.primary',
-                                mt: 0.5
-                              }}
-                            >
-                              <Box component="span" sx={{ fontWeight: 500, mr: 1 }}>
-                                {format(event.start_time, 'dd/mm/yyyy, hh:mm a')}
-                              </Box>
-                              • {format(event.end_time, 'dd/mm/yyyy, hh:mm a')}
-                            </Typography>
-                          }
-                        />
-                      </ListItem>
-                    </Card>
-                  ))}
-                </Box>
+                      />
+                    </ListItem>
+                  </Card>
+                ))}
+              </Box>
 
-                {/* Sticky Footer Button */}
-                <Box sx={{ 
-                  p: 2,
-                  position: 'sticky',
-                  bottom: 0,
-                  background: theme.palette.mode === 'dark' 
-                    ? 'linear-gradient(transparent, rgba(18, 18, 18, 0.9))' 
-                    : 'linear-gradient(transparent, rgba(255, 255, 255, 0.9))',
-                  backdropFilter: 'blur(8px)',
-                  borderTop: `1px solid ${theme.palette.divider}`
-                }}>
-                  <Button 
-                    fullWidth 
-                    variant="outlined"
-                    endIcon={<ArrowForward />}
-                    sx={{
-                      py: 1.5,
-                      borderRadius: '8px',
-                      textTransform: 'none',
-                      fontWeight: 500
-                    }}
-                    onClick={() => router.push("/calendar")}
-                  >
-                    {t("ViewAllEvents")}
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </CanAccess>
+              {/* Sticky Footer Button */}
+              <Box sx={{ 
+                p: 2,
+                position: 'sticky',
+                bottom: 0,
+                background: theme.palette.mode === 'dark' 
+                  ? 'linear-gradient(transparent, rgba(18, 18, 18, 0.9))' 
+                  : 'linear-gradient(transparent, rgba(255, 255, 255, 0.9))',
+                backdropFilter: 'blur(8px)',
+                borderTop: `1px solid ${theme.palette.divider}`
+              }}>
+                <Button 
+                  fullWidth 
+                  variant="outlined"
+                  endIcon={<ArrowForward />}
+                  sx={{
+                    py: 1.5,
+                    borderRadius: '8px',
+                    textTransform: 'none',
+                    fontWeight: 500
+                  }}
+                  onClick={() => router.push("/calendar")}
+                >
+                  {t("ViewAllEvents")}
+                </Button>
+              </Box>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
     </Box>

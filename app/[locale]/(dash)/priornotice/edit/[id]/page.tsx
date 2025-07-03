@@ -32,7 +32,7 @@ const PNEdit = () => {
     formState: { errors },
   } = useForm<PriorNotice>({
     refineCoreProps: {
-      resource: 'pn_forms',
+      resource: 'priornotice',
       action: 'edit',
       id: pnID,
       metaData: {
@@ -49,17 +49,12 @@ const PNEdit = () => {
   // Set form values when data is loaded
   useEffect(() => {
     if (defaultValues) {
-      setValue('from_location', defaultValues.from_location);
-      setValue('to_location', defaultValues.to_location);
       setValue('dep_time', defaultValues.dep_time);
       setValue('arr_time', defaultValues.arr_time);
-      setValue('dep_date', defaultValues.dep_date?.split('T')[0]);
-      setValue('arr_date', defaultValues.arr_date?.split('T')[0]);
-      setValue('aircraft_reg', defaultValues.aircraft_reg);
+      setValue('dof', defaultValues.dof?.split('T')[0]);
+      setValue('aircraft', defaultValues.aircraft);
       setValue('mtow', defaultValues.mtow);
       setValue('pic_name', defaultValues.pic_name);
-      setValue('phone', defaultValues.phone);
-      setValue('email', defaultValues.email);
       setValue('ifr_arrival', defaultValues.ifr_arrival || false);
     }
   }, [defaultValues, setValue]);
@@ -98,32 +93,6 @@ const PNEdit = () => {
             </Typography>
           </Grid>
 
-          {/* Departure Location */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('from_location', {
-                required: t("DepartureLocationRequired"),
-              })}
-              error={!!errors.from_location}
-              helperText={errors.from_location?.message as string}
-              fullWidth
-              label={t("DepartureLocation")}
-            />
-          </Grid>
-
-          {/* Arrival Location */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('to_location', {
-                required: t("ArrivalLocationRequired"),
-              })}
-              error={!!errors.to_location}
-              helperText={errors.to_location?.message as string}
-              fullWidth
-              label={t("ArrivalLocation")}
-            />
-          </Grid>
-
           {/* Departure Time */}
           <Grid item xs={12} md={6}>
             <TextField
@@ -158,24 +127,13 @@ const PNEdit = () => {
             />
           </Grid>
 
-          {/* Departure Date */}
+          {/* Date Of Flight */}
           <Grid item xs={12} md={6}>
             <TextField
-              {...register('dep_date')}
+              {...register('dof')}
               fullWidth
               type="date"
-              label={t("DEP Date")}
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-
-          {/* Arrival Date */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('arr_date')}
-              fullWidth
-              type="date"
-              label={t("ARR Date")}
+              label={t("DateOfFlight")}
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
@@ -183,11 +141,11 @@ const PNEdit = () => {
           {/* Aircraft Registration */}
           <Grid item xs={12} md={6}>
             <TextField
-              {...register('aircraft_reg', {
+              {...register('aircraft', {
                 required: t("AircraftRegRequired"),
               })}
-              error={!!errors.aircraft_reg}
-              helperText={errors.aircraft_reg?.message as string}
+              error={!!errors.aircraft}
+              helperText={errors.aircraft?.message as string}
               fullWidth
               label={t("Aircraft registration")}
             />
@@ -220,40 +178,6 @@ const PNEdit = () => {
               helperText={errors.pic_name?.message as string}
               fullWidth
               label={t("PIC (Full name)")}
-            />
-          </Grid>
-
-          {/* Phone */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('phone', {
-                required: t("PhoneRequired"),
-                pattern: {
-                  value: /^\+?[0-9\s-]+$/,
-                  message: t("InvalidPhone"),
-                },
-              })}
-              error={!!errors.phone}
-              helperText={errors.phone?.message as string}
-              fullWidth
-              label={t("Phone")}
-            />
-          </Grid>
-
-          {/* Email */}
-          <Grid item xs={12}>
-            <TextField
-              {...register('email', {
-                required: t("EmailRequired"),
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: t("InvalidEmail"),
-                },
-              })}
-              error={!!errors.email}
-              helperText={errors.email?.message as string}
-              fullWidth
-              label={t("PIC email")}
             />
           </Grid>
 

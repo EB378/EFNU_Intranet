@@ -22,17 +22,16 @@ const PNStatusDashboard = () => {
   const theme = useTheme();
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const { tableQueryResult: { data, isFetching } } = useTable<PriorNotice>({
-    resource: "pn_forms",
+    resource: "priornotice",
     sorters: {
       permanent: [
-        { field: "dep_date", order: "asc" },
-        { field: "dep_time", order: "asc" },
+        { field: "dof", order: "asc" }
       ]
     },
     filters: {
       permanent: [
         {
-          field: "arr_date",
+          field: "dof",
           operator: "eq",
           value: dayjs().utc().format('YYYY-MM-DD'),
         },
@@ -45,7 +44,7 @@ const PNStatusDashboard = () => {
   const handleStatusChange = (id: string, newStatus: string) => {
     setUpdatingId(id);
     updateStatus({
-      resource: "pn_forms",
+      resource: "priornotice",
       id,
       values: { status: newStatus },
     }, {
@@ -96,13 +95,16 @@ const PNStatusDashboard = () => {
               }}>
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="body1" fontWeight="500">
-                    {pn.aircraft_reg} • {dayjs(pn.arr_date).format('DD MMM YY')}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {pn.from_location} → {pn.to_location}
+                    {pn.aircraft} • {dayjs(pn.dof).format('DD MMM YY')}
                   </Typography>
                   <Typography variant="caption">
-                    PIC: {pn.pic_name} • {pn.dep_time}-{pn.arr_time}
+                    PIC: {pn.pic_name} • {pn.dep_time && pn.arr_time
+                      ? `${pn.dep_time} - ${pn.arr_time}`
+                      : pn.dep_time
+                      ? `Dep: ${pn.dep_time}`
+                      : pn.arr_time
+                      ? `Arr: ${pn.arr_time}`
+                      : 'Time not available'}
                   </Typography>
                 </Box>
 

@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useTable, useMany, useGetIdentity } from "@refinedev/core";
+import { useTable, useGetIdentity } from "@refinedev/core";
 import { 
   Grid, 
   Paper, 
@@ -35,16 +35,16 @@ const PNList = () => {
   
   // Fetch all public PN entries
   const { tableQueryResult: { data: publicData, isLoading: publicLoading } } = useTable({
-    resource: "pn_forms",
+    resource: "priornotice",
     sorters: {
       permanent: [
-        { field: "dep_date", order: "asc" },
+        { field: "dof", order: "asc" },
         { field: "dep_time", order: "asc" },
       ]
     },
     filters: {
       permanent: [
-        { field: "dep_date", operator: "gte", value: dayjs().format("YYYY-MM-DD") }
+        { field: "dof", operator: "gte", value: dayjs().format("YYYY-MM-DD") }
       ]
     },
     pagination: {
@@ -92,15 +92,18 @@ const PNList = () => {
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <div>
                     <Typography variant="subtitle1">
-                      {pn.aircraft_reg} • {pn.pic_name}
+                      {pn.aircraft} • {pn.pic_name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {dayjs(pn.dep_date).format('DD MMM')} • {pn.dep_time}-{pn.arr_time}
+                      {dayjs(pn.dof).format('DD MMM')} •   {pn.dep_time && pn.arr_time
+                      ? `${pn.dep_time} - ${pn.arr_time}`
+                      : pn.dep_time
+                      ? `Dep: ${pn.dep_time}`
+                      : pn.arr_time
+                      ? `Arr: ${pn.arr_time}`
+                      : 'Time not available'}
                     </Typography>
-                    <Typography variant="caption">
-                      {pn.from_location} → {pn.to_location}
-                    </Typography>
-                    {UserID === pn.uid && isDateTimePassed(pn.arr_date, pn.arr_time) === false && (
+                    {UserID === pn.uid && isDateTimePassed(pn.dof, pn?.arr_time ?? pn?.dep_time ?? "") === false && (
                       <Box sx={{
                         display: "flex",
                         flexDirection: "row",
@@ -146,6 +149,11 @@ export default PNList;
 
 
 function isDateTimePassed(dateStr: string, timeStr: string): boolean {
+  console.log("Checking date and time:", dateStr, timeStr);
+  console.log("Checking date and time:", dateStr, timeStr);
+  console.log("Checking date and time:", dateStr, timeStr);
+  console.log("Checking date and time:", dateStr, timeStr);
+  
   // Validate date format (yyyy-mm-dd)
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
     throw new Error('Invalid date format. Expected yyyy-mm-dd.');

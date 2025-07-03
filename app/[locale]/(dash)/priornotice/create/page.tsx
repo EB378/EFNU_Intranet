@@ -29,18 +29,27 @@ const PNCreate = () => {
     formState: { errors },
   } = useForm<PriorNotice>({
     refineCoreProps: {
-      resource: 'pn_forms',
-      redirect: false, // Disable default redirect
+      resource: 'priornotice',
     },
   });
 
   const handleFormSubmit = handleSubmit(async (data) => {
     try {
-      await onFinish(data);
+      if (!data.dep_time && !data.arr_time) {
+        throw new Error(t("EitherDepartureOrArrivalRequired"));
+      }
+      
+      const filteredData = Object.fromEntries(
+        Object.entries(data).filter(([_, value]) => 
+          value !== null && value !== undefined && value !== ''
+        )
+      );
+      
+      await onFinish(filteredData);
       router.push('/priornotice');
     } catch (error) {
-      // Handle error here
       console.error("Form submission error:", error);
+      // You might want to show this error to the user
     }
   });
 
@@ -69,39 +78,10 @@ const PNCreate = () => {
             </Typography>
           </Grid>
 
-          {/* Departure Location */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('from_location', {
-                required: t("DepartureLocationRequired"),
-              })}
-              error={!!errors.from_location}
-              helperText={errors.from_location?.message as string}
-              fullWidth
-              label={t("DepartureLocation")}
-              placeholder={t("Enterlocationhere")}
-            />
-          </Grid>
-
-          {/* Arrival Location */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('to_location', {
-                required: t("ArrivalLocationRequired"),
-              })}
-              error={!!errors.to_location}
-              helperText={errors.to_location?.message as string}
-              fullWidth
-              label={t("ArrivalLocation")}
-              placeholder={t("Enterlocationhere")}
-            />
-          </Grid>
-
           {/* Departure Time */}
           <Grid item xs={12} md={6}>
             <TextField
               {...register('dep_time', {
-                required: t("DepartureTimeRequired"),
                 pattern: {
                   value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
                   message: t("InvalidTimeFormat"),
@@ -109,6 +89,7 @@ const PNCreate = () => {
               })}
               error={!!errors.dep_time}
               helperText={errors.dep_time?.message as string}
+              defaultValue={null}
               fullWidth
               label={t("DEP (UTC HHMM)")}
               placeholder={t("Enterdeptimehere")}
@@ -119,7 +100,6 @@ const PNCreate = () => {
           <Grid item xs={12} md={6}>
             <TextField
               {...register('arr_time', {
-                required: t("ArrivalTimeRequired"),
                 pattern: {
                   value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
                   message: t("InvalidTimeFormat"),
@@ -127,32 +107,21 @@ const PNCreate = () => {
               })}
               error={!!errors.arr_time}
               helperText={errors.arr_time?.message as string}
+              defaultValue={null}
               fullWidth
               label={t("ARR (UTC HHMM)")}
               placeholder={t("Enterarrtimehere")}
             />
           </Grid>
 
-          {/* Departure Date */}
+          {/* Date Of Flight */}
           <Grid item xs={12} md={6}>
             <TextField
-              {...register('dep_date')}
+              {...register('dof')}
               fullWidth
               type="date"
-              label={t("DEP Date")}
+              label={t("DateOfFlight")}
               defaultValue={new Date().toISOString().split('T')[0]}
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-
-          {/* Arrival Date */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('arr_date')}
-              fullWidth
-              type="date"
-              defaultValue={new Date().toISOString().split('T')[0]}
-              label={t("ARR Date")}
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
@@ -160,11 +129,11 @@ const PNCreate = () => {
           {/* Aircraft Registration */}
           <Grid item xs={12} md={6}>
             <TextField
-              {...register('aircraft_reg', {
+              {...register('aircraft', {
                 required: t("AircraftRegRequired"),
               })}
-              error={!!errors.aircraft_reg}
-              helperText={errors.aircraft_reg?.message as string}
+              error={!!errors.aircraft}
+              helperText={errors.aircraft?.message as string}
               fullWidth
               label={t("Aircraft registration")}
             />
@@ -197,40 +166,6 @@ const PNCreate = () => {
               helperText={errors.pic_name?.message as string}
               fullWidth
               label={t("PIC (Full name)")}
-            />
-          </Grid>
-
-          {/* Phone */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('phone', {
-                required: t("PhoneRequired"),
-                pattern: {
-                  value: /^\+?[0-9\s-]+$/,
-                  message: t("InvalidPhone"),
-                },
-              })}
-              error={!!errors.phone}
-              helperText={errors.phone?.message as string}
-              fullWidth
-              label={t("Phone")}
-            />
-          </Grid>
-
-          {/* Email */}
-          <Grid item xs={12}>
-            <TextField
-              {...register('email', {
-                required: t("EmailRequired"),
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: t("InvalidEmail"),
-                },
-              })}
-              error={!!errors.email}
-              helperText={errors.email?.message as string}
-              fullWidth
-              label={t("PIC email")}
             />
           </Grid>
 

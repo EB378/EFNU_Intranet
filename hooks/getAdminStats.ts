@@ -43,7 +43,7 @@ export function usePnApprovalsToCome() {
   const now = dayjs().utc();
   
   const { data: pendingFlightsData } = useList({
-    resource: "pn_forms",
+    resource: "priornotice",
     filters: [
       {
         field: "status",
@@ -51,7 +51,7 @@ export function usePnApprovalsToCome() {
         value: "pending"
       },
       {
-        field: "arr_date",
+        field: "dof",
         operator: "gte",
         value: now.format('YYYY-MM-DD')
       }
@@ -74,10 +74,10 @@ export function usePNStatsToday() {
   const todayEnd = dayjs().utc().endOf('day').format('YYYY-MM-DD');
   
   const { data: todaysFlightsData } = useList({
-    resource: "pn_forms",
+    resource: "priornotice",
     filters: [
       {
-        field: "dep_date",
+        field: "dof",
         operator: "eq",
         value: todayStart
       },
