@@ -132,7 +132,14 @@
     "MTOW (Kg)": "MTOW (Kg)",
     "PIC (Full name)": "PIC (Full Name)",
     "IFR Arrival": "IFR Arrival",
-    "Edittitle": "Edit Prior Notice (PN)"
+    "Edittitle": "Edit Prior Notice (PN)",
+    "InvalidTimeFormat": "Invalid time format. Please use HHMM (24-hour) format.",
+    "InvalidDateFormat": "Invalid date format. Please use YYYY-MM-DD format.",
+    "AircraftRequired": "Aircraft registration is required.",
+    "PICNameRequired": "PIC (Full Name) is required.",
+    "InvalidMTOW": "Invalid MTOW",
+    "MTOWRequired": "MTOW (Kg) is required.",
+    "MTOWTooHigh": "MTOW (Kg) cannot exceed 10000 Kg."
   },
   "WebCam": {
     "EFNUWebcams": "EFNU Webcams",

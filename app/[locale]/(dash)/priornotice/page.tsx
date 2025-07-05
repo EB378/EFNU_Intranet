@@ -48,7 +48,7 @@ const PNList = () => {
       ]
     },
     pagination: {
-      pageSize: 10,
+      mode: "off",
     },
   });
 

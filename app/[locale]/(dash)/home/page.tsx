@@ -32,6 +32,7 @@ import SunriseSunsetCard from "@components/home/SunriseSunsetCard";
 import AlertCreateModal from "@components/home/CreateAlertPublicModal";
 import { Blog } from "@types";
 import dayjs from "dayjs";
+import { getfinishDate, getfinishTime, getlocalDate, getlocalTime, getutcDate, getutcTime } from "@components/home/time";
 
 interface LocalBlog extends Blog {
   category: string;
@@ -61,7 +62,6 @@ export default function HomePage() {
   const router = useRouter();
    
   // Current time state
-  const [currentTime, setCurrentTime] = useState(new Date());
   const [createModalOpen, setCreateModalOpen] = useState(false);
   
   // Update time every second
@@ -133,77 +133,20 @@ export default function HomePage() {
     // Handle post click logic
     router.push(`/blog/${postId}`);
   }
+  const [currentTime, setCurrentTime] = useState(new Date());
 
-  const utcString = currentTime.toUTCString();
-  
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
-
-// Fixed UTC and FIN time formatters
-  const localTimeFormatter = new Intl.DateTimeFormat('en-FI', { 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    second: '2-digit',
-    hour12: false 
-  });
   
-  const localDateFormatter = new Intl.DateTimeFormat('en-FI', { 
-    day: '2-digit', 
-    month: '2-digit', 
-    year: 'numeric' 
-  });
-
-  // UTC formatter - explicitly set timeZone to 'UTC'
-  const utcTimeFormatter = new Intl.DateTimeFormat('en-FI', { 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    second: '2-digit',
-    hour12: false,
-    timeZone: 'UTC'  // Explicit UTC timezone
-  });
-  
-  const utcDateFormatter = new Intl.DateTimeFormat('en-FI', { 
-    day: '2-digit', 
-    month: '2-digit', 
-    year: 'numeric',
-    timeZone: 'UTC'  // Explicit UTC timezone
-  });
-
-  // Finnish time formatter - explicit timezone
-  const finTimeFormatter = new Intl.DateTimeFormat('en-FI', { 
-    hour: '2-digit', 
-    minute: '2-digit', 
-    second: '2-digit',
-    hour12: false,
-    timeZone: 'Europe/Helsinki'  // Helsinki timezone
-  });
-  
-  const finDateFormatter = new Intl.DateTimeFormat('en-FI', { 
-    day: '2-digit', 
-    month: '2-digit', 
-    year: 'numeric',
-    timeZone: 'Europe/Helsinki'  // Helsinki timezone
-  });
-
-
-  // Format values safely
-  const formatSafe = (formatter: Intl.DateTimeFormat, date: Date) => {
-    try {
-      return formatter.format(date);
-    } catch {
-      return '--:--:--';
-    }
-  };
-
   // Get formatted values
-  const localTime = formatSafe(localTimeFormatter, currentTime);
-  const localDate = formatSafe(localDateFormatter, currentTime);
-  const utcTime = formatSafe(utcTimeFormatter, currentTime);
-  const utcDate = formatSafe(utcDateFormatter, currentTime);
-  const finishTime = formatSafe(finTimeFormatter, currentTime);
-  const finishDate = formatSafe(finDateFormatter, currentTime);
+  const localTime = getlocalTime(currentTime);
+  const localDate = getlocalDate(currentTime);
+  const utcTime = getutcTime(currentTime);
+  const utcDate = getutcDate(currentTime);
+  const finishTime = getfinishTime(currentTime);
+  const finishDate = getfinishDate(currentTime);
   
   return (
     <Box sx={{ 

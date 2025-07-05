@@ -1,7 +1,7 @@
 // components/MobileNav.tsx
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   BottomNavigation, 
   BottomNavigationAction,
@@ -15,7 +15,9 @@ import {
   IconButton,
   Slide,
   styled,
-  MenuItem 
+  MenuItem,
+  useMediaQuery,
+  Theme
 } from '@mui/material';
 import {
   ListAlt,  
@@ -64,11 +66,26 @@ export default function MobileNav() {
   const theme = useTheme();
   const pathname = usePathname();
   const { mutate: logout } = useLogout();
+  
+  // Check if the screen is wide enough to show extra navigation items
+  const isWideEnough = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'));
+  const [extraNavItems, setExtraNavItems] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Determine which extra items to show based on available space
+    if (isWideEnough) {
+      // These are the additional items we can show when there's space
+      setExtraNavItems(['priornotice', 'webcam']);
+    } else {
+      setExtraNavItems([]);
+    }
+  }, [isWideEnough]);
 
   // Define main navigation items
   const mainNavItems = ['home', 'info', 'fuel', 'profile'];
-  const mainNavResources = resources.filter(resource => mainNavItems.includes(resource.name));
-  const menuResources = resources.filter(resource => !mainNavItems.includes(resource.name));
+  const allNavItems = [...mainNavItems, ...extraNavItems];
+  const mainNavResources = resources.filter(resource => allNavItems.includes(resource.name));
+  const menuResources = resources.filter(resource => !allNavItems.includes(resource.name));
 
   // Derive active tab from current path
   const activeTab = mainNavResources.findIndex(resource => 
@@ -78,6 +95,11 @@ export default function MobileNav() {
   const handleMenuToggle = () => {
     setMenuOpen(!menuOpen);
   };
+
+  // Calculate how many items to show on each side of the FAB
+  const leftItemsCount = Math.ceil((mainNavResources.length) / 2);
+  const leftItems = mainNavResources.slice(0, leftItemsCount);
+  const rightItems = mainNavResources.slice(leftItemsCount);
 
   return (
     <>
@@ -210,7 +232,7 @@ export default function MobileNav() {
           }}
         >
           {/* Left Group */}
-          {mainNavResources.slice(0, 2).map((resource) => (
+          {leftItems.map((resource) => (
             <BottomNavigationAction
               key={resource.name}
               label={t(`${resource.meta.label}`)}
@@ -265,7 +287,7 @@ export default function MobileNav() {
           </Box>
 
           {/* Right Group */}
-          {mainNavResources.slice(2).map((resource) => (
+          {rightItems.map((resource) => (
             <BottomNavigationAction
               key={resource.name}
               label={t(`${resource.meta.label}`)}

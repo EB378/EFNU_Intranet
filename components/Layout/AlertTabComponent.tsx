@@ -142,8 +142,8 @@ const AlertTabModal = () => {
             borderTopLeftRadius: 16,
             borderBottomLeftRadius: 16,
             py: 1.2,
-            px: 0.5,
-            width: 30,
+            px: 0.75,
+            width: 45,
             boxShadow: 3,
             backgroundColor: theme.palette.error.main,
             '&:hover': {

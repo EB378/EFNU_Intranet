@@ -100,3 +100,50 @@ export function FuelName({ id }: { id: string }) {
   if (!resourceData) return <span>Loading...</span>;
   return <span>{resourceData.label}</span>;
 }
+
+// Define the return type
+interface AircraftData {
+  aircraft: string;
+  mtow: number;
+}
+
+export function useProfilePNAircraft({ profileId }: { profileId: string }) {
+  const { queryResult } = useShow({
+    resource: "profiles",
+    id: profileId,
+    queryOptions: { enabled: !!profileId },
+  });
+
+  const profileData = queryResult?.data?.data as {
+    presaved?: {
+      aircrafts?: AircraftData[];
+    };
+  } | undefined;
+
+  if (!queryResult?.isLoading && profileData?.presaved?.aircrafts) {
+    return profileData.presaved.aircrafts;
+  }
+
+  return [];
+}
+
+
+export function useProfilePNPIC({ profileId }: { profileId: string }) {
+  const { queryResult } = useShow({
+    resource: "profiles",
+    id: profileId,
+    queryOptions: { enabled: !!profileId },
+  });
+
+  const profileData = queryResult?.data?.data as {
+    presaved?: {
+      PIC?: string[];
+    };
+  } | undefined;
+
+  if (!queryResult?.isLoading && profileData?.presaved?.PIC) {
+    return profileData.presaved.PIC;
+  }
+
+  return [];
+}

@@ -9,7 +9,10 @@ import {
   Checkbox,
   FormControlLabel,
   Typography,
+  Button,
+  IconButton,
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Controller } from 'react-hook-form';
 import { useTheme } from '@hooks/useTheme';
 import { useParams, useRouter } from "next/navigation";
@@ -45,6 +48,9 @@ const PNEdit = () => {
   });
 
   const defaultValues = queryResult?.data?.data;
+  const handleGoBack = () => {
+    router.push('/priornotice'); // or router.back() if you want to go to the previous page
+  };
 
   // Set form values when data is loaded
   useEffect(() => {
@@ -79,11 +85,24 @@ const PNEdit = () => {
           handleFormSubmit(e);
         },
       }}
+      goBack
       title={
-        <Typography variant="h4">
-          {t("Edittitle")}
-        </Typography>
+        <Box display="flex" alignItems="center" gap={2}>
+          <IconButton onClick={handleGoBack} sx={{ p: 0 }}>
+            <ArrowBackIcon />
+          </IconButton>
+          <Typography variant="h4">
+            {t("Edittitle")}
+          </Typography>
+        </Box>
       }
+      headerProps={{
+        sx: {
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+        }
+      }}
     >
       <Box component="form" sx={{ mt: 3 }} onSubmit={handleFormSubmit}>
         <Grid container spacing={3}>
@@ -106,6 +125,13 @@ const PNEdit = () => {
               error={!!errors.dep_time}
               helperText={errors.dep_time?.message as string}
               fullWidth
+              margin="normal"  
+              sx={{ 
+                marginBottom: 2,
+                '& .MuiFormHelperText-root': {
+                  position: 'absolute',
+                  bottom: '-20px'
+                }}}
               label={t("DEP (UTC HHMM)")}
             />
           </Grid>
@@ -123,6 +149,14 @@ const PNEdit = () => {
               error={!!errors.arr_time}
               helperText={errors.arr_time?.message as string}
               fullWidth
+              sx={{ 
+                marginBottom: 2,
+                '& .MuiFormHelperText-root': {
+                  position: 'absolute',
+                  bottom: '-20px'
+                }}}
+                variant="outlined"
+              margin="normal"  
               label={t("ARR (UTC HHMM)")}
             />
           </Grid>
@@ -133,6 +167,7 @@ const PNEdit = () => {
               {...register('dof')}
               fullWidth
               type="date"
+              margin="normal"  
               label={t("DateOfFlight")}
               InputLabelProps={{ shrink: true }}
             />
@@ -147,6 +182,7 @@ const PNEdit = () => {
               error={!!errors.aircraft}
               helperText={errors.aircraft?.message as string}
               fullWidth
+              margin="normal"  
               label={t("Aircraft registration")}
             />
           </Grid>
@@ -163,6 +199,7 @@ const PNEdit = () => {
               error={!!errors.mtow}
               helperText={errors.mtow?.message as string}
               fullWidth
+              margin="normal"  
               type="number"
               label={t("MTOW (Kg)")}
             />
@@ -177,6 +214,7 @@ const PNEdit = () => {
               error={!!errors.pic_name}
               helperText={errors.pic_name?.message as string}
               fullWidth
+              margin="normal"  
               label={t("PIC (Full name)")}
             />
           </Grid>
