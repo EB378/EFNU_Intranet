@@ -190,8 +190,34 @@
     "question4Title": "What information should I include in my support request?",
     "question4Answer": "Please include your contact information, flight details (if applicable), and a detailed description of your inquiry or issue."
   },
-  "RunwayLights":{
-    "Runway Lights Guide": "Runway Lights Guide(ONLY IN FINISH )"
+  "RunwayLights": {
+    "title": "Runway Lights Guide",
+    "videoTitle": "Runway Lights Control Guide",
+    "videoNotSupported": "Your browser does not support the video tag.",
+    
+    "nightOperations": {
+      "title": "Night Flying Operations Considerations",
+      "taxiwayNotInUse": "During night flight operations 04-22, the taxiway next to the runway is not in use.",
+      "noTaxiwayLights": "There are no taxiway lights. Use the airplane's own lights when taxiing from holding point BRAVO to ALPHA and when taxiing to the hangars at the end of RWY 22.",
+      "runwayLightsInfo": "Runway lights can be used according to the instructions below. Edge and threshold lights have been installed on runway 04/22. Threshold/end lights show green in the direction of the threshold and red in the direction of the end."
+    },
+    
+    "lightControl": {
+      "title": "Runway Light Control",
+      "frequency": "Control is done by pressing the send button at the COM frequency of 122.825 MHz.",
+      "operationRange": "The system tells you the status of the light in English and has been tested to work at an altitude of 1200 ft ASL at a distance of five NM from the field.",
+      "timingRequirements": "Send button presses must be 0.3–2s long, with 0.3–2s pauses between them. The series must be completed within 15 seconds. There must be at least a 2s pause before the series and 3s after before the next transmission.",
+      "timeExtension": "The new control extends the lighting time up to 20 minutes from the moment of control.",
+      "faultIndicators": "If the lights are on but there are no notifications, the transmitter may be faulty or the lights have been turned on manually."
+    },
+    
+    "lightOperation": {
+      "title": "Light Operation Details",
+      "activation": "The lights are switched on for 20 minutes by pressing the send button 7 times. The system switches to level 3 intensity and announces the status.",
+      "announcements": "The system announces remaining time at 10 minutes, 5 minutes, 1 minute, and 10 seconds before switching off.",
+      "flashingWarning": "The brightness flashes during the last 10 seconds. If you hear the 10-second announcement or see intensity variation, abort approach and reactivate lights.",
+      "dimming": "Lights can be dimmed by pressing the send button 5 times (INTENSITY 1). Seven presses raises brightness back to level 3 (INTENSITY 3)."
+    }
   },
   "SafetyReports": {
     "SafetyReports": "Safety Reports",
@@ -340,11 +366,6 @@
     },
     "downloadButton": "Download Full Rules (PDF)"
   },
-  "PdfViewer": {
-    "title": "Association Rules Document(ONLY IN FINISH)",
-    "description": "Official rules and regulations of the association. Please review carefully.",
-    "OpenButton": "Open PDF"
-  },
   "Blog": {
     "title": "EFNU Airport Insights",
     "subtitle": "Discover the latest news, updates, and stories from EFNU Airport",
@@ -408,5 +429,11 @@
     "EventNotFound": "Event Not Found",
     "The event you're looking for doesn't exist or may have been removed.": "The event you're looking for doesn't exist or may have been removed.",
     "BackToCalendar": "Back to Calendar"
+  },
+  "PdfViewer": {
+    "title": "Operations Handbook",
+    "downloadButton": "Download PDF",
+    "pdfTitle": "EFNU Operations Handbook",
+    "mobileWarning": "For best experience, rotate your device to landscape mode"
   }
 }

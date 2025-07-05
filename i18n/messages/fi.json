@@ -191,8 +191,31 @@
     "question4Answer": "Voit lähettää tukipyynnön täyttämällä yhteydenottolomakkeen verkkosivuillamme tai lähettämällä sähköpostia suoraan tukiosastollemme. Pyrimme vastaamaan kaikkiin pyyntöihin mahdollisimman pian."
   },
   "RunwayLights":{
-    "Runway Lights Guide": "Kiitotien valojen opas"
+  "title": "Kiitoradan valot - ohje",
+  "videoTitle": "Kiitoradan valaistuksen ohjausopas",
+  "videoNotSupported": "Selaimesi ei tue videotagia.",
+  "nightOperations": {
+    "title": "Yölentotoiminnan huomioitavaa",
+    "taxiwayNotInUse": "Yölentotoiminnan aikana 04-22 kiitoradan vieressä olevaa rullausväylää ei käytetä.",
+    "noTaxiwayLights": "Rullausväylällä ei ole valoja. Käytä lentokoneen omia valoja rullatessasi lähtöpisteestä BRAVO kohtaan ALPHA ja hangareille kiitoradan 22 päässä.",
+    "runwayLightsInfo": "Kiitoradan valoja voi käyttää alla olevien ohjeiden mukaisesti. Kiitoradalle 04/22 on asennettu reunavalot ja kynnysvalot. Kynnys-/päätyvalot näyttävät vihreää kynnyksen suuntaan ja punaista päädyn suuntaan."
   },
+  "lightControl": {
+    "title": "Kiitoradan valaistuksen ohjaus",
+    "frequency": "Ohjaus tapahtuu painamalla lähetysnappia taajuudella 122.825 MHz.",
+    "operationRange": "Järjestelmä ilmoittaa valon tilan englanniksi ja sen on testattu toimivan 1200 jalan korkeudella merenpinnan yläpuolella (ASL) viiden meripeninkulman etäisyydellä kentästä.",
+    "timingRequirements": "Lähetysnapin painalluksen tulee olla 0,3–2 sekuntia pitkä, ja painallusten välillä tulee olla 0,3–2 sekunnin tauko. Sarjan tulee olla valmis 15 sekunnin kuluessa. Sarjan ja seuraavan lähetyksen välillä tulee olla vähintään 2 sekunnin tauko ja 3 sekunnin tauko sarjan jälkeen.",
+    "timeExtension": "Uusi ohjaus pidentää valaistusaikaa jopa 20 minuuttiin ohjauksen hetkestä.",
+    "faultIndicators": "Jos valot ovat päällä, mutta ilmoituksia ei tule, lähetin saattaa olla viallinen tai valot on kytketty päälle manuaalisesti."
+  },
+  "lightOperation": {
+    "title": "Valaistuksen toimintayksityiskohdat",
+    "activation": "Valot kytkeytyvät päälle 20 minuutiksi painamalla lähetysnappia 7 kertaa. Järjestelmä vaihtaa tasolle 3 (teho) ja ilmoittaa tilan.",
+    "announcements": "Järjestelmä ilmoittaa jäljellä olevan ajan 10 minuutin, 5 minuutin, 1 minuutin ja 10 sekunnin kuluttua sammutuksesta.",
+    "flashingWarning": "Kirkkaus vilkkuu viimeisten 10 sekunnin aikana. Jos kuulet 10 sekunnin ilmoituksen tai näet intensiteetin vaihtelua, keskeytä lähestyminen ja aktivoi valot uudelleen.",
+    "dimming": "Valoja voi himmentää painamalla lähetysnappia 5 kertaa (INTENSITY 1). Seitsemän painallusta palauttaa kirkkauden tasolle 3 (INTENSITY 3)."
+  }
+},
   "SafetyReports": {
     "SafetyReports": "Turvallisuusraportit",
     "Active safety reports and incident tracking": "Aktiiviset turvallisuusraportit ja tapahtumien seuranta",
@@ -341,9 +364,10 @@
     "downloadButton": "Lataa täydelliset säännöt (PDF)"
   },
   "PdfViewer": {
-    "title": "Nummelan lentokenttäyhdistyksen säännöt",
-    "description": "Voit tarkastella ja ladata Nummelan lentokenttäyhdistyksen säännöt PDF-muodossa.",
-    "OpenButton": "Avaa PDF"
+    "title": "Operations Handbook",
+    "downloadButton": "Download PDF",
+    "pdfTitle": "EFNU Operations Handbook",
+    "mobileWarning": "For best experience, rotate your device to landscape mode"
   },
    "Blog": {
     "title": "EFNU-lentoaseman tiedotteet",

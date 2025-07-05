@@ -92,10 +92,10 @@ const PNList = () => {
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <div>
                     <Typography variant="subtitle1">
-                      {pn.aircraft} • {pn.pic_name}
+                      {pn.aircraft.toUpperCase()} • {pn.pic_name.toUpperCase()}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {dayjs(pn.dof).format('DD MMM')} •   {pn.dep_time && pn.arr_time
+                      {dayjs(pn.dof).format('DD/MM/YYYY')} •   {pn.dep_time && pn.arr_time
                       ? `${pn.dep_time} - ${pn.arr_time}`
                       : pn.dep_time
                       ? `Dep: ${pn.dep_time}`
