@@ -1,4 +1,4 @@
-// components/MobileNav.tsx
+// components/NavBar.tsx
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -20,20 +20,7 @@ import {
   Theme
 } from '@mui/material';
 import {
-  ListAlt,  
-  BroadcastOnHome,  
-  CloudQueue,
-  Map,
-  PriorityHigh,
-  LocalGasStation,
-  CameraOutdoor,
-  Book,
-  Article,
-  Info,
-  Air,
-  Lightbulb,
   AccountBox,
-  EnhancedEncryption,
   Menu as MenuIcon,
   Add,
   Close,

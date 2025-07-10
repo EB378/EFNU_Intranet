@@ -149,46 +149,43 @@ export default PNList;
 
 
 function isDateTimePassed(dateStr: string, timeStr: string): boolean {
-  console.log("Checking date and time:", dateStr, timeStr);
-  console.log("Checking date and time:", dateStr, timeStr);
-  console.log("Checking date and time:", dateStr, timeStr);
-  console.log("Checking date and time:", dateStr, timeStr);
-  
-  // Validate date format (yyyy-mm-dd)
+  // Trim and validate input
+  const cleanedTime = timeStr.trim();
+
+  // If time is empty or just whitespace, treat it as missing
+  if (!cleanedTime || cleanedTime.length === 0) return false;
+
+  // Basic validation: must be 4 digits
+  if (!/^\d{4}$/.test(cleanedTime)) {
+    console.warn(`Skipping invalid time: "${timeStr}" for date: "${dateStr}"`);
+    return false; // Invalid time format → do not consider it passed or valid
+  }
+
+  // Validate date format
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-    throw new Error('Invalid date format. Expected yyyy-mm-dd.');
+    console.warn(`Skipping invalid date format: "${dateStr}"`);
+    return false;
   }
 
-  // Validate time format (HHMM)
-  if (!/^\d{4}$/.test(timeStr)) {
-    throw new Error('Invalid time format. Expected HHMM as a 4-digit string.');
+  try {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const hours = parseInt(cleanedTime.substring(0, 2), 10);
+    const minutes = parseInt(cleanedTime.substring(2, 4), 10);
+
+    if (
+      isNaN(year) || isNaN(month) || isNaN(day) ||
+      isNaN(hours) || isNaN(minutes) ||
+      hours < 0 || hours > 23 ||
+      minutes < 0 || minutes > 59
+    ) {
+      console.warn(`Invalid datetime values in "${dateStr} ${cleanedTime}"`);
+      return false;
+    }
+
+    const inputDateTime = new Date(Date.UTC(year, month - 1, day, hours, minutes));
+    return inputDateTime.getTime() < Date.now();
+  } catch (error) {
+    console.error("Error parsing date/time:", { dateStr, timeStr, error });
+    return false;
   }
-
-  // Parse date components
-  const [year, month, day] = dateStr.split('-').map(Number);
-  
-  // Parse time components
-  const hours = parseInt(timeStr.substring(0, 2), 10);
-  const minutes = parseInt(timeStr.substring(2, 4), 10);
-
-  // Validate date values
-  const dateObj = new Date(Date.UTC(year, month - 1, day));
-  if (
-    dateObj.getUTCFullYear() !== year ||
-    dateObj.getUTCMonth() !== month - 1 ||
-    dateObj.getUTCDate() !== day
-  ) {
-    throw new Error('Invalid date values.');
-  }
-
-  // Validate time values
-  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
-    throw new Error('Invalid time. Hours must be 00-23 and minutes 00-59.');
-  }
-
-  // Create the full datetime in UTC
-  const inputDateTime = new Date(Date.UTC(year, month - 1, day, hours, minutes));
-
-  // Compare with current UTC time
-  return inputDateTime.getTime() < Date.now();
 }

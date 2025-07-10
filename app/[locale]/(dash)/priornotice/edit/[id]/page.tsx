@@ -3,28 +3,38 @@
 import { useForm } from '@refinedev/react-hook-form';
 import { Edit } from '@refinedev/mui';
 import {
-  Box,
-  Grid,
-  TextField,
-  Checkbox,
-  FormControlLabel,
-  Typography,
-  Button,
-  IconButton,
+  Box, Grid, TextField, Checkbox, FormControlLabel, Typography, Autocomplete, IconButton
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Controller } from 'react-hook-form';
 import { useTheme } from '@hooks/useTheme';
-import { useParams, useRouter } from "next/navigation";
-import { PriorNotice } from "@/types/index";
+import { useParams, useRouter } from 'next/navigation';
+import { PriorNotice } from '@/types/index';
 import { useTranslations } from 'next-intl';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useProfilePNAircraft, useProfilePNPIC } from '@components/functions/FetchFunctions';
+import { useGetIdentity } from '@refinedev/core';
+
+interface AircraftData {
+  aircraft: string;
+  mtow: number;
+}
 
 const PNEdit = () => {
   const t = useTranslations('PN');
-  const { id: pnID } = useParams<{ id: string }>();
-  const router = useRouter();
   const theme = useTheme();
+  const router = useRouter();
+  const { id: pnID } = useParams<{ id: string }>();
+  const { data: identityData } = useGetIdentity<{ id: string }>();
+
+  const aircrafts = useProfilePNAircraft({ profileId: identityData?.id ?? "" });
+  const PICPersons = useProfilePNPIC({ profileId: identityData?.id ?? "" });
+
+  const [aircraftOptions, setAircraftOptions] = useState<AircraftData[]>([]);
+  const [picOptions, setPicOptions] = useState<string[]>([]);
+  const [selectedAircraft, setSelectedAircraft] = useState<AircraftData | null>(null);
+  const [currentMTOW, setCurrentMTOW] = useState<number | ''>('');
+
   const {
     refineCore: { formLoading, queryResult, onFinish },
     saveButtonProps,
@@ -33,6 +43,8 @@ const PNEdit = () => {
     setValue,
     getValues,
     formState: { errors },
+    trigger,
+    watch
   } = useForm<PriorNotice>({
     refineCoreProps: {
       resource: 'priornotice',
@@ -41,18 +53,20 @@ const PNEdit = () => {
       metaData: {
         transform: (data: PriorNotice) => ({
           ...data,
-          status: 'pending' // Add status field with pending value
-        })
-      }
+          status: 'pending',
+        }),
+      },
     },
+    mode: 'onChange',
   });
 
   const defaultValues = queryResult?.data?.data;
-  const handleGoBack = () => {
-    router.push('/priornotice'); // or router.back() if you want to go to the previous page
-  };
 
-  // Set form values when data is loaded
+  useEffect(() => {
+    if (aircrafts?.length) setAircraftOptions(aircrafts);
+    if (PICPersons?.length) setPicOptions(PICPersons);
+  }, [aircrafts, PICPersons]);
+
   useEffect(() => {
     if (defaultValues) {
       setValue('dep_time', defaultValues.dep_time);
@@ -61,19 +75,67 @@ const PNEdit = () => {
       setValue('aircraft', defaultValues.aircraft);
       setValue('mtow', defaultValues.mtow);
       setValue('pic_name', defaultValues.pic_name);
-      setValue('ifr_arrival', defaultValues.ifr_arrival || false);
+      setValue('ifr_arrival', defaultValues.ifr_arrival ?? false);
+
+      // Preselect aircraft if found
+      const found = aircraftOptions.find(ac => ac.aircraft === defaultValues.aircraft);
+      if (found) {
+        setSelectedAircraft(found);
+        setCurrentMTOW(found.mtow);
+      }
     }
-  }, [defaultValues, setValue]);
+  }, [defaultValues, aircraftOptions, setValue]);
+
+  const watchedAircraft = watch('aircraft');
+
+  const handleGoBack = () => router.push('/priornotice');
+
+  const handleAircraftChange = (newValue: AircraftData | string | null) => {
+    if (typeof newValue === 'string') {
+      setSelectedAircraft(null);
+      setValue('aircraft', newValue, { shouldValidate: true });
+      setCurrentMTOW('');
+    } else if (newValue) {
+      setSelectedAircraft(newValue);
+      setValue('aircraft', newValue.aircraft, { shouldValidate: true });
+      setValue('mtow', newValue.mtow, { shouldValidate: true });
+      setCurrentMTOW(newValue.mtow);
+    } else {
+      setSelectedAircraft(null);
+      setValue('aircraft', '', { shouldValidate: true });
+      setCurrentMTOW('');
+    }
+    trigger('aircraft');
+  };
+
+  const handleMTOWChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value === '' ? '' : Number(e.target.value);
+    setCurrentMTOW(value);
+    setValue('mtow', value === '' ? undefined : value, { shouldValidate: true });
+  };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await onFinish(getValues());
-      router.push('/priornotice');
-    } catch (error) {
-      console.error("Form submission error:", error);
+
+    const valid = await trigger();
+
+    const values = getValues();
+    const dep = values.dep_time?.trim();
+    const arr = values.arr_time?.trim();
+
+    const atLeastOneTime = dep || arr;
+
+    if (!atLeastOneTime) {
+      alert(t("AtLeastOneTimeRequired")); // Or show toast/snackbar
+      return;
     }
+
+    if (!valid) return;
+
+    await onFinish(values);
+    router.push('/priornotice');
   };
+
 
   return (
     <Edit
@@ -91,18 +153,9 @@ const PNEdit = () => {
           <IconButton onClick={handleGoBack} sx={{ p: 0 }}>
             <ArrowBackIcon />
           </IconButton>
-          <Typography variant="h4">
-            {t("Edittitle")}
-          </Typography>
+          <Typography variant="h4">{t("Edittitle")}</Typography>
         </Box>
       }
-      headerProps={{
-        sx: {
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-        }
-      }}
     >
       <Box component="form" sx={{ mt: 3 }} onSubmit={handleFormSubmit}>
         <Grid container spacing={3}>
@@ -112,11 +165,9 @@ const PNEdit = () => {
             </Typography>
           </Grid>
 
-          {/* Departure Time */}
           <Grid item xs={12} md={6}>
             <TextField
               {...register('dep_time', {
-                required: t("DepartureTimeRequired"),
                 pattern: {
                   value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
                   message: t("InvalidTimeFormat"),
@@ -125,22 +176,13 @@ const PNEdit = () => {
               error={!!errors.dep_time}
               helperText={errors.dep_time?.message as string}
               fullWidth
-              margin="normal"  
-              sx={{ 
-                marginBottom: 2,
-                '& .MuiFormHelperText-root': {
-                  position: 'absolute',
-                  bottom: '-20px'
-                }}}
               label={t("DEP (UTC HHMM)")}
             />
           </Grid>
 
-          {/* Arrival Time */}
           <Grid item xs={12} md={6}>
             <TextField
               {...register('arr_time', {
-                required: t("ArrivalTimeRequired"),
                 pattern: {
                   value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
                   message: t("InvalidTimeFormat"),
@@ -149,45 +191,53 @@ const PNEdit = () => {
               error={!!errors.arr_time}
               helperText={errors.arr_time?.message as string}
               fullWidth
-              sx={{ 
-                marginBottom: 2,
-                '& .MuiFormHelperText-root': {
-                  position: 'absolute',
-                  bottom: '-20px'
-                }}}
-                variant="outlined"
-              margin="normal"  
               label={t("ARR (UTC HHMM)")}
             />
           </Grid>
 
-          {/* Date Of Flight */}
           <Grid item xs={12} md={6}>
             <TextField
               {...register('dof')}
               fullWidth
               type="date"
-              margin="normal"  
               label={t("DateOfFlight")}
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
 
-          {/* Aircraft Registration */}
           <Grid item xs={12} md={6}>
-            <TextField
-              {...register('aircraft', {
-                required: t("AircraftRegRequired"),
-              })}
-              error={!!errors.aircraft}
-              helperText={errors.aircraft?.message as string}
-              fullWidth
-              margin="normal"  
-              label={t("Aircraft registration")}
+            <Controller
+              name="aircraft"
+              control={control}
+              rules={{ required: t("AircraftRequired") }}
+              render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+                <Autocomplete
+                  freeSolo
+                  options={aircraftOptions}
+                  getOptionLabel={(option) => typeof option === 'string' ? option : option.aircraft}
+                  value={selectedAircraft || value || null}
+                  onChange={(_, newValue) => {
+                    handleAircraftChange(newValue);
+                    onChange(typeof newValue === 'string' ? newValue : newValue?.aircraft || '');
+                  }}
+                  onInputChange={(_, newInputValue) => {
+                    if (newInputValue !== value) onChange(newInputValue);
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t("Aircraft registration")}
+                      inputRef={ref}
+                      error={!!error}
+                      helperText={error?.message}
+                      value={watchedAircraft || ''}
+                    />
+                  )}
+                />
+              )}
             />
           </Grid>
 
-          {/* MTOW */}
           <Grid item xs={12} md={6}>
             <TextField
               {...register('mtow', {
@@ -199,34 +249,47 @@ const PNEdit = () => {
               error={!!errors.mtow}
               helperText={errors.mtow?.message as string}
               fullWidth
-              margin="normal"  
+              value={currentMTOW}
+              onChange={handleMTOWChange}
               type="number"
               label={t("MTOW (Kg)")}
             />
           </Grid>
 
-          {/* PIC Name */}
           <Grid item xs={12} md={6}>
-            <TextField
-              {...register('pic_name', { 
-                required: t("PICNameRequired") 
-              })}
-              error={!!errors.pic_name}
-              helperText={errors.pic_name?.message as string}
-              fullWidth
-              margin="normal"  
-              label={t("PIC (Full name)")}
+            <Controller
+              name="pic_name"
+              control={control}
+              rules={{ required: t("PICNameRequired") }}
+              render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+                <Autocomplete
+                  freeSolo
+                  options={picOptions}
+                  value={value || ''}
+                  onChange={(_, newValue) => onChange(newValue || '')}
+                  onInputChange={(_, newInputValue) => onChange(newInputValue)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={t("PIC (Full name)")}
+                      inputRef={ref}
+                      error={!!error}
+                      helperText={error?.message}
+                    />
+                  )}
+                />
+              )}
             />
           </Grid>
 
-          {/* IFR Arrival */}
           <Grid item xs={12}>
             <Controller
               control={control}
               name="ifr_arrival"
+              defaultValue={false}
               render={({ field }) => (
                 <FormControlLabel
-                  control={<Checkbox {...field} checked={field.value} color="primary" />}
+                  control={<Checkbox {...field} color="primary" />}
                   label={t("IFR Arrival")}
                 />
               )}

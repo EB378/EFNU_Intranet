@@ -134,7 +134,7 @@ const BlogShowPage = () => {
             {t("PostNotFound")}
           </Typography>
           <Typography variant="h6" sx={{ mb: 4, maxWidth: 600, mx: 'auto' }}>
-            {t("The blog post you're looking for doesn't exist or may have been removed.")}
+            {t("The blog post you're looking for doesn't exist or may have been removed")}
           </Typography>
           <Button
             variant="contained"

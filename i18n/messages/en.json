@@ -376,7 +376,7 @@
     "noPosts": "No blog posts found",
     "Try adjusting your search or check back later for new content": "Try adjusting your search or check back later for new content",
     "PostNotFound": "Post Not Found",
-    "The blog post you're looking for doesn't exist or may have been removed.": "The blog post you're looking for doesn't exist or may have been removed.",
+    "The blog post you're looking for doesn't exist or may have been removed": "The blog post you're looking for doesn't exist or may have been removed.",
     "BackToBlog": "Back to Blog",
     "Back": "Back",
     "Article": "Article",
@@ -427,7 +427,7 @@
     "Try adjusting your search or check back later for new events": "Try adjusting your search or check back later for new events",
     "EventDetails": "Event Details",
     "EventNotFound": "Event Not Found",
-    "The event you're looking for doesn't exist or may have been removed.": "The event you're looking for doesn't exist or may have been removed.",
+    "The event you're looking for doesn't exist or may have been removed": "The event you're looking for doesn't exist or may have been removed.",
     "BackToCalendar": "Back to Calendar"
   },
   "PdfViewer": {

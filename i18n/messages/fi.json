@@ -379,7 +379,7 @@
     "noPosts": "Blogikirjoituksia ei löytynyt",
     "Try adjusting your search or check back later for new content": "Yritä muuttaa hakua tai tarkista myöhemmin uutta sisältöä",
     "PostNotFound": "Julkaisua ei löytynyt",
-    "The blog post you're looking for doesn't exist or may have been removed.": "The blog post you're looking for doesn't exist or may have been removed.",
+    "The blog post you're looking for doesn't exist or may have been removed": "The blog post you're looking for doesn't exist or may have been removed.",
     "BackToBlog": "Takaisin blogiin",
     "Back": "Takaisin",
     "Article": "Artikkeli",
@@ -430,7 +430,7 @@
     "Try adjusting your search or check back later for new events": "Kokeile hakuehtojen muuttamista tai tarkista myöhemmin uudet tapahtumat",
     "EventDetails": "Tapahtuman tiedot",
     "EventNotFound": "Tapahtumaa ei löytynyt",
-    "The event you're looking for doesn't exist or may have been removed.": "The event you're looking for doesn't exist or may have been removed.",
+    "The event you're looking for doesn't exist or may have been removed": "The event you're looking for doesn't exist or may have been removed.",
     "BackToCalendar": "Takaisin kalenteriin"
   }
 }

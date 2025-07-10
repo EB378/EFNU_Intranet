@@ -267,7 +267,7 @@ const EventShowPage = () => {
             {t("EventNotFound")}
           </Typography>
           <Typography variant="h6" sx={{ mb: 4, maxWidth: 600, mx: 'auto' }}>
-            {t("The event you're looking for doesn't exist or may have been removed.")}
+            {t("The event you're looking for doesn't exist or may have been removed")}
           </Typography>
           <Button
             variant="contained"
