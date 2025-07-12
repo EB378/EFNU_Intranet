@@ -7,7 +7,7 @@ const AtisPage: React.FC = () => {
   return (
     <div className="fixed top-0 left-0 h-90vh overflow-hidden m-0 p-0 border-none">
       <iframe 
-        src="https://atis.efnu.fi/" 
+        src="https://info.efnu.fi/" 
         style={{
           position: "absolute",
           bottom: "10vh",
