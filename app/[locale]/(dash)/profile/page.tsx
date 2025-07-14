@@ -39,6 +39,8 @@ import { FuelData } from "@components/profile/FuelData";
 import { PasswordChangeBlock } from "@components/profile/PasswordChange";
 import LanguageSwitcher from "@components/ui/LanguageSwitcher";
 import { useTranslations } from "next-intl";
+import QuickAccessSettings from "@/components/QuickAccessSettings";
+
 
 const Profile = () => {
   const { open } = useNotification();
@@ -245,6 +247,9 @@ const Profile = () => {
         </Grid>
         {/* Fuel Totals Card */}
         <FuelData profileId={uid} />
+        <Box sx={{ m:2 }}>
+          <QuickAccessSettings />
+        </Box>
       </Container>
     </Box>
   );

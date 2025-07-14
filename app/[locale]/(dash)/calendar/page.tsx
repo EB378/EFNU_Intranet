@@ -37,7 +37,8 @@ import {
   FormControl,
   Chip,
   Divider,
-  CircularProgress
+  CircularProgress,
+  Tooltip
 } from "@mui/material";
 import {
   Today as TodayIcon,
@@ -45,12 +46,14 @@ import {
   ViewDay as ViewDayIcon,
   ViewAgenda as ViewAgendaIcon,
   ViewModule as ViewMonthIcon,
-  MoreVert as MoreIcon
+  MoreVert as MoreIcon,
+  NavigateBefore as PrevIcon,
+  NavigateNext as NextIcon
 } from "@mui/icons-material";
 import { DatePicker, TimePicker, DateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { format, addHours } from "date-fns";
+import { format, addHours, isSameDay } from "date-fns";
 import { useRouter } from "next/navigation";
 
 type CalendarEvent = {
@@ -85,13 +88,14 @@ const CalendarPage = () => {
   const calendarRef = useRef<any>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [currentView, setCurrentView] = useState<string>("dayGridMonth");
+  const [currentTitle, setCurrentTitle] = useState<string>("");
   const open = Boolean(anchorEl);
   const [openModal, setOpenModal] = useState<"create" | "edit" | "details" | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
   const [eventForm, setEventForm] = useState<EventFormData>({
     id: "",
     title: "",
-    description: "",
+    description: "", 
     start_time: new Date(),
     end_time: addHours(new Date(), 1),
     is_all_day: false,
@@ -102,8 +106,11 @@ const CalendarPage = () => {
   });
 
   // Refine hooks
-  const { data: eventsData } = useList<CalendarEvent>({
+  const { data: eventsData, isLoading: eventsLoading } = useList<CalendarEvent>({
     resource: "events",
+    pagination: {
+      mode: "off",
+    },
   });
   
   const { mutate: createEvent } = useCreate();
@@ -132,6 +139,49 @@ const CalendarPage = () => {
       }
     })) || [];
   }, [eventsData]);
+
+  // Update calendar title when view changes
+  useEffect(() => {
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      const updateTitle = () => {
+        const view = calendarApi.view;
+        let title = "";
+        
+        if (view.type === "dayGridMonth") {
+          title = format(view.currentStart, "MMMM yyyy");
+        } else if (view.type === "timeGridWeek") {
+          const start = view.currentStart;
+          const end = new Date(view.currentEnd);
+          end.setDate(end.getDate() - 1); // Adjust end date
+          
+          if (isSameDay(start, end)) {
+            title = format(start, "MMMM d, yyyy");
+          } else if (start.getMonth() === end.getMonth()) {
+            title = `${format(start, "MMMM d")} - ${format(end, "d, yyyy")}`;
+          } else {
+            title = `${format(start, "MMMM d")} - ${format(end, "MMMM d, yyyy")}`;
+          }
+        } else if (view.type === "timeGridDay") {
+          title = format(view.currentStart, "EEEE, MMMM d, yyyy");
+        } else if (view.type === "listWeek") {
+          const start = view.currentStart;
+          const end = new Date(view.currentEnd);
+          end.setDate(end.getDate() - 1); // Adjust end date
+          title = `${format(start, "MMM d")} - ${format(end, "MMM d, yyyy")}`;
+        }
+        
+        setCurrentTitle(title);
+      };
+      
+      calendarApi.on("datesSet", updateTitle);
+      updateTitle();
+      
+      return () => {
+        calendarApi.off("datesSet", updateTitle);
+      };
+    }
+  }, [currentView]);
 
   const handleDateSelect = (selectInfo: any) => {
     const start = selectInfo.start;
@@ -190,6 +240,14 @@ const CalendarPage = () => {
 
   const handleTodayClick = () => {
     calendarRef.current?.getApi().today();
+  };
+
+  const handlePrevClick = () => {
+    calendarRef.current?.getApi().prev();
+  };
+
+  const handleNextClick = () => {
+    calendarRef.current?.getApi().next();
   };
 
   const handleViewChange = (view: string) => {
@@ -296,7 +354,7 @@ const CalendarPage = () => {
     handleCloseModal();
   };
 
-  const handleshowpage = () => {
+  const handleShowPage = () => {
     if (!selectedEvent) return;
     
     // Redirect to event details page
@@ -305,30 +363,38 @@ const CalendarPage = () => {
 
   const renderViewButtons = () => (
     <Stack direction="row" spacing={1} sx={{ ml: 2 }}>
-      <IconButton 
-        onClick={() => handleViewChange("dayGridMonth")}
-        color={currentView === "dayGridMonth" ? "primary" : "default"}
-      >
-        <ViewMonthIcon />
-      </IconButton>
-      <IconButton 
-        onClick={() => handleViewChange("timeGridWeek")}
-        color={currentView === "timeGridWeek" ? "primary" : "default"}
-      >
-        <ViewWeekIcon />
-      </IconButton>
-      <IconButton 
-        onClick={() => handleViewChange("timeGridDay")}
-        color={currentView === "timeGridDay" ? "primary" : "default"}
-      >
-        <ViewDayIcon />
-      </IconButton>
-      <IconButton 
-        onClick={() => handleViewChange("listWeek")}
-        color={currentView === "listWeek" ? "primary" : "default"}
-      >
-        <ViewAgendaIcon />
-      </IconButton>
+      <Tooltip title="Month view">
+        <IconButton 
+          onClick={() => handleViewChange("dayGridMonth")}
+          color={currentView === "dayGridMonth" ? "primary" : "default"}
+        >
+          <ViewMonthIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Week view">
+        <IconButton 
+          onClick={() => handleViewChange("timeGridWeek")}
+          color={currentView === "timeGridWeek" ? "primary" : "default"}
+        >
+          <ViewWeekIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Day view">
+        <IconButton 
+          onClick={() => handleViewChange("timeGridDay")}
+          color={currentView === "timeGridDay" ? "primary" : "default"}
+        >
+          <ViewDayIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Agenda view">
+        <IconButton 
+          onClick={() => handleViewChange("listWeek")}
+          color={currentView === "listWeek" ? "primary" : "default"}
+        >
+          <ViewAgendaIcon />
+        </IconButton>
+      </Tooltip>
       <IconButton onClick={handleMenuClick}>
         <MoreIcon />
       </IconButton>
@@ -353,16 +419,28 @@ const CalendarPage = () => {
         p: 0.5, 
         borderLeft: `3px solid ${eventTypeColor()}`,
         backgroundColor: theme.palette.background.paper,
-        height: '100%'
+        height: '100%',
+        overflow: 'hidden'
       }}>
-        <Typography variant="body2" sx={{ fontWeight: 500, lineHeight: 1.2 }}>
+        <Typography variant="body2" sx={{ 
+          fontWeight: 500, 
+          lineHeight: 1.2,
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }}>
           {eventInfo.timeText && (
             <span style={{ marginRight: 4 }}>{eventInfo.timeText}</span>
           )}
           {eventInfo.event.title}
         </Typography>
         {eventInfo.event.extendedProps.location && (
-          <Typography variant="caption" sx={{ display: 'block' }}>
+          <Typography variant="caption" sx={{ 
+            display: 'block',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          }}>
             {eventInfo.event.extendedProps.location}
           </Typography>
         )}
@@ -396,9 +474,22 @@ const CalendarPage = () => {
         flexWrap: "wrap",
         gap: 2
       }}>
-        <Typography variant="h4" sx={{ fontWeight: 700 }}>
-          Calendar
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Typography variant="h4" sx={{ fontWeight: 700 }}>
+            Calendar
+          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton onClick={handlePrevClick} size="small">
+              <PrevIcon />
+            </IconButton>
+            <Typography variant="h6" sx={{ minWidth: 200, textAlign: 'center' }}>
+              {currentTitle}
+            </Typography>
+            <IconButton onClick={handleNextClick} size="small">
+              <NextIcon />
+            </IconButton>
+          </Box>
+        </Box>
         
         <Stack direction="row" spacing={2} sx={{ flexWrap: "wrap" }}>
           <Button 
@@ -450,6 +541,54 @@ const CalendarPage = () => {
             meridiem: "short",
             hour12: true
           }}
+          eventDisplay="block"
+          eventMaxStack={2}
+          eventOrder="start,-duration,allDay,title"
+          navLinks={true}
+          dayMaxEventRows={4}
+          moreLinkClick="popover"
+          eventDidMount={(info) => {
+            // Add tooltip for events with long titles
+            if (info.event.title.length > 30 || (info.event.extendedProps.description && info.event.extendedProps.description.length > 50)) {
+              const tooltip = document.createElement('div');
+              tooltip.innerHTML = `
+                <div style="padding: 8px; max-width: 300px;">
+                  <strong>${info.event.title}</strong>
+                  ${info.event.extendedProps.description ? `<p style="margin-top: 4px;">${info.event.extendedProps.description}</p>` : ''}
+                  ${info.event.extendedProps.location ? `<p style="margin-top: 4px;"><small>Location: ${info.event.extendedProps.location}</small></p>` : ''}
+                </div>
+              `;
+              info.el.setAttribute('data-tooltip', '');
+              info.el.addEventListener('mouseenter', () => {
+                const popper = document.createElement('div');
+                popper.style.position = 'absolute';
+                popper.style.zIndex = '9999';
+                popper.style.pointerEvents = 'none';
+                popper.innerHTML = tooltip.innerHTML;
+                popper.style.backgroundColor = theme.palette.background.paper;
+                popper.style.borderRadius = '4px';
+                popper.style.boxShadow = theme.shadows[3];
+                popper.style.padding = '8px';
+                popper.style.maxWidth = '300px';
+                
+                document.body.appendChild(popper);
+                
+                const updatePosition = () => {
+                  const rect = info.el.getBoundingClientRect();
+                  popper.style.left = `${rect.left + window.scrollX}px`;
+                  popper.style.top = `${rect.top + window.scrollY + rect.height + 4}px`;
+                };
+                
+                updatePosition();
+                const interval = setInterval(updatePosition, 100);
+                
+                info.el.addEventListener('mouseleave', () => {
+                  clearInterval(interval);
+                  document.body.removeChild(popper);
+                }, { once: true });
+              });
+            }
+          }}
         />
       </Box>
 
@@ -461,11 +600,8 @@ const CalendarPage = () => {
         <MenuItem onClick={() => handleViewChange("dayGridYear")}>
           Year View
         </MenuItem>
-        <MenuItem onClick={() => handleViewChange("multiMonthYear")}>
-          Multi-Month View
-        </MenuItem>
-        <MenuItem onClick={() => handleViewChange("resourceTimeline")}>
-          Timeline View
+        <MenuItem onClick={() => handleViewChange("dayGridMonth")}>
+          Month View
         </MenuItem>
       </Menu>
 
@@ -480,7 +616,12 @@ const CalendarPage = () => {
         {selectedEvent ? (
           <>
             <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Box>
+              <Box sx={{ 
+                maxWidth: '70%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap'
+              }}>
                 {selectedEvent.title}
                 <Chip 
                   label={selectedEvent.event_type} 
@@ -522,7 +663,12 @@ const CalendarPage = () => {
                 {selectedEvent.description && (
                   <div>
                     <Typography variant="subtitle2" color="textSecondary">Description</Typography>
-                    <Typography>{selectedEvent.description}</Typography>
+                    <Typography sx={{ 
+                      whiteSpace: 'pre-wrap',
+                      wordBreak: 'break-word'
+                    }}>
+                      {selectedEvent.description}
+                    </Typography>
                   </div>
                 )}
                 
@@ -545,7 +691,7 @@ const CalendarPage = () => {
               </Stack>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleshowpage} variant="outlined">Show</Button>
+              <Button onClick={handleShowPage} variant="outlined">Show</Button>
               <CanAccess resource="calendar" action="edit">
                 <Button onClick={handleDeleteEvent} color="error">Delete</Button>
                 <Button onClick={handleOpenEditModal} variant="contained">Edit</Button>
@@ -580,6 +726,7 @@ const CalendarPage = () => {
                   value={eventForm.title}
                   onChange={(e) => handleFormChange('title', e.target.value)}
                   required
+                  inputProps={{ maxLength: 100 }}
                 />
                 
                 <TextField
@@ -589,6 +736,7 @@ const CalendarPage = () => {
                   rows={3}
                   value={eventForm.description}
                   onChange={(e) => handleFormChange('description', e.target.value)}
+                  inputProps={{ maxLength: 500 }}
                 />
                 
                 <FormControlLabel
@@ -645,6 +793,7 @@ const CalendarPage = () => {
                   fullWidth
                   value={eventForm.location}
                   onChange={(e) => handleFormChange('location', e.target.value)}
+                  inputProps={{ maxLength: 100 }}
                 />
                 
                 <Grid container spacing={2}>
@@ -657,7 +806,7 @@ const CalendarPage = () => {
                         onChange={(e) => handleFormChange('event_type', e.target.value)}
                       >
                         {['meeting', 'training', 'event', 'reminder', 'holiday', 'personal'].map(type => (
-                          <MenuItem key={type} value={type}>{type}</MenuItem>
+                          <MenuItem key={type} value={type}>{type.charAt(0).toUpperCase() + type.slice(1)}</MenuItem>
                         ))}
                       </Select>
                     </FormControl>
@@ -671,7 +820,7 @@ const CalendarPage = () => {
                         onChange={(e) => handleFormChange('status', e.target.value)}
                       >
                         {['confirmed', 'tentative', 'cancelled'].map(status => (
-                          <MenuItem key={status} value={status}>{status}</MenuItem>
+                          <MenuItem key={status} value={status}>{status.charAt(0).toUpperCase() + status.slice(1)}</MenuItem>
                         ))}
                       </Select>
                     </FormControl>

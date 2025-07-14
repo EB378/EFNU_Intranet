@@ -25,15 +25,15 @@ import {
   getutcTime
 } from "@components/home/time";
 import SunriseSunsetCard from "@components/home/SunriseSunsetCard"
-import {
-  WarningAmber,        // For NOTAMs
-  Campaign,            // For PN (Prior Notice)
-  Videocam,            // For WebCam
-  LightMode,           // For RWY Lights
-  Flight,              // For FLYK
-  Cloud,               // For Weather
-} from '@mui/icons-material';
+import QuickAccessButtons from "@components/QuickAccessButtons";
 import AlertCreateModal from "@components/home/CreateAlertPublicModal";
+
+type QuickButton = {
+  icon: React.ReactElement;
+  label: string;
+  path: string;
+  name: string;
+};
 
 
 interface LocalBlog extends Blog {
@@ -59,10 +59,12 @@ interface CalendarEvent {
 
 export default function HomePage() {
   const t = useTranslations("Home");
+  const t2 = useTranslations("NavBar");
   const theme = useTheme();
   const router = useRouter();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [createModalOpen, setCreateModalOpen] = useState(false);
+  const buttons = QuickAccessButtons()
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -70,15 +72,6 @@ export default function HomePage() {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  const defaultNavButtons = [
-    { icon: <WarningAmber />, label: "NOTAMs", path: "/notams" },
-    { icon: <Campaign />, label: "PN", path: "/priornotice" },
-    { icon: <Videocam />, label: "WebCam", path: "/webcam" },
-    { icon: <LightMode />, label: "RWY Lights", path: "/lights" },
-    { icon: <Flight />, label: "FLYK", path: "/flyk" },
-    { icon: <Cloud />, label: "Weather", path: "/weather" },
-  ];
 
   const { data: eventData } = useList<CalendarEvent>({
     resource: "events",
@@ -134,7 +127,7 @@ export default function HomePage() {
 
       <Box sx={{ mb: 5 }}>
         <Grid container spacing={2}>
-          {defaultNavButtons.map(({ icon, label, path }) => (
+          {buttons.map(({ icon, label, path }: QuickButton) => (
             <Grid item xs={6} sm={4} key={label}>
               <Button
                 fullWidth
@@ -162,7 +155,7 @@ export default function HomePage() {
                   }}
                 >
                   {icon}
-                  {label}
+                  {t2(`${label}`)}
                 </Box>
               </Button>
             </Grid>

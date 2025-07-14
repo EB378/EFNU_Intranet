@@ -13,6 +13,7 @@ export interface ProfileData {
   updated_at: string;
   created_at: string;
   profile_type: string;
+  quick_nav?:string[];
 }
 
 
