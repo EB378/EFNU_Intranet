@@ -8,37 +8,39 @@ import {
   Stack,
   Grid,
   Card,
-  CardContent,
-  ListItem,
-  ListItemText,
-  Chip
+  CardContent
 } from "@mui/material";
-import {
-  Add,
-  LocationOn,
-  Public,
-  Timer,
-  CalendarToday,
-  ArrowForward,
-  Announcement,
-} from "@mui/icons-material";
 import { useTheme } from "@hooks/useTheme";
 import { useTranslations } from "next-intl";
-import { CanAccess, useGetIdentity, useList } from "@refinedev/core";
-import { ProfileName, ProfileAvatar } from "@components/functions/FetchFunctions";
+import { useList } from "@refinedev/core";
 import { useRouter } from "next/navigation";
-import { format } from 'date-fns';
-import SunriseSunsetCard from "@components/home/SunriseSunsetCard";
-import AlertCreateModal from "@components/home/CreateAlertPublicModal";
+import { format, parse } from "date-fns";
 import { Blog } from "@types";
-import dayjs from "dayjs";
-import { getfinishDate, getfinishTime, getlocalDate, getlocalTime, getutcDate, getutcTime } from "@components/home/time";
+import {
+  getfinishDate,
+  getfinishTime,
+  getlocalDate,
+  getlocalTime,
+  getutcDate,
+  getutcTime
+} from "@components/home/time";
+import SunriseSunsetCard from "@components/home/SunriseSunsetCard"
+import {
+  WarningAmber,        // For NOTAMs
+  Campaign,            // For PN (Prior Notice)
+  Videocam,            // For WebCam
+  LightMode,           // For RWY Lights
+  Flight,              // For FLYK
+  Cloud,               // For Weather
+} from '@mui/icons-material';
+import AlertCreateModal from "@components/home/CreateAlertPublicModal";
+
 
 interface LocalBlog extends Blog {
   category: string;
   categoryColor?: string;
   excerpt: string;
-  date: string; // API returns date as string
+  date: string;
 }
 
 interface CalendarEvent {
@@ -53,613 +55,160 @@ interface CalendarEvent {
   status: string;
   timezone: string;
   organizer_id: string;
-};
+}
 
 export default function HomePage() {
   const t = useTranslations("Home");
   const theme = useTheme();
-  const { data: identityData } = useGetIdentity<{ id: string }>();
   const router = useRouter();
-   
-  // Current time state
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  
-  // Update time every second
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(timer);
   }, []);
-   const formatDate = (dateString: string | null) => {
-      return dateString ? dayjs(dateString).format("MMM D, YYYY") : "Draft";
-    };
-  
 
-  const { data: eventData, isLoading: eventloading } = useList<CalendarEvent>({
+  const defaultNavButtons = [
+    { icon: <WarningAmber />, label: "NOTAMs", path: "/notams" },
+    { icon: <Campaign />, label: "PN", path: "/priornotice" },
+    { icon: <Videocam />, label: "WebCam", path: "/webcam" },
+    { icon: <LightMode />, label: "RWY Lights", path: "/lights" },
+    { icon: <Flight />, label: "FLYK", path: "/flyk" },
+    { icon: <Cloud />, label: "Weather", path: "/weather" },
+  ];
+
+  const { data: eventData } = useList<CalendarEvent>({
     resource: "events",
-    meta: {
-      select: "*"
-    },
-    pagination: {
-      pageSize: 5,
-    },
-    sorters: [
-      {
-        field: "end_time",
-        order: "asc",
-      },
-    ],
-    filters: [
-      {
-        field: "end_time",
-        operator: "gte",
-        value: new Date().toISOString(),
-      },
-    ],
+    meta: { select: "*" },
+    pagination: { pageSize: 10 },
+    sorters: [{ field: "end_time", order: "asc" }],
+    filters: [{ field: "end_time", operator: "gte", value: new Date().toISOString() }]
   });
   const events = eventData?.data || [];
 
-  const { data: postData, isLoading } = useList<LocalBlog>({
+  const { data: postData } = useList<LocalBlog>({
     resource: "blogs",
-    meta: {
-      select: "*"
-    },
-    pagination: {
-      pageSize: 5,
-    },
-    sorters: [
-      {
-        field: "published_at",
-        order: "desc",
-      },
-    ],
-    filters: [
-      {
-        field: "published",
-        operator: "eq",
-        value: true,
-      },
-    ],
+    meta: { select: "*" },
+    pagination: { pageSize: 3 },
+    sorters: [{ field: "published_at", order: "desc" }],
+    filters: [{ field: "published", operator: "eq", value: true }]
   });
   const posts = postData?.data || [];
 
-
-  const handleEventClick = (eventId: String) => {
-    // Handle event click logic
+  const handleEventClick = (eventId: string) => {
     router.push(`/calendar/${eventId}`);
-  }
-  const handlePostClick = (postId: String) => {
-    // Handle post click logic
+  };
+
+  const handlePostClick = (postId: string) => {
     router.push(`/blog/${postId}`);
-  }
-  const [currentTime, setCurrentTime] = useState(new Date());
+  };
 
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-  
-  // Get formatted values
   const localTime = getlocalTime(currentTime);
-  const localDate = getlocalDate(currentTime);
   const utcTime = getutcTime(currentTime);
-  const utcDate = getutcDate(currentTime);
   const finishTime = getfinishTime(currentTime);
-  const finishDate = getfinishDate(currentTime);
-  
+  const todayDate = getlocalDate(currentTime);
+
   return (
-    <Box sx={{ 
-      p: { xs: 2, md: 4 },
-      background: theme.palette.mode === 'dark' 
-        ? 'linear-gradient(45deg, #121212 30%, #1e1e1e 90%)' 
-        : 'linear-gradient(45deg, #f5f7fa 30%, #e4e8f0 90%)',
-      minHeight: '100vh'
-    }}>
-      {/* Main Grid Layout */}
-      <Grid container spacing={2}>
+    <Box
+      sx={{
+        p: { xs: 2, md: 4 },
+        background: theme.palette.mode === "dark"
+          ? "radial-gradient(circle at top left, #111 0%, #1c1c1c 100%)"
+          : "radial-gradient(circle at top left, #f0f4f8 0%, #e3e9f0 100%)",
+        minHeight: "100vh"
+      }}
+    >
+      <Box sx={{ mb: 4, textAlign: "center" }}>
+        <Typography variant="overline" sx={{ opacity: 0.7 }}>{todayDate}</Typography>
+        <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>{t("title")}</Typography>
+        <Stack direction="row" spacing={2} justifyContent="center">
+          <Typography variant="body2">LCL: {localTime}</Typography>
+          <Typography variant="body2">UTC: {utcTime}</Typography>
+          <Typography variant="body2">FIN: {finishTime}</Typography>
+        </Stack>
+        <SunriseSunsetCard />
+      </Box>
 
-        {/* Main Header */}
-
-        <Grid item xs={12}>
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            
-            justifyContent: 'space-between', 
-            mb: 2, 
-            flexDirection: { xs: 'column', md: 'row' }
-          }}>
-            <Typography variant="h4" sx={{ fontWeight: 600 }}>
-              {t("title")}
-            </Typography>
-            <Box sx={{ gap: 3, mt: { xs: 2, md: 0 } }}>
-              <SunriseSunsetCard />
-              <Typography variant='caption'>{t("Not Offical, Check AIP GEN")}</Typography>
-              <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                {t("hours")}: 04:00 - 19:00 UTC
-              </Typography>
-            </Box>
-          </Box>
-        </Grid>
-
-
-
-        <Grid item xs={12}>
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: { xs: 'column', md: 'row' }, 
-            gap: { xs: 2, md: 3 },
-            mb: { xs: 2, md: 4 },
-            p: { xs: 1, md: 2 },
-            borderRadius: '16px',
-            background: theme.palette.mode === 'dark' 
-              ? 'linear-gradient(45deg, #1a1a1a 30%, #2a2a2a 90%)' 
-              : 'linear-gradient(45deg, #f8f9fa 30%, #ffffff 90%)',
-            boxShadow: '0 8px 32px rgba(31, 38, 135, 0.15)',
-            backdropFilter: 'blur(4px)',
-            border: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            {/* Local Time Card */}
-            <Card sx={{ 
-              flex: 1,
-              display: { xs: 'none', md: 'block' },
-              background: 'transparent',
-              boxShadow: 'none',
-              position: 'relative',
-              '&:before': {
-                content: '""',
-                position: 'absolute',
-                inset: 0,
-                borderRadius: '12px',
-                padding: '1px',
-                background: 'linear-gradient(45deg, #4facfe 0%, #00f2fe 100%)',
-                WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                WebkitMaskComposite: 'xor',
-                maskComposite: 'exclude'
-              }
-            }}>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <LocationOn sx={{ 
-                    mr: 1, 
-                    color: theme.palette.mode === 'dark' ? '#4facfe' : '#1976d2',
-                    fontSize: '1.5rem'
-                  }} />
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    {t("LocalTime")}
-                  </Typography>
-                </Box>
-                <Typography variant="h3" sx={{ 
-                  fontWeight: 300,
-                  background: theme.palette.mode === 'dark' 
-                    ? 'linear-gradient(45deg, #4facfe 0%, #00f2fe 100%)' 
-                    : 'linear-gradient(45deg, #1976d2 0%, #2196f3 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  letterSpacing: '2px'
-                }}>
-                  {localTime}
-                </Typography>
-                <Typography variant="subtitle2" sx={{ 
-                  mt: 1,
-                  color: theme.palette.mode === 'dark' ? '#88d3ff' : '#4dabf5'
-                }}>
-                  {localDate}
-                </Typography>
-              </CardContent>
-            </Card>
-
-            {/* UTC Time Card */}
-            <Card sx={{ 
-              flex: 1,
-              background: 'transparent',
-              boxShadow: 'none',
-              position: 'relative',
-              '&:before': {
-                content: '""',
-                position: 'absolute',
-                inset: 0,
-                borderRadius: '12px',
-                padding: '1px',
-                background: 'linear-gradient(45deg, #43e97b 0%, #38f9d7 100%)',
-                WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                WebkitMaskComposite: 'xor',
-                maskComposite: 'exclude'
-              }
-            }}>
-              <CardContent sx={{ p: { xs: 1, md: 2 } }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <Public sx={{ 
-                    mr: 1, 
-                    color: theme.palette.mode === 'dark' ? '#43e97b' : '#2e7d32',
-                    fontSize: { xs: '1.2rem', md: '1.5rem' }
-                  }} />
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    {t("UTCTime")}
-                  </Typography>
-                </Box>
-                <Typography variant="h3" sx={{ 
-                  fontWeight: 300,
-                  fontSize: { xs: '1.8rem', md: '3rem' },
-                  background: theme.palette.mode === 'dark' 
-                    ? 'linear-gradient(45deg, #43e97b 0%, #38f9d7 100%)' 
-                    : 'linear-gradient(45deg, #2e7d32 0%, #4caf50 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  letterSpacing: '2px'
-                }}>
-                  {utcTime}
-                </Typography>
-                <Typography variant="subtitle2" sx={{ 
-                  mt: 1,
-                  display: {xs:'none', md: 'block'},
-                  color: theme.palette.mode === 'dark' ? '#8bf0c5' : '#66bb6a'
-                }}>
-                  {utcDate}
-                </Typography>
-              </CardContent>
-            </Card>
-
-            {/* Finish Time Card */}
-            <Card sx={{ 
-              flex: 1,
-              background: 'transparent',
-              boxShadow: 'none',
-              position: 'relative',
-              '&:before': {
-                content: '""',
-                position: 'absolute',
-                inset: 0,
-                borderRadius: '12px',
-                padding: '1px',
-                background: 'linear-gradient(45deg, #ff6b6b 0%, #ff8e53 100%)',
-                WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-                WebkitMaskComposite: 'xor',
-                maskComposite: 'exclude'
-              }
-            }}>
-              <CardContent sx={{ p: { xs: 1, md: 2 } }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <Timer sx={{ 
-                    mr: 1, 
-                    color: theme.palette.mode === 'dark' ? '#ff6b6b' : '#d32f2f',
-                    fontSize: { xs: '1.2rem', md: '1.5rem' }
-                  }} />
-                  <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                    {t("FINTime")}
-                  </Typography>
-                </Box>
-                <Typography variant="h3" sx={{ 
-                  fontWeight: 300,
-                  fontSize: { xs: '1.8rem', md: '3rem' },
-                  background: theme.palette.mode === 'dark' 
-                    ? 'linear-gradient(45deg, #ff6b6b 0%, #ff8e53 100%)' 
-                    : 'linear-gradient(45deg, #d32f2f 0%, #f44336 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  letterSpacing: '2px'
-                }}>
-                  {finishTime}
-                </Typography>
-                <Typography variant="subtitle2" sx={{ 
-                  mt: 1,
-                  display: {xs:'none', md: 'block'},
-                  color: theme.palette.mode === 'dark' ? '#ffab91' : '#ef5350'
-                }}>
-                  {finishDate}
-                </Typography>
-              </CardContent>
-            </Card> 
-          </Box>
-        </Grid>
-        {/* Left Coloumn */}
-        <Grid item xs={12} md={6}>
-          <Stack spacing={3}>
-            {/* Profile Card */}
-            <Card sx={{
-              color: 'white',
-              borderRadius: '12px',
-              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)'
-            }}>
-              <CardContent sx={{ textAlign: 'center' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-                  <ProfileAvatar 
-                    profileId={identityData?.id || ""} 
-                  />
-                </Box>
-                <Typography variant="h5" gutterBottom sx={{ fontWeight: 600, color: theme.palette.primary.contrastText }}>
-                  {t("WelcomeBack")}, <br/><ProfileName profileId={identityData?.id || ""} />
-                </Typography>
-                <Typography variant="subtitle1" sx={{ mb: 3, opacity: 0.9, color: theme.palette.primary.contrastText }}>
-                  {localDate}
-                </Typography>
-                <Stack spacing={1}>
-                  <Button variant="outlined" color="secondary" onClick={() => setCreateModalOpen(true)}>{t("ReportTroubleatEFNU")}</Button>
-                  <AlertCreateModal 
-                  open={createModalOpen}
-                  onClose={() => setCreateModalOpen(false)}
-                  onSuccess={() => {
-                    setCreateModalOpen(false);
-                  }}
-                />
-                  <Button 
-                    variant="outlined"
-                    color="primary"
-                    onClick={() => {router.push("/priornotice/create")}}
-                  >
-                    <Add/> {t("CreatePriorNotice")}
-                  </Button>
-                </Stack>
-              </CardContent>
-            </Card>
-            <Card sx={{ 
-              borderRadius: '12px',
-              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
-              display: 'flex',
-              flexDirection: 'column'
-            }}>
-              <CardContent sx={{ flex: 1, p: 0 }}>
-                <Box sx={{ 
-                  display: "flex",
-                  flexDirection: { xs: "column", md: "row" },
-                  alignItems: 'center', 
-                  justifyContent: 'space-between',
-                  p: 3,
-                  pb: 1
-                }}>
-                  <Typography variant="h6" sx={{ 
-                    display: 'flex', 
-                    alignItems: 'center',
-                    fontWeight: 600,
-                    color: theme.palette.mode === 'dark' ? 'text.primary' : 'primary.main'
-                  }}>
-                    <Announcement sx={{ 
-                      mr: 1.5, 
-                      fontSize: '1.4rem',
-                      color: theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark' 
-                    }} />
-                    {t("AirportUpdates")}
-                  </Typography>
-                </Box>
-
-                {/* Scrollable Posts Area */}
-                <Box sx={{ 
-                  height: { xs: 300, md: 400 },
-                  overflow: 'auto',
-                  px: 2,
-                  pb: 2
-                }}>
-                  {posts?.map((post: LocalBlog) => (
-                    <Card 
-                      key={post.id}
-                      sx={{ 
-                        mb: 2,
-                        borderRadius: '8px',
-                        borderLeft: `4px solid ${post.categoryColor || theme.palette.secondary.main}`,
-                        transition: '0.3s',
-                        '&:hover': {
-                          transform: 'translateX(4px)',
-                          boxShadow: theme.shadows[2]
-                        }
-                      }}
-                    >
-                      <ListItem>
-                        <ListItemText
-                          primary={
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                              <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                                {post.title}
-                              </Typography>
-                            </Box>
-                          }
-                          secondary={
-                            <>
-                              <Typography 
-                                variant="body2"
-                                sx={{ 
-                                  color: theme.palette.mode === 'dark' ? 'text.secondary' : 'text.primary',
-                                  mt: 1,
-                                  lineClamp: 2,
-                                  display: '-webkit-box',
-                                  WebkitBoxOrient: 'vertical',
-                                  overflow: 'hidden'
-                                }}
-                              >
-                                {post.content.substring(0, 60)}...
-                              </Typography>
-                              
-                              <Typography 
-                                variant="caption"
-                                sx={{ 
-                                  display: 'block',
-                                  mt: 1,
-                                  color: theme.palette.text.secondary
-                                }}
-                              >
-                                {t("postedOn")} {formatDate(post.published_at || post.created_at)}
-                              </Typography>
-                              <Button 
-                                variant="outlined" 
-                                size="small"
-                                onClick={() => handlePostClick(post.id)}
-                                sx={{
-                                  minWidth: '100px',
-                                  borderRadius: '6px',
-                                  textTransform: 'none',
-                                  boxShadow: 'none'
-                                }}
-                              >
-                                {t("readMore")}
-                              </Button>
-                            </>
-                          }
-                        />
-                      </ListItem>
-                    </Card>
-                  ))}
-                </Box>
-
-                {/* Sticky Footer Button */}
-                <Box sx={{ 
-                  p: 2,
-                  position: 'sticky',
-                  bottom: 0,
-                  background: theme.palette.mode === 'dark' 
-                    ? 'linear-gradient(transparent, rgba(18, 18, 18, 0.9))' 
-                    : 'linear-gradient(transparent, rgba(255, 255, 255, 0.9))',
-                  backdropFilter: 'blur(8px)',
-                  borderTop: `1px solid ${theme.palette.divider}`
-                }}>
-                  <Button 
-                    fullWidth 
-                    variant="outlined"
-                    endIcon={<ArrowForward />}
-                    sx={{
-                      py: 1.5,
-                      borderRadius: '8px',
-                      textTransform: 'none',
-                      fontWeight: 500
-                    }}
-                    onClick={() => router.push("/blog")}
-                  >
-                    {t("ViewAllUpdates")}
-                  </Button>
-                </Box>
-              </CardContent>
-            </Card>
-          </Stack>
-        </Grid>
-        
-        {/* Right Column */}
-        <Grid item xs={12} md={6}>
-          <Card sx={{ 
-            borderRadius: '12px',
-            boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
-            display: 'flex',
-            flexDirection: 'column'
-          }}>
-            <CardContent sx={{ flex: 1, p: 0 }}>
-              <Box sx={{ 
-                display: "flex",
-                flexDirection: { xs: "column", md: "row" },
-                alignItems: 'center', 
-                justifyContent: 'space-between',
-                p: 3,
-                pb: 1
-              }}>
-                <Typography variant="h6" sx={{ 
-                  display: 'flex', 
-                  alignItems: 'center',
-                  fontWeight: 600,
-                  color: theme.palette.mode === 'dark' ? 'text.primary' : 'primary.main'
-                }}>
-                  <CalendarToday sx={{ 
-                    mr: 1.5, 
-                    fontSize: '1.4rem',
-                    color: theme.palette.mode === 'dark' ? 'primary.light' : 'primary.dark' 
-                  }} />
-                  {t("UpcomingEvents")}
-                </Typography>
-              </Box>
-
-              {/* Scrollable Events Area */}
-              <Box sx={{ 
-                height: { xs: 300, md: 400 },
-                overflow: 'auto',
-                px: 2,
-                pb: 2
-              }}>
-                {events.map((event, index) => (
-                  <Card 
-                    key={event.id}
-                    sx={{ 
-                      mb: 2,
-                      borderRadius: '8px',
-                      borderLeft: `4px solid ${theme.palette.primary.main}`,
-                      transition: '0.3s',
-                      '&:hover': {
-                        transform: 'translateX(4px)',
-                        boxShadow: theme.shadows[2]
-                      }
-                    }}
-                  >
-                    <ListItem 
-                      secondaryAction={
-                        <Button 
-                          variant="contained" 
-                          size="small"
-                          onClick={() => handleEventClick(event.id)}
-                          sx={{
-                            minWidth: '90px',
-                            borderRadius: '6px',
-                            textTransform: 'none',
-                            boxShadow: 'none'
-                          }}
-                        >
-                          {t("Details")}
-                        </Button>
-                      }
-                    >
-                      <ListItemText
-                        primary={
-                          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                            {event.title}
-                          </Typography>
-                        }
-                        secondary={
-                          <Typography 
-                            variant="body2"
-                            sx={{ 
-                              color: theme.palette.mode === 'dark' ? 'text.secondary' : 'text.primary',
-                              mt: 0.5
-                            }}
-                          >
-                            <Box component="span" sx={{ fontWeight: 500, mr: 1 }}>
-                              {format(event.start_time, 'dd/mm/yyyy, hh:mm a')}
-                            </Box>
-                            • {format(event.end_time, 'dd/mm/yyyy, hh:mm a')}
-                          </Typography>
-                        }
-                      />
-                    </ListItem>
-                  </Card>
-                ))}
-              </Box>
-
-              {/* Sticky Footer Button */}
-              <Box sx={{ 
-                p: 2,
-                position: 'sticky',
-                bottom: 0,
-                background: theme.palette.mode === 'dark' 
-                  ? 'linear-gradient(transparent, rgba(18, 18, 18, 0.9))' 
-                  : 'linear-gradient(transparent, rgba(255, 255, 255, 0.9))',
-                backdropFilter: 'blur(8px)',
-                borderTop: `1px solid ${theme.palette.divider}`
-              }}>
-                <Button 
-                  fullWidth 
-                  variant="outlined"
-                  endIcon={<ArrowForward />}
+      <Box sx={{ mb: 5 }}>
+        <Grid container spacing={2}>
+          {defaultNavButtons.map(({ icon, label, path }) => (
+            <Grid item xs={6} sm={4} key={label}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                sx={{
+                  py: 4,
+                  fontSize: "1.1rem",
+                  borderRadius: "14px",
+                  background: theme.palette.mode === "dark" ? "#263238" : "#1976d2",
+                  boxShadow: "0 6px 18px rgba(0,0,0,0.15)",
+                  textTransform: "none",
+                  '&:hover': {
+                    background: theme.palette.mode === "dark" ? "#37474f" : "#1565c0"
+                  }
+                }}
+                onClick={() => router.push(path)}
+              >
+                <Box
                   sx={{
-                    py: 1.5,
-                    borderRadius: '8px',
-                    textTransform: 'none',
-                    fontWeight: 500
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 1.2
                   }}
-                  onClick={() => router.push("/calendar")}
                 >
-                  {t("ViewAllEvents")}
-                </Button>
-              </Box>
-            </CardContent>
-          </Card>
+                  {icon}
+                  {label}
+                </Box>
+              </Button>
+            </Grid>
+          ))}
+        
+          <Grid item xs={12}>
+            <Button variant="outlined" color="secondary" sx={{ width: "100%" }} onClick={() => setCreateModalOpen(true)}>{t("ReportTroubleatEFNU")}</Button>
+          </Grid>
         </Grid>
-      </Grid>
+        <AlertCreateModal 
+          open={createModalOpen}
+          onClose={() => setCreateModalOpen(false)}
+          onSuccess={() => {
+            setCreateModalOpen(false);
+          }}
+        />
+        
+      </Box>
+
+      <Box sx={{ mb: 5 }}>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>{t("AirportUpdates")}</Typography>
+        <Stack spacing={2}>
+          {posts.map(post => (
+            <Card key={post.id} sx={{ p: 2, borderLeft: `4px solid ${post.categoryColor || theme.palette.primary.main}` }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>{post.title}</Typography>
+              <Typography variant="body2" sx={{ mt: 1, color: theme.palette.text.secondary }}>{post.content.substring(0, 80)}...</Typography>
+              <Button size="small" sx={{ mt: 1 }} onClick={() => handlePostClick(post.id)}>{t("readMore")}</Button>
+            </Card>
+          ))}
+        </Stack>
+      </Box>
+
+      <Box>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>{t("UpcomingEvents")}</Typography>
+        <Stack spacing={2}>
+          {events.map(event => (
+            <Card key={event.id} sx={{ p: 2, borderLeft: `4px solid ${theme.palette.secondary.main}` }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>{event.title}</Typography>
+              <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+                {format(event.start_time, "dd/MM/yyyy, HH:mm")} – {format(event.end_time, "HH:mm")}
+              </Typography>
+              <Button size="small" sx={{ mt: 1 }} onClick={() => handleEventClick(event.id)}>{t("Details")}</Button>
+            </Card>
+          ))}
+        </Stack>
+      </Box>
     </Box>
   );
 }

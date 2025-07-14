@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Grid, useTheme } from '@mui/material';
+import { Box, Typography, Grid, useTheme, Stack } from '@mui/material';
 import { WbSunny, NightsStay } from '@mui/icons-material';
 import { format, parse } from 'date-fns';
 
@@ -54,55 +54,11 @@ const SunriseSunsetCard = () => {
     ) : error ? (
         <Typography color="error">{error}</Typography>
     ) : (
-        <Grid container spacing={1}>
-            <Grid item xs={6}>
-                <Box 
-                    sx={{
-                        textAlign: 'center',
-                        p: 1,
-                        borderRadius: '8px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        display: 'flex',
-                        flexDirection: 'row',
-                    }}
-                >
-                    <WbSunny 
-                        sx={{
-                            fontSize: '2rem',
-                            mr: 1,
-                            color: theme.palette.mode === 'dark' ? '#ffeb3b' : '#f9a825'
-                        }} 
-                    />
-                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        {formatTime(times?.sunrise)}
-                    </Typography>
-                </Box>
-            </Grid>
-
-            <Grid item xs={6}>
-                <Box
-                    sx={{
-                        textAlign: 'center',
-                        p: 1,
-                        borderRadius: '8px',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        display: 'flex',
-                        flexDirection: 'row',
-                    }}
-                >
-                    <NightsStay 
-                        sx={{
-                            fontSize: '2rem',
-                            mr: 1,
-                            color: theme.palette.mode === 'dark' ? '#ba68c8' : '#6a1b9a'
-                        }} 
-                    />
-                    <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-                        {formatTime(times?.sunset)}
-                    </Typography>
-                </Box>
-            </Grid>
-        </Grid>
+        <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 1 }}>
+          <Typography variant="caption">SR: {formatTime(times?.sunrise)}</Typography>
+          <Typography variant="caption">SS: {formatTime(times?.sunset)}</Typography>
+          <Typography variant="caption">Ops: 04:00–19:00 UTC</Typography>
+      </Stack>
     )}
 </>
   );
