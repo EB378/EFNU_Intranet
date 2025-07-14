@@ -11,6 +11,8 @@ import {
   FormControlLabel,
   Typography,
   Autocomplete,
+  ButtonGroup,
+  Button
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { useTheme } from '@hooks/useTheme';
@@ -48,6 +50,13 @@ const PNCreate = () => {
 
   const aircrafts = useProfilePNAircraft({ profileId: identityData?.id ?? "" });
   const PICPersons = useProfilePNPIC({ profileId: identityData?.id ?? "" });
+
+
+  const [depArrSelected, setDepArrSelected] = useState<"DEP" | "ARR" | "BOTH">("ARR");
+
+  const handleSelect = (option: "DEP" | "ARR" | "BOTH") => {
+    setDepArrSelected(option);
+  };
 
   // Initialize aircraft options
   useEffect(() => {
@@ -248,37 +257,101 @@ const PNCreate = () => {
             </Typography>
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('dep_time', {
-                pattern: {
-                  value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
-                  message: t("InvalidTimeFormat"),
-                },
-              })}
-              error={!!errors.dep_time}
-              helperText={errors.dep_time?.message as string}
-              fullWidth
-              label={t("DEP (UTC HHMM)")}
-              placeholder={t("Enterdeptimehere")}
-            />
+          <Grid item xs={12}>
+            <Box mt={2}>
+              <ButtonGroup variant="contained" fullWidth>
+                <Button
+                  onClick={() => handleSelect("DEP")}
+                  color={depArrSelected === "DEP" ? "primary" : "inherit"}
+                >
+                  DEP
+                </Button>
+                <Button
+                  onClick={() => handleSelect("ARR")}
+                  color={depArrSelected === "ARR" ? "primary" : "inherit"}
+                >
+                  ARR
+                </Button>
+                <Button
+                  onClick={() => handleSelect("BOTH")}
+                  color={depArrSelected === "BOTH" ? "primary" : "inherit"}
+                >
+                  BOTH
+                </Button>
+              </ButtonGroup>
+            </Box>
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('arr_time', {
-                pattern: {
-                  value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
-                  message: t("InvalidTimeFormat"),
-                },
-              })}
-              error={!!errors.arr_time}
-              helperText={errors.arr_time?.message as string}
-              fullWidth
-              label={t("ARR (UTC HHMM)")}
-              placeholder={t("Enterarrtimehere")}
-            />
-          </Grid>
+
+          {depArrSelected === "BOTH" && (
+            <>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  {...register('dep_time', {
+                    pattern: {
+                      value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
+                      message: t("InvalidTimeFormat"),
+                    },
+                  })}
+                  error={!!errors.dep_time}
+                  helperText={errors.dep_time?.message as string}
+                  fullWidth
+                  label={t("DEP (UTC HHMM)")}
+                  placeholder={t("Enterdeptimehere")}
+                />
+              </Grid>
+
+              <Grid item xs={12} md={6}>
+                <TextField
+                  {...register('arr_time', {
+                    pattern: {
+                      value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
+                      message: t("InvalidTimeFormat"),
+                    },
+                  })}
+                  error={!!errors.arr_time}
+                  helperText={errors.arr_time?.message as string}
+                  fullWidth
+                  label={t("ARR (UTC HHMM)")}
+                  placeholder={t("Enterarrtimehere")}
+                />
+              </Grid>
+            </>
+          )}
+          {depArrSelected === "DEP" && (
+            <Grid item xs={12} md={6}>
+              <TextField
+                {...register('dep_time', {
+                  pattern: {
+                    value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
+                    message: t("InvalidTimeFormat"),
+                  },
+                })}
+                error={!!errors.dep_time}
+                helperText={errors.dep_time?.message as string}
+                fullWidth
+                label={t("DEP (UTC HHMM)")}
+                placeholder={t("Enterdeptimehere")}
+              />
+            </Grid>
+          )}
+          {depArrSelected === "ARR" && (
+            <Grid item xs={12} md={6}>
+              <TextField
+                {...register('arr_time', {
+                  pattern: {
+                    value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
+                    message: t("InvalidTimeFormat"),
+                  },
+                })}
+                error={!!errors.arr_time}
+                helperText={errors.arr_time?.message as string}
+                fullWidth
+                label={t("ARR (UTC HHMM)")}
+                placeholder={t("Enterarrtimehere")}
+              />
+            </Grid>
+          )}
 
           <Grid item xs={12} md={6}>
             <TextField
