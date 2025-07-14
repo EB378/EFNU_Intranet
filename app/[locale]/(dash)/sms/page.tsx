@@ -125,20 +125,22 @@ const ReportListPage = () => {
       margin: '0 auto'
     }}>
       {/* Header Section */}
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ 
-          fontWeight: 700,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2
-        }}>
-          <Assignment fontSize="large" />
-          {t("SafetyReports")}
-        </Typography>
-        
-        <Typography variant="body1" color="text.secondary">
-          {t("Active safety reports and incident tracking")}
-        </Typography>
+      <Box sx={{ mb: 4, display: 'flex', flexDirection: 'row', justifyContent: "space-between" }}>
+        <Stack>
+          <Typography variant="h4" component="h1" gutterBottom sx={{ 
+            fontWeight: 700,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 2
+          }}>
+            <Assignment fontSize="large" />
+            {t("SafetyReports")}
+          </Typography>
+          
+          <Typography variant="body1" color="text.secondary">
+            {t("Active safety reports and incident tracking")}
+          </Typography>
+        </Stack>
         <CreateButton 
           resource="sms"
         />

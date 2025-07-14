@@ -77,7 +77,7 @@ const ReportShowPage = () => {
 
   return (
     <Box sx={{ p: 4, maxWidth: 1200, margin: '0 auto' }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={4}>
+      <Stack direction={{ xs: 'column', md: 'row' }} justifyContent={{ xs:'center', md:"space-between" }} alignItems="center" mb={4}>
         <Typography variant="h4" fontWeight={700}>
           {t("Show.title")}
         </Typography>
@@ -90,7 +90,7 @@ const ReportShowPage = () => {
         </Button>
       </Stack>
 
-      <Paper sx={{ p: 4, mb: 4 }}>
+      <Paper sx={{ p: 4, mb: 4, maxWidth: '90vw' }}>
         <Stack direction="row" spacing={3} alignItems="flex-start">
           {getSeverityIcon(report.severity)}
           
@@ -99,21 +99,30 @@ const ReportShowPage = () => {
               {report.title}
             </Typography>
             
-            <Stack direction="row" spacing={2} mb={2}>
+            <Stack 
+              direction="row" 
+              spacing={2} 
+              mb={2} 
+              sx={{ flexWrap: 'wrap' }}
+            >
               <Chip 
                 label={t(report.status).replace('-', ' ')}
                 color={getStatusColor(report.status)}
+                sx={{ mt:2 }}
               />
               <Chip 
                 label={t(report.category)}
                 variant="outlined"
+                sx={{ mt:2 }}
               />
               <Chip 
                 label={t(report.severity)}
                 variant="outlined"
                 color="primary"
+                sx={{ mt:2 }}
               />
             </Stack>
+
             
             <Typography variant="body1" mb={3}>
               {report.description}

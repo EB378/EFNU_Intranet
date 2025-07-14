@@ -53,28 +53,23 @@ export default function MobileNav() {
   const theme = useTheme();
   const pathname = usePathname();
   const { mutate: logout } = useLogout();
-  
-  // Check if the screen is wide enough to show extra navigation items
+
   const isWideEnough = useMediaQuery((theme: Theme) => theme.breakpoints.up('sm'));
   const [extraNavItems, setExtraNavItems] = useState<string[]>([]);
 
   useEffect(() => {
-    // Determine which extra items to show based on available space
     if (isWideEnough) {
-      // These are the additional items we can show when there's space
       setExtraNavItems(['priornotice', 'webcam']);
     } else {
       setExtraNavItems([]);
     }
   }, [isWideEnough]);
 
-  // Define main navigation items
   const mainNavItems = ['home', 'info', 'fuel', 'profile'];
   const allNavItems = [...mainNavItems, ...extraNavItems];
   const mainNavResources = resources.filter(resource => allNavItems.includes(resource.name));
   const menuResources = resources.filter(resource => !allNavItems.includes(resource.name));
 
-  // Derive active tab from current path
   const activeTab = mainNavResources.findIndex(resource => 
     pathname.startsWith(resource.list)
   );
@@ -83,19 +78,39 @@ export default function MobileNav() {
     setMenuOpen(!menuOpen);
   };
 
-  // Calculate how many items to show on each side of the FAB
   const leftItemsCount = Math.ceil((mainNavResources.length) / 2);
   const leftItems = mainNavResources.slice(0, leftItemsCount);
   const rightItems = mainNavResources.slice(leftItemsCount);
 
+  const navActionStyles = (path: string) => ({
+    minWidth: '72px',
+    maxWidth: '72px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: pathname.startsWith(path) 
+      ? theme.palette.primary.main 
+      : theme.palette.text.secondary,
+    transition: 'color 0.2s, transform 0.2s',
+    '&:hover': {
+      color: theme.palette.primary.dark,
+    },
+    '& .MuiBottomNavigationAction-label': {
+      display: 'block',
+      fontSize: '0.7rem',
+      mt: 0.5,
+      fontWeight: pathname.startsWith(path) ? 600 : 500,
+    },
+    '& .MuiSvgIcon-root': {
+      fontSize: '1.8rem',
+      mb: 0.5,
+    }
+  });
+
   return (
     <>
-      {/* Navigation Modal */}
-      <Modal
-        open={menuOpen}
-        onClose={handleMenuToggle}
-        closeAfterTransition
-      >
+      <Modal open={menuOpen} onClose={handleMenuToggle} closeAfterTransition>
         <Slide in={menuOpen} direction="up">
           <Box sx={{
             position: 'absolute',
@@ -155,25 +170,14 @@ export default function MobileNav() {
 
               {menuResources.length > 0 && <Divider />}
 
-              {/* Add Create Actions */}
-              {resources
-                .filter(r => r.create)
-                .map((resource) => (
-                  <CanAccess
-                    key={`create-${resource.name}`}
-                    resource={resource.name}
-                    action='create'
-                  >
-                    <MenuItem
-                      onClick={handleMenuToggle}
-                      component={Link}
-                      href={resource.create!}
-                    >
-                      <Add sx={{ mr: 2 }} />
-                      {t("Create")} {t(`${resource.meta.label}`)}
-                    </MenuItem>
-                  </CanAccess>
-                ))}
+              {resources.filter(r => r.create).map((resource) => (
+                <CanAccess key={`create-${resource.name}`} resource={resource.name} action='create'>
+                  <MenuItem onClick={handleMenuToggle} component={Link} href={resource.create!}>
+                    <Add sx={{ mr: 2 }} />
+                    {t("Create")} {t(`${resource.meta.label}`)}
+                  </MenuItem>
+                </CanAccess>
+              ))}
 
               <Divider />
 
@@ -208,56 +212,23 @@ export default function MobileNav() {
         }}
         elevation={0}
       >
-        <BottomNavigation
-          showLabels
-          value={activeTab}
-          sx={{
-            height: "64px",
-            backgroundColor: 'transparent',
-            gap: 1,
-            px: 1,
-          }}
-        >
-          {/* Left Group */}
-          {leftItems.map((resource) => (
-            <BottomNavigationAction
-              key={resource.name}
-              label={t(`${resource.meta.label}`)}
-              icon={resource.meta.icon}
-              component={Link}
-              href={resource.list}
-              sx={{
-                minWidth: '72px',
-                color: pathname.startsWith(resource.list) 
-                  ? theme.palette.primary.main 
-                  : theme.palette.text.secondary,
-                transition: 'color 0.2s, transform 0.2s',
-                '&:hover': {
-                  color: theme.palette.primary.dark,
-                },
-                '& .MuiBottomNavigationAction-label': {
-                  fontSize: '0.7rem',
-                  mt: 0.5,
-                  fontWeight: pathname.startsWith(resource.list) ? 600 : 500,
-                },
-                '& .MuiSvgIcon-root': {
-                  fontSize: '1.8rem',
-                  mb: 0.5,
-                }
-              }}
-            />
-          ))}
+        <BottomNavigation showLabels value={activeTab} sx={{ height: "64px", backgroundColor: 'transparent', px: 1, display: 'flex', justifyContent: 'space-between' }}>
 
-          {/* Floating Menu Button */}
-          <Box 
-            sx={{ 
-              position: 'relative',
-              mx: 'auto',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
+          <Box sx={{ display: 'flex', flex: 1, justifyContent: 'space-evenly' }}>
+            {leftItems.map((resource) => (
+              <BottomNavigationAction
+                key={resource.name}
+                label={t(`${resource.meta.label}`)}
+                icon={resource.meta.icon}
+                component={Link}
+                href={resource.list}
+                sx={navActionStyles(resource.list)}
+                showLabel
+              />
+            ))}
+          </Box>
+
+          <Box sx={{ width: 72, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <StyledFab
               color="primary"
               aria-label="menu"
@@ -273,35 +244,20 @@ export default function MobileNav() {
             </StyledFab>
           </Box>
 
-          {/* Right Group */}
-          {rightItems.map((resource) => (
-            <BottomNavigationAction
-              key={resource.name}
-              label={t(`${resource.meta.label}`)}
-              icon={resource.meta.icon}
-              component={Link}
-              href={resource.list}
-              sx={{
-                minWidth: '72px',
-                color: pathname.startsWith(resource.list) 
-                  ? theme.palette.primary.main 
-                  : theme.palette.text.secondary,
-                transition: 'color 0.2s, transform 0.2s',
-                '&:hover': {
-                  color: theme.palette.primary.dark,
-                },
-                '& .MuiBottomNavigationAction-label': {
-                  fontSize: '0.7rem',
-                  mt: 0.5,
-                  fontWeight: pathname.startsWith(resource.list) ? 600 : 500,
-                },
-                '& .MuiSvgIcon-root': {
-                  fontSize: '1.8rem',
-                  mb: 0.5,
-                }
-              }}
-            />
-          ))}
+          <Box sx={{ display: 'flex', flex: 1, justifyContent: 'space-evenly' }}>
+            {rightItems.map((resource) => (
+              <BottomNavigationAction
+                key={resource.name}
+                label={t(`${resource.meta.label}`)}
+                icon={resource.meta.icon}
+                component={Link}
+                href={resource.list}
+                sx={navActionStyles(resource.list)}
+                showLabel
+              />
+            ))}
+          </Box>
+
         </BottomNavigation>
       </Paper>
     </>
