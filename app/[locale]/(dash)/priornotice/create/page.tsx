@@ -52,12 +52,6 @@ const PNCreate = () => {
   const PICPersons = useProfilePNPIC({ profileId: identityData?.id ?? "" });
 
 
-  const [depArrSelected, setDepArrSelected] = useState<"DEP" | "ARR" | "BOTH">("ARR");
-
-  const handleSelect = (option: "DEP" | "ARR" | "BOTH") => {
-    setDepArrSelected(option);
-  };
-
   // Initialize aircraft options
   useEffect(() => {
     if (aircrafts && aircrafts.length > 0) {
@@ -227,6 +221,33 @@ const PNCreate = () => {
     setCurrentMTOW(value);
     setValue('mtow', value === '' ? undefined : value, { shouldValidate: true });
   };
+
+  const checkValueTime = (time?: string) => {
+    return /^([01][0-9]|2[0-3])[0-5][0-9]$/.test(time ?? "");
+  };
+
+  const watchedDepTime = watch('dep_time');
+  const watchedArrTime = watch('arr_time');
+
+  const [depArrSelected, setDepArrSelected] = useState<"DEP" | "ARR" | "BOTH">('ARR');
+
+  useEffect(() => {
+    if (checkValueTime(watchedDepTime) && checkValueTime(watchedArrTime)) {
+      setDepArrSelected("BOTH");
+    } else if (checkValueTime(watchedDepTime)) {
+      setDepArrSelected("DEP");
+    } else if (checkValueTime(watchedArrTime)) {
+      setDepArrSelected("ARR");
+    } else {
+      setDepArrSelected("ARR");
+    }
+  }, [watchedDepTime, watchedArrTime]);
+  
+
+  const handleSelect = (option: "DEP" | "ARR" | "BOTH") => {
+    setDepArrSelected(option);
+  };
+
 
   return (
     <Create
