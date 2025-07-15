@@ -26,23 +26,6 @@ export async function POST(request: Request) {
       throw authError
     }
 
-    // 2. Create profile record
-    const { error: profileError } = await adminClient
-      .from('profiles')
-      .insert({
-        id: authUser.user.id,
-        email,
-        fullname: user_metadata?.fullname,
-        license: user_metadata?.license,
-        status: user_metadata?.status || 'active',
-        role: user_metadata?.role || 'pilot',
-        profile_type: user_metadata?.profile_type || 'user'
-      })
-
-    if (profileError) {
-      throw profileError
-    }
-
     return NextResponse.json({ user: authUser.user }, { status: 200 })
     
   } catch (error: any) {

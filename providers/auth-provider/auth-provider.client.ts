@@ -57,13 +57,27 @@ export const authProviderClient: AuthProvider = {
       redirectTo: "/login",
     };
   },
-  register: async ({ email, password }) => {
+  register: async ({ email, password, user_metadata = {} }) => {
     const supabase = await supabaseBrowserClient();
+
+    const defaultMetadata = {
+      fullname: "",
+      license: "",
+      role: "pilot",
+      status: "active",
+      profile_type: "user",
+    };
 
     try {
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            ...defaultMetadata,
+            ...user_metadata,
+          },
+        },
       });
 
       if (error) {
@@ -94,6 +108,7 @@ export const authProviderClient: AuthProvider = {
       },
     };
   },
+
   check: async () => {
     const supabase = await supabaseBrowserClient();
 
