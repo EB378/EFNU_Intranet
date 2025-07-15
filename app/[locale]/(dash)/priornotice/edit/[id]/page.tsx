@@ -157,11 +157,11 @@ const PNEdit = () => {
   const watchedDepTime = watch('dep_time');
   const watchedArrTime = watch('arr_time');
 
-  const [depArrSelected, setDepArrSelected] = useState<"DEP" | "ARR" | "BOTH">('ARR');
+  const [depArrSelected, setDepArrSelected] = useState<"DEP" | "ARR" | "LOCAL">('ARR');
 
   useEffect(() => {
     if (checkValueTime(watchedDepTime) && checkValueTime(watchedArrTime)) {
-      setDepArrSelected("BOTH");
+      setDepArrSelected("LOCAL");
     } else if (checkValueTime(watchedDepTime)) {
       setDepArrSelected("DEP");
     } else if (checkValueTime(watchedArrTime)) {
@@ -171,7 +171,7 @@ const PNEdit = () => {
     }
   }, [watchedDepTime, watchedArrTime]);
 
-  const handleSelect = (option: "DEP" | "ARR" | "BOTH") => {
+  const handleSelect = (option: "DEP" | "ARR" | "LOCAL") => {
       setDepArrSelected(option);
     };
 
@@ -221,15 +221,15 @@ const PNEdit = () => {
                     ARR
                   </Button>
                   <Button
-                    onClick={() => handleSelect("BOTH")}
-                    color={depArrSelected === "BOTH" ? "primary" : "inherit"}
+                    onClick={() => handleSelect("LOCAL")}
+                    color={depArrSelected === "LOCAL" ? "primary" : "inherit"}
                   >
-                    BOTH
+                    LOCAL
                   </Button>
                 </ButtonGroup>
               </Box>
             </Grid>
-            {depArrSelected === "BOTH" && (
+            {depArrSelected === "LOCAL" && (
               <>
                 <Grid item xs={12} md={6}>
                   <TextField
