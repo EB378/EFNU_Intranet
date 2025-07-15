@@ -5,8 +5,8 @@ import { createClient } from '@supabase/supabase-js';
 import type { NextRequest } from "next/server";
 
 const intlMiddleware = NextIntlMiddleware({
-  locales: ['en', 'fi', 'se'],
-  defaultLocale: 'fi'
+  locales: ['en', 'fi', 'se', 'de'],
+  defaultLocale: 'en'
 });
 
 export async function middleware(request: NextRequest) {

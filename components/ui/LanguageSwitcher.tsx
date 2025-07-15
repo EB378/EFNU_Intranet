@@ -114,6 +114,13 @@ const LanguageSwitcher: React.FC<NavbarProps> = ({ locale }) => {
             <Typography variant="body2"></Typography>
           </Box>
         </MenuItem>
+        <MenuItem value="se">
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography variant="body2">🇩🇪</Typography>
+            <Typography variant="body2">DE</Typography>
+            <Typography variant="body2"></Typography>
+          </Box>
+        </MenuItem>
       </Select>
     </Box>
   );
