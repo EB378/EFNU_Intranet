@@ -141,7 +141,17 @@ const PNEdit = () => {
   };
 
   const checkValueTime = (time?: string) => {
-    return /^([01][0-9]|2[0-3])[0-5][0-9]$/.test(time ?? "");
+    const str = time ?? "";
+
+    if (!/^\d{1,4}$/.test(str)) return false;
+
+    if (str.length < 4) return true;
+
+    // If 4 digits, validate HHMM format
+    const hour = parseInt(str.slice(0, 2), 10);
+    const minute = parseInt(str.slice(2), 10);
+
+    return hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
   };
 
   const watchedDepTime = watch('dep_time');
