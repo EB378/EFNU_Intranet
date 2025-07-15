@@ -1,3 +1,4 @@
+//next.config.mjs
 import createNextIntlPlugin from 'next-intl/plugin';
 import withPWAInit from 'next-pwa';
 

@@ -155,3 +155,32 @@ export interface AlertItem {
   created_at: string;
   updated_at: string;
 }
+
+
+export type QuickButton = {
+  icon: React.ReactElement;
+  label: string;
+  path: string;
+  name: string;
+};
+
+export interface LocalBlog extends Blog {
+  category: string;
+  categoryColor?: string;
+  excerpt: string;
+  date: string;
+}
+
+export interface CalendarEvent {
+  id: string;
+  title: string;
+  start_time: Date | string;
+  end_time: Date | string;
+  is_all_day: boolean;
+  description?: string;
+  location?: string;
+  event_type: string;
+  status: string;
+  timezone: string;
+  organizer_id: string;
+}

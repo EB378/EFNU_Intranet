@@ -13,7 +13,8 @@ import { useTheme } from '@hooks/useTheme';
 import { useParams, useRouter } from 'next/navigation';
 import { PriorNotice } from '@/types/index';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { Spinner } from "@/components/ui/Spinner";
 import { useProfilePNAircraft, useProfilePNPIC } from '@components/functions/FetchFunctions';
 import { useGetIdentity } from '@refinedev/core';
 
@@ -187,38 +188,71 @@ const PNEdit = () => {
       }
     >
       <Box component="form" sx={{ mt: 3 }} onSubmit={handleFormSubmit}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="body1" color={theme.palette.error.main}>
-              {t("subtitle")}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Box mt={2}>
-              <ButtonGroup variant="contained" fullWidth>
-                <Button
-                  onClick={() => handleSelect("DEP")}
-                  color={depArrSelected === "DEP" ? "primary" : "inherit"}
-                >
-                  DEP
-                </Button>
-                <Button
-                  onClick={() => handleSelect("ARR")}
-                  color={depArrSelected === "ARR" ? "primary" : "inherit"}
-                >
-                  ARR
-                </Button>
-                <Button
-                  onClick={() => handleSelect("BOTH")}
-                  color={depArrSelected === "BOTH" ? "primary" : "inherit"}
-                >
-                  BOTH
-                </Button>
-              </ButtonGroup>
-            </Box>
-          </Grid>
-          {depArrSelected === "BOTH" && (
-            <>
+        <Suspense fallback={<Spinner/>}>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography variant="body1" color={theme.palette.error.main}>
+                {t("subtitle")}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Box mt={2}>
+                <ButtonGroup variant="contained" fullWidth>
+                  <Button
+                    onClick={() => handleSelect("DEP")}
+                    color={depArrSelected === "DEP" ? "primary" : "inherit"}
+                  >
+                    DEP
+                  </Button>
+                  <Button
+                    onClick={() => handleSelect("ARR")}
+                    color={depArrSelected === "ARR" ? "primary" : "inherit"}
+                  >
+                    ARR
+                  </Button>
+                  <Button
+                    onClick={() => handleSelect("BOTH")}
+                    color={depArrSelected === "BOTH" ? "primary" : "inherit"}
+                  >
+                    BOTH
+                  </Button>
+                </ButtonGroup>
+              </Box>
+            </Grid>
+            {depArrSelected === "BOTH" && (
+              <>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    {...register('dep_time', {
+                      pattern: {
+                        value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
+                        message: t("InvalidTimeFormat"),
+                      },
+                    })}
+                    error={!!errors.dep_time}
+                    helperText={errors.dep_time?.message as string}
+                    fullWidth
+                    label={t("DEP (UTC HHMM)")}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    {...register('arr_time', {
+                      pattern: {
+                        value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
+                        message: t("InvalidTimeFormat"),
+                      },
+                    })}
+                    error={!!errors.arr_time}
+                    helperText={errors.arr_time?.message as string}
+                    fullWidth
+                    label={t("ARR (UTC HHMM)")}
+                  />
+                </Grid>
+              </>
+            )}
+            {depArrSelected === "DEP" && (
               <Grid item xs={12} md={6}>
                 <TextField
                   {...register('dep_time', {
@@ -233,7 +267,8 @@ const PNEdit = () => {
                   label={t("DEP (UTC HHMM)")}
                 />
               </Grid>
-
+            )}
+            {depArrSelected === "ARR" && (
               <Grid item xs={12} md={6}>
                 <TextField
                   {...register('arr_time', {
@@ -248,142 +283,110 @@ const PNEdit = () => {
                   label={t("ARR (UTC HHMM)")}
                 />
               </Grid>
-            </>
-          )}
-          {depArrSelected === "DEP" && (
+            )}
+
             <Grid item xs={12} md={6}>
               <TextField
-                {...register('dep_time', {
-                  pattern: {
-                    value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
-                    message: t("InvalidTimeFormat"),
-                  },
-                })}
-                error={!!errors.dep_time}
-                helperText={errors.dep_time?.message as string}
+                {...register('dof')}
                 fullWidth
-                label={t("DEP (UTC HHMM)")}
+                type="date"
+                label={t("DateOfFlight")}
+                InputLabelProps={{ shrink: true }}
               />
             </Grid>
-          )}
-          {depArrSelected === "ARR" && (
+
+            <Grid item xs={12} md={6}>
+              <Controller
+                name="aircraft"
+                control={control}
+                rules={{ required: t("AircraftRequired") }}
+                render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+                  <Autocomplete
+                    freeSolo
+                    options={aircraftOptions}
+                    getOptionLabel={(option) => typeof option === 'string' ? option : option.aircraft}
+                    value={selectedAircraft || value || null}
+                    onChange={(_, newValue) => {
+                      handleAircraftChange(newValue);
+                      onChange(typeof newValue === 'string' ? newValue : newValue?.aircraft || '');
+                    }}
+                    onInputChange={(_, newInputValue) => {
+                      if (newInputValue !== value) onChange(newInputValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={t("Aircraft registration")}
+                        inputRef={ref}
+                        error={!!error}
+                        helperText={error?.message}
+                        value={watchedAircraft || ''}
+                      />
+                    )}
+                  />
+                )}
+              />
+            </Grid>
+
             <Grid item xs={12} md={6}>
               <TextField
-                {...register('arr_time', {
-                  pattern: {
-                    value: /^([0-1][0-9]|2[0-3])[0-5][0-9]$/,
-                    message: t("InvalidTimeFormat"),
-                  },
+                {...register('mtow', {
+                  required: t("MTOWRequired"),
+                  min: { value: 1, message: t("InvalidMTOW") },
+                  max: { value: 10000, message: t("MTOWTooHigh") },
+                  valueAsNumber: true,
                 })}
-                error={!!errors.arr_time}
-                helperText={errors.arr_time?.message as string}
+                error={!!errors.mtow}
+                helperText={errors.mtow?.message as string}
                 fullWidth
-                label={t("ARR (UTC HHMM)")}
+                value={currentMTOW}
+                onChange={handleMTOWChange}
+                type="number"
+                label={t("MTOW (Kg)")}
               />
             </Grid>
-          )}
 
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('dof')}
-              fullWidth
-              type="date"
-              label={t("DateOfFlight")}
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
+            <Grid item xs={12} md={6}>
+              <Controller
+                name="pic_name"
+                control={control}
+                rules={{ required: t("PICNameRequired") }}
+                render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+                  <Autocomplete
+                    freeSolo
+                    options={picOptions}
+                    value={value || ''}
+                    onChange={(_, newValue) => onChange(newValue || '')}
+                    onInputChange={(_, newInputValue) => onChange(newInputValue)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={t("PIC (Full name)")}
+                        inputRef={ref}
+                        error={!!error}
+                        helperText={error?.message}
+                      />
+                    )}
+                  />
+                )}
+              />
+            </Grid>
 
-          <Grid item xs={12} md={6}>
-            <Controller
-              name="aircraft"
-              control={control}
-              rules={{ required: t("AircraftRequired") }}
-              render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
-                <Autocomplete
-                  freeSolo
-                  options={aircraftOptions}
-                  getOptionLabel={(option) => typeof option === 'string' ? option : option.aircraft}
-                  value={selectedAircraft || value || null}
-                  onChange={(_, newValue) => {
-                    handleAircraftChange(newValue);
-                    onChange(typeof newValue === 'string' ? newValue : newValue?.aircraft || '');
-                  }}
-                  onInputChange={(_, newInputValue) => {
-                    if (newInputValue !== value) onChange(newInputValue);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t("Aircraft registration")}
-                      inputRef={ref}
-                      error={!!error}
-                      helperText={error?.message}
-                      value={watchedAircraft || ''}
-                    />
-                  )}
-                />
-              )}
-            />
+            <Grid item xs={12}>
+              <Controller
+                control={control}
+                name="ifr_arrival"
+                defaultValue={false}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} color="primary" />}
+                    label={t("IFR Arrival")}
+                  />
+                )}
+              />
+            </Grid>
           </Grid>
-
-          <Grid item xs={12} md={6}>
-            <TextField
-              {...register('mtow', {
-                required: t("MTOWRequired"),
-                min: { value: 1, message: t("InvalidMTOW") },
-                max: { value: 10000, message: t("MTOWTooHigh") },
-                valueAsNumber: true,
-              })}
-              error={!!errors.mtow}
-              helperText={errors.mtow?.message as string}
-              fullWidth
-              value={currentMTOW}
-              onChange={handleMTOWChange}
-              type="number"
-              label={t("MTOW (Kg)")}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <Controller
-              name="pic_name"
-              control={control}
-              rules={{ required: t("PICNameRequired") }}
-              render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
-                <Autocomplete
-                  freeSolo
-                  options={picOptions}
-                  value={value || ''}
-                  onChange={(_, newValue) => onChange(newValue || '')}
-                  onInputChange={(_, newInputValue) => onChange(newInputValue)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t("PIC (Full name)")}
-                      inputRef={ref}
-                      error={!!error}
-                      helperText={error?.message}
-                    />
-                  )}
-                />
-              )}
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Controller
-              control={control}
-              name="ifr_arrival"
-              defaultValue={false}
-              render={({ field }) => (
-                <FormControlLabel
-                  control={<Checkbox {...field} color="primary" />}
-                  label={t("IFR Arrival")}
-                />
-              )}
-            />
-          </Grid>
-        </Grid>
+        </Suspense>
       </Box>
     </Edit>
   );

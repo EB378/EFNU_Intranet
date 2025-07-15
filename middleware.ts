@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import type { NextRequest } from "next/server";
 
 const intlMiddleware = NextIntlMiddleware({
-  locales: ['en', 'fi'],
+  locales: ['en', 'fi', 'se'],
   defaultLocale: 'fi'
 });
 
@@ -38,4 +38,4 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico|api/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|json|ico)$).*)"]
-};//add matcher to exclude files under folder api
+};

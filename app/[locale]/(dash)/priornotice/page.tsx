@@ -21,6 +21,8 @@ import { DeleteButton, EditButton } from "@refinedev/mui";
 import { PriorNotice } from "@/types/index";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import React, { Suspense } from 'react';
+import { Spinner } from "@/components/ui/Spinner";
 
 dayjs.extend(relativeTime);
 
@@ -67,21 +69,22 @@ const PNList = () => {
       {/* Public Board Column */}
       <Grid item xs={12}>
         <Paper sx={{ p: 3, minHeight: '90vh', overflow: 'auto' }}>
-          <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h5" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
-              <Flight sx={{ mr: 1, color: theme.palette.primary.main }} />
-              {t("UpcomingFlights")}
-            </Typography>
-            <Button
-              variant="contained"
-              onClick={() => route.push("/priornotice/create")}
-              sx={{ m: 2 }}
-            >
-              <AddIcon />
-              {t("CreatePN")}
-            </Button>
-          </Box>
-          
+          <Suspense fallback={<Spinner/>}>
+            <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="h5" sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+                <Flight sx={{ mr: 1, color: theme.palette.primary.main }} />
+                {t("UpcomingFlights")}
+              </Typography>
+              <Button
+                variant="contained"
+                onClick={() => route.push("/priornotice/create")}
+                sx={{ m: 2 }}
+              >
+                <AddIcon />
+                {t("CreatePN")}
+              </Button>
+            </Box>
+          </Suspense>
           {publicLoading ? (
             Array(5).fill(0).map((_, i) => (
               <Skeleton key={i} variant="rectangular" height={100} sx={{ mb: 2 }} />

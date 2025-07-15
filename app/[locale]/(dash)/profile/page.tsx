@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext, useState } from "react"
+import React, { Suspense, useContext, useState } from "react"
 import { useGetIdentity, useNotification } from "@refinedev/core";
 import { 
   Container,
@@ -40,6 +40,7 @@ import { PasswordChangeBlock } from "@components/profile/PasswordChange";
 import LanguageSwitcher from "@components/ui/LanguageSwitcher";
 import { useTranslations } from "next-intl";
 import QuickAccessSettings from "@/components/QuickAccessSettings";
+import { Spinner } from "@components/ui/Spinner";
 
 
 const Profile = () => {
@@ -48,15 +49,6 @@ const Profile = () => {
   const uid = identityData?.id as string;
   const { mode, setMode } = useContext(ColorModeContext);
   const t = useTranslations("Profile");
-
-  const [fuelData] = useState([
-    { month: 'Jan', amount: 1200 },
-    { month: 'Feb', amount: 900 },
-    { month: 'Mar', amount: 1500 },
-    { month: 'Apr', amount: 1100 },
-    { month: 'May', amount: 1300 },
-    { month: 'Jun', amount: 800 },
-  ]);
 
   const [feeData] = useState([
     { id: 1, type: "Landing Fee", amount: "$250.00", status: "Paid", dueDate: "2025-04-15" },
@@ -98,69 +90,71 @@ const Profile = () => {
 
         <Grid container spacing={3}>
           {/* Personal Information Card */}
-          <Grid item xs={12} md={4}>
-            <Card elevation={2} sx={{ 
-              borderRadius: '12px',
-              boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
-            }}>
-              <CardHeader
-                title={
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant="h6">{t("PersonalInformation")}</Typography>
-                    <ProfileAvatar profileId={uid}/>
-                  </Box>
-                }
-                subheader={t("Yourpilotdetails")}
-              />
-              <CardContent>
-                <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
-                  <ProfileAvatar profileId={uid}/>
-                  <Box>
-                    <Typography variant="h6"><ProfileName profileId={uid} /></Typography>
-                    <Typography variant="body2" color="text.secondary">{t("License")} #: <ProfileLicense profileId={uid} /></Typography>
-                  </Box>
-                </Box>
-                <Box>
-                  {[
-                    { label: t("Email"), value: <ProfileEmail profileId={uid} /> },
-                    { label: t("Phone"), value: <ProfilePhone profileId={uid} /> },
-                    { label: t("Certification"), value: <ProfileRatings profileId={uid} /> }
-                  ].map((item, index) => (
-                    <Box 
-                      key={index} 
-                      sx={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
-                        py: 1, 
-                        borderBottom: '1px solid #e0e0e0'
-                      }}
-                    >
-                      <Typography color="text.secondary">{item.label}</Typography>
-                      <Typography fontWeight="medium">{item.value}</Typography>
+          <Suspense fallback={<Spinner/>}>
+            <Grid item xs={12} md={4}>
+              <Card elevation={2} sx={{ 
+                borderRadius: '12px',
+                boxShadow: '0 0 40px -10px rgba(34, 211, 238, 0.5)',
+              }}>
+                <CardHeader
+                  title={
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <Typography variant="h6">{t("PersonalInformation")}</Typography>
+                      <ProfileAvatar profileId={uid}/>
                     </Box>
-                  ))}
-                </Box>
-              </CardContent>
-              <CardActions>
-                <EditButton
-                  resource="profile"
-                  recordItemId={uid}
-                  fullWidth
-                  LinkComponent={"button"}
-                  variant="outlined"
+                  }
+                  subheader={t("Yourpilotdetails")}
                 />
-                <IconButton
-                  color="inherit"
-                  onClick={() => {
-                    setMode();
-                  }}
-                >
-                  {mode === "dark" ? <LightModeOutlined /> : <DarkModeOutlined />}
-                </IconButton>
-                <LanguageSwitcher/>
-              </CardActions>
-            </Card>
-          </Grid>
+                <CardContent>
+                  <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
+                    <ProfileAvatar profileId={uid}/>
+                    <Box>
+                      <Typography variant="h6"><ProfileName profileId={uid} /></Typography>
+                      <Typography variant="body2" color="text.secondary">{t("License")} #: <ProfileLicense profileId={uid} /></Typography>
+                    </Box>
+                  </Box>
+                  <Box>
+                    {[
+                      { label: t("Email"), value: <ProfileEmail profileId={uid} /> },
+                      { label: t("Phone"), value: <ProfilePhone profileId={uid} /> },
+                      { label: t("Certification"), value: <ProfileRatings profileId={uid} /> }
+                    ].map((item, index) => (
+                      <Box 
+                        key={index} 
+                        sx={{ 
+                          display: 'flex', 
+                          justifyContent: 'space-between', 
+                          py: 1, 
+                          borderBottom: '1px solid #e0e0e0'
+                        }}
+                      >
+                        <Typography color="text.secondary">{item.label}</Typography>
+                        <Typography fontWeight="medium">{item.value}</Typography>
+                      </Box>
+                    ))}
+                  </Box>
+                </CardContent>
+                <CardActions>
+                  <EditButton
+                    resource="profile"
+                    recordItemId={uid}
+                    fullWidth
+                    LinkComponent={"button"}
+                    variant="outlined"
+                  />
+                  <IconButton
+                    color="inherit"
+                    onClick={() => {
+                      setMode();
+                    }}
+                  >
+                    {mode === "dark" ? <LightModeOutlined /> : <DarkModeOutlined />}
+                  </IconButton>
+                  <LanguageSwitcher/>
+                </CardActions>
+              </Card>
+            </Grid>
+          </Suspense>
 
           {/* Fee Status Card */}
           <Grid item xs={12} md={4}>
@@ -241,15 +235,21 @@ const Profile = () => {
               </CardActions>
             </Card>
           </Grid>
-          <Grid item xs={12} md={4}>
-            <PasswordChangeBlock />
-          </Grid>
+          <Suspense fallback={<Spinner/>}>
+            <Grid item xs={12} md={4}>
+              <PasswordChangeBlock />
+            </Grid>
+          </Suspense>
         </Grid>
         {/* Fuel Totals Card */}
-        <FuelData profileId={uid} />
-        <Box sx={{ m:2 }}>
-          <QuickAccessSettings />
-        </Box>
+        <Suspense fallback={<Spinner/>}>
+          <FuelData profileId={uid} />
+        </Suspense>
+        <Suspense fallback={<Spinner/>}>
+          <Box sx={{ m:2 }}>
+            <QuickAccessSettings />
+          </Box>
+        </Suspense>
       </Container>
     </Box>
   );

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react"
+import { Spinner } from "@components/ui/Spinner";
 import {
   Box,
   Grid,
@@ -80,41 +81,43 @@ export default function ProfileEditPage() {
           {/* Left Column: Avatar */}
           <Grid item xs={12} md={4}>
             <Card>
-              <CardMedia
-                component="div"
-                sx={{
-                  height: 200,
-                  backgroundColor: theme.palette.third.main,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Box
+              <Suspense fallback={<Spinner/>}>
+                <CardMedia
+                  component="div"
                   sx={{
-                    width: 100,
-                    minHeight: 100,
-                    borderRadius: "50%",
-                    backgroundColor: "white",
+                    height: 200,
+                    backgroundColor: theme.palette.third.main,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    overflow: "hidden",
                   }}
                 >
-                  {profile.avatar_url ? (
-                    <Avatar
-                      src={profile.avatar_url}
-                      alt="Profile"
-                      sx={{ width: "100%", height: "100%" }}
-                    />
-                  ) : (
-                    <Typography variant="h4" color="primary">
-                      {getInitials(profile.fullname)}
-                    </Typography>
-                  )}
-                </Box>
-              </CardMedia>
+                  <Box
+                    sx={{
+                      width: 100,
+                      minHeight: 100,
+                      borderRadius: "50%",
+                      backgroundColor: "white",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {profile.avatar_url ? (
+                      <Avatar
+                        src={profile.avatar_url}
+                        alt="Profile"
+                        sx={{ width: "100%", height: "100%" }}
+                      />
+                    ) : (
+                      <Typography variant="h4" color="primary">
+                        {getInitials(profile.fullname)}
+                      </Typography>
+                    )}
+                  </Box>
+                </CardMedia>
+              </Suspense>
               <CardContent>
                 <TextField
                   fullWidth

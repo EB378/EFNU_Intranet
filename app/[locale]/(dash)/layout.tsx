@@ -2,9 +2,10 @@
 
 import { getData } from "@hooks/getData";
 import { redirect } from "next/navigation";
-import React from "react";
+import React, { Suspense } from "react";
+import { Spinner } from "@components/ui/Spinner";
 import { SessionSync } from "@components/Layout/SessionSync";
-import MobileNav from "@components/navbar";
+import Nav from "@components/navbar";
 import { Box } from "@mui/material";
 import RightTabModal from "@components/Layout/AlertTabComponent";
 
@@ -21,10 +22,14 @@ export default async function Layout({ children }: React.PropsWithChildren) {
       <>
         <SessionSync />
         <Box sx={{ mb: 10 }}>
-          <RightTabModal />
-          { children }
+          <Suspense>
+            <RightTabModal />
+          </Suspense>
+          <Suspense fallback={<Spinner/>}>
+            { children }
+          </Suspense>
         </Box>
-        <MobileNav></MobileNav>
+        <Nav/>
       </>
   );
 }

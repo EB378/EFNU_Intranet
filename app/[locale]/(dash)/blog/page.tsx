@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import {
   Box,
   Typography,
@@ -22,13 +22,13 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import CalendarToday from "@mui/icons-material/CalendarToday";
-import Person from "@mui/icons-material/Person";
 import { useList } from "@refinedev/core";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { format } from 'date-fns';
 import { ProfileAvatar, ProfileName } from "@components/functions/FetchFunctions";
 import { Blog } from "@/types";
+
 
 const BlogPage = () => {
   const theme = useTheme();
@@ -243,10 +243,14 @@ const BlogPage = () => {
               </Typography>
               
               <Box sx={{ display: 'flex', alignItems: 'center', mt: 'auto' }}>
-                <ProfileAvatar profileId={featuredBlog.uid} />
+                <Suspense fallback={<Skeleton variant="circular" width={40} height={40} />}>
+                  <ProfileAvatar profileId={featuredBlog.uid} />
+                </Suspense>
                 <Box sx={{ ml: 2 }}>
                   <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                    <ProfileName profileId={featuredBlog.uid} />
+                    <Suspense fallback={<Skeleton width={80} />}>
+                      <ProfileName profileId={featuredBlog.uid} />
+                    </Suspense>
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <CalendarToday sx={{ 
@@ -388,10 +392,14 @@ const BlogPage = () => {
                       </Typography>
                       
                       <Box sx={{ display: 'flex', alignItems: 'center', mt: 'auto' }}>
-                        <ProfileAvatar profileId={blog.uid} />
+                        <Suspense fallback={<Skeleton variant="circular" width={40} height={40} />}>
+                          <ProfileAvatar profileId={blog.uid} />
+                        </Suspense>
                         <Box sx={{ ml: 2 }}>
                           <Typography variant="caption" sx={{ fontWeight: 600 }}>
-                            <ProfileName profileId={blog.uid} />
+                            <Suspense fallback={<Skeleton width={80} />}>
+                              <ProfileName profileId={blog.uid} />
+                            </Suspense>
                           </Typography>
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <CalendarToday sx={{ 

@@ -23,8 +23,11 @@ const LanguageSwitcher: React.FC<NavbarProps> = ({ locale }) => {
   const handleLanguageChange = (event: SelectChangeEvent<string>) => {
     const newLocale = event.target.value;
     if (newLocale === currentLocale) return;
-    const path = pathname.split("/").slice(2).join("/");
-    router.push(`/${newLocale}/${path}`);
+
+    const pathSegments = pathname.split("/").slice(2); // remove locale
+    const newPath = "/" + [newLocale, ...pathSegments].join("/");
+
+    router.push(newPath);
   };
 
   // Animation variants
@@ -101,6 +104,13 @@ const LanguageSwitcher: React.FC<NavbarProps> = ({ locale }) => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Typography variant="body2">🇫🇮</Typography>
             <Typography variant="body2">FI</Typography>
+            <Typography variant="body2"></Typography>
+          </Box>
+        </MenuItem>
+        <MenuItem value="se">
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography variant="body2">🇸🇪</Typography>
+            <Typography variant="body2">SE</Typography>
             <Typography variant="body2"></Typography>
           </Box>
         </MenuItem>

@@ -1,41 +1,51 @@
 "use client";
 
-import { 
-  Box, 
-  Grid, 
-  Typography, 
-  Paper, 
-  Chip, 
-  Avatar, 
-  Stack, 
-  Pagination, 
+import {
+  Box,
+  Grid,
+  Typography,
+  Paper,
+  Chip,
+  Stack,
+  Pagination,
   TextField,
   InputAdornment,
   Skeleton,
   Select,
-  MenuItem
+  MenuItem,
 } from "@mui/material";
-import { Search, Warning, CheckCircle, Assignment } from "@mui/icons-material";
-import React, { useState, useEffect } from "react";
+import {
+  Search,
+  Warning,
+  CheckCircle,
+  Assignment,
+} from "@mui/icons-material";
+import React, { useState, useEffect, Suspense } from "react";
 import NextLink from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { useTable, LogicalFilter, useGetIdentity } from "@refinedev/core";
 import { CreateButton } from "@refinedev/mui";
 import { ProfileName } from "@components/functions/FetchFunctions";
-import { SafetyReport } from "@/types"; // Adjust the import path as necessary
+import { SafetyReport } from "@/types";
 import { useTranslations } from "next-intl";
+
+// ------------------ Component ------------------
 
 const ReportListPage = () => {
   const t = useTranslations("SafetyReports");
+
+  // ------------------ Identity ------------------
   interface Identity {
     id?: string | number;
     [key: string]: any;
   }
   const { data: identity = {} as Identity } = useGetIdentity<Identity>();
+
+  // ------------------ Filters ------------------
   const [filter, setFilter] = useState({
     search: "",
     status: "all",
-    category: "all"
+    category: "all",
   });
 
   const {
@@ -51,15 +61,15 @@ const ReportListPage = () => {
         {
           field: "reported_by",
           operator: "eq",
-          value: identity?.id, // Replace with actual user ID or logic to get current user
-        }
-      ]
+          value: identity?.id,
+        },
+      ],
     },
   });
 
   useEffect(() => {
     const filters: LogicalFilter[] = [];
-    
+
     if (filter.search) {
       filters.push({
         field: "title",
@@ -67,7 +77,7 @@ const ReportListPage = () => {
         value: filter.search,
       });
     }
-    
+
     if (filter.status !== "all") {
       filters.push({
         field: "status",
@@ -75,7 +85,7 @@ const ReportListPage = () => {
         value: filter.status,
       });
     }
-    
+
     if (filter.category !== "all") {
       filters.push({
         field: "category",
@@ -83,15 +93,16 @@ const ReportListPage = () => {
         value: filter.category,
       });
     }
-    
+
     setFilters(filters);
   }, [filter]);
 
   const reports = tableQueryResult?.data?.data || [];
   const loading = tableQueryResult?.isLoading;
 
-  // Returns an icon based on the severity level
-  function getSeverityIcon(severity: string) {
+  // ------------------ Utility ------------------
+
+  const getSeverityIcon = (severity: string) => {
     switch (severity) {
       case "high":
         return <Warning color="error" fontSize="large" />;
@@ -102,10 +113,11 @@ const ReportListPage = () => {
       default:
         return <Warning color="disabled" fontSize="large" />;
     }
-  }
+  };
 
-  // Returns the color for the status chip
-  function getStatusColor(status: string): "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" {
+  const getStatusColor = (
+    status: string
+  ): "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" => {
     switch (status) {
       case "open":
         return "warning";
@@ -116,51 +128,53 @@ const ReportListPage = () => {
       default:
         return "default";
     }
-  }
+  };
+
+  // ------------------ JSX ------------------
 
   return (
-    <Box sx={{ 
-      p: { xs: 2, md: 4 },
-      maxWidth: 1600,
-      margin: '0 auto'
-    }}>
-      {/* Header Section */}
-      <Box sx={{ mb: 4, display: 'flex', flexDirection: 'row', justifyContent: "space-between" }}>
+    <Box sx={{ p: { xs: 2, md: 4 }, maxWidth: 1600, margin: "0 auto" }}>
+
+      {/* ------------------ Header ------------------ */}
+      <Box
+        sx={{
+          mb: 4,
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
         <Stack>
-          <Typography variant="h4" component="h1" gutterBottom sx={{ 
-            fontWeight: 700,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 2
-          }}>
+          <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 700, display: "flex", alignItems: "center", gap: 2 }}>
             <Assignment fontSize="large" />
             {t("SafetyReports")}
           </Typography>
-          
           <Typography variant="body1" color="text.secondary">
             {t("Active safety reports and incident tracking")}
           </Typography>
         </Stack>
-        <CreateButton 
-          resource="sms"
-        />
+        <CreateButton resource="sms" />
       </Box>
 
-      {/* Filter Bar */}
-      <Paper sx={{ 
-        mb: 4,
-        p: 2,
-        display: 'flex',
-        gap: 2,
-        flexWrap: 'wrap',
-        alignItems: 'center'
-      }}>
+      {/* ------------------ Filter Bar ------------------ */}
+      <Paper
+        sx={{
+          mb: 4,
+          p: 2,
+          display: "flex",
+          gap: 2,
+          flexWrap: "wrap",
+          alignItems: "center",
+        }}
+      >
         <TextField
           placeholder={t("Search reports")}
           variant="outlined"
           size="small"
           value={filter.search}
-          onChange={(e) => setFilter({...filter, search: e.target.value})}
+          onChange={(e) =>
+            setFilter({ ...filter, search: e.target.value })
+          }
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -173,7 +187,7 @@ const ReportListPage = () => {
 
         <Select
           value={filter.status}
-          onChange={(e) => setFilter({...filter, status: e.target.value})}
+          onChange={(e) => setFilter({ ...filter, status: e.target.value })}
           size="small"
           sx={{ minWidth: 140 }}
         >
@@ -185,7 +199,7 @@ const ReportListPage = () => {
 
         <Select
           value={filter.category}
-          onChange={(e) => setFilter({...filter, category: e.target.value})}
+          onChange={(e) => setFilter({ ...filter, category: e.target.value })}
           size="small"
           sx={{ minWidth: 160 }}
         >
@@ -201,7 +215,7 @@ const ReportListPage = () => {
         </Select>
       </Paper>
 
-      {/* Report List */}
+      {/* ------------------ Report List ------------------ */}
       <Grid container spacing={3}>
         {loading ? (
           Array.from({ length: 3 }).map((_, index) => (
@@ -213,28 +227,30 @@ const ReportListPage = () => {
           reports.map((report) => (
             <Grid item xs={12} md={6} lg={4} key={report.id}>
               <NextLink href={`/sms/show/${report.id}`} passHref>
-                <Paper component="a" sx={{ 
-                  p: 3,
-                  height: '100%',
-                  display: 'block',
-                  textDecoration: 'none',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: 3
-                  }
-                }}>
+                <Paper
+                  component="a"
+                  sx={{
+                    p: 3,
+                    height: "100%",
+                    display: "block",
+                    textDecoration: "none",
+                    transition: "transform 0.2s, box-shadow 0.2s",
+                    "&:hover": {
+                      transform: "translateY(-4px)",
+                      boxShadow: 3,
+                    },
+                  }}
+                >
                   <Stack direction="row" spacing={2} alignItems="center">
                     {getSeverityIcon(report.severity)}
-                    
                     <Box sx={{ flexGrow: 1 }}>
                       <Typography variant="subtitle1" fontWeight={600}>
                         {report.title}
                       </Typography>
-                      
+
                       <Stack direction="row" spacing={2} sx={{ mt: 1 }}>
-                        <Chip 
-                          label={t(report.status.replace('-', ' '))}
+                        <Chip
+                          label={t(report.status.replace("-", " "))}
                           color={getStatusColor(report.status)}
                           size="small"
                         />
@@ -242,10 +258,13 @@ const ReportListPage = () => {
                           {t(report.category)}
                         </Typography>
                       </Stack>
-                      
+
                       <Stack direction="row" spacing={2} sx={{ mt: 1 }} alignItems="center">
                         <Typography variant="caption" color="text.secondary">
-                          {t("Reported by")} <ProfileName profileId={report.reported_by} />
+                          {t("Reported by")}{" "}
+                          <Suspense fallback={<Skeleton width={60} />}>
+                            <ProfileName profileId={report.reported_by} />
+                          </Suspense>
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
                           {formatDistanceToNow(new Date(report.reported_at))} {t("ago")}
@@ -253,7 +272,7 @@ const ReportListPage = () => {
                       </Stack>
                     </Box>
 
-                    {report.status === 'resolved' && (
+                    {report.status === "resolved" && (
                       <CheckCircle color="success" />
                     )}
                   </Stack>
@@ -264,15 +283,15 @@ const ReportListPage = () => {
         )}
       </Grid>
 
-      {/* Pagination */}
-      <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
-        <Pagination 
-          count={pageCount} 
-          page={current} 
+      {/* ------------------ Pagination ------------------ */}
+      <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
+        <Pagination
+          count={pageCount}
+          page={current}
           onChange={(_, page) => setCurrent(page)}
-          color="primary" 
+          color="primary"
           shape="rounded"
-          sx={{ '& .MuiPaginationItem-root': { borderRadius: 2 } }}
+          sx={{ "& .MuiPaginationItem-root": { borderRadius: 2 } }}
         />
       </Box>
     </Box>

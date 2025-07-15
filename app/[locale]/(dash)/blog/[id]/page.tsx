@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import {
   Box,
   Typography,
@@ -269,17 +269,17 @@ const BlogShowPage = () => {
                       gap: 2
                     }}>
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <ProfileAvatar profileId={blog?.uid || ""} />
+                        <Suspense fallback={<Skeleton variant="circular" width={40} height={40} />}>
+                          <ProfileAvatar profileId={blog?.uid || ""} />
+                        </Suspense>
                         <Box sx={{ ml: 2 }}>
                           <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                            <ProfileName profileId={blog?.uid || ""} />
+                            <Suspense fallback={<Skeleton width={100} />}>
+                              <ProfileName profileId={blog?.uid || ""} />
+                            </Suspense>
                           </Typography>
                           <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
-                            <CalendarToday sx={{ 
-                              fontSize: 14, 
-                              mr: 0.5,
-                              color: theme.palette.text.secondary
-                            }} />
+                            <CalendarToday sx={{ fontSize: 14, mr: 0.5, color: theme.palette.text.secondary }} />
                             <Typography variant="caption" sx={{ opacity: 0.8 }}>
                               {blog?.published_at 
                                 ? format(new Date(blog.published_at), 'MMM dd, yyyy • hh:mm a') 
@@ -378,26 +378,39 @@ const BlogShowPage = () => {
               </Typography>
               
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
-                <ProfileAvatar profileId={blog?.uid || ""} />
+                <Suspense fallback={<Skeleton variant="circular" width={40} height={40} />}>
+                  <ProfileAvatar profileId={blog?.uid || ""} />
+                </Suspense>
                 <Box sx={{ ml: 2 }}>
                   <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                    <ProfileName profileId={blog?.uid || ""} />
+                    <Suspense fallback={<Skeleton width={100} />}>
+                      <ProfileName profileId={blog?.uid || ""} />
+                    </Suspense>
                   </Typography>
                   <Typography variant="body2" sx={{ mt: 0.5, opacity: 0.8 }}>
-                    <ProfileRole profileId={blog?.uid as string} />
+                    <Suspense fallback={<Skeleton width={80} />}>
+                      <ProfileRole profileId={blog?.uid || ""} />
+                    </Suspense>
                   </Typography>
                 </Box>
               </Box>
-              
+
               <Typography variant="body2" sx={{ 
                 color: theme.palette.mode === 'dark' 
                   ? 'text.secondary' : 'text.primary',
                 lineHeight: 1.7
               }}>
-                <ProfileEmail profileId={blog?.uid || ""} /> <br />
-                <ProfilePhone profileId={blog?.uid || ""} /> <br />
-                <ProfileLicense profileId={blog?.uid || ""} />
+                <Suspense fallback={<Skeleton width={160} />}>
+                  <ProfileEmail profileId={blog?.uid || ""} />
+                </Suspense><br />
+                <Suspense fallback={<Skeleton width={100} />}>
+                  <ProfilePhone profileId={blog?.uid || ""} />
+                </Suspense><br />
+                <Suspense fallback={<Skeleton width={180} />}>
+                  <ProfileLicense profileId={blog?.uid || ""} />
+                </Suspense>
               </Typography>
+
               
               <Button
                 variant="outlined"
