@@ -2,8 +2,9 @@
 
 import { useForm } from "@refinedev/react-hook-form";
 import { useLogin, useRegister } from "@refinedev/core";
-import { TextField, Box, Button, Typography, Link } from "@mui/material";
+import { TextField, Box, Button, Typography, Link, Divider } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { GoogleAuthButton } from "@components/GoogleAuthButton";
 
 type AuthPageProps = {
   type: "login" | "register";
@@ -105,6 +106,10 @@ export const AuthPage = ({ type }: AuthPageProps) => {
       >
         {type === "register" ? "Sign Up" : "Login"}
       </Button>
+
+      <Divider sx={{ my: 3 }}>or</Divider>
+
+      <GoogleAuthButton />
 
       <Box mt={2} textAlign="center">
         {type === "register" ? (
