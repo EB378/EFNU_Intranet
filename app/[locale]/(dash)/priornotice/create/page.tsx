@@ -13,27 +13,33 @@ import {
   Typography,
   Autocomplete,
   ButtonGroup,
-  Button
+  Button,
+  CircularProgress
 } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { useTheme } from '@hooks/useTheme';
-import { PriorNotice } from "@/types/index";
+import { PriorNotice, ProfileData } from "@/types/index";
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useProfilePNAircraft, useProfilePNPIC } from '@components/functions/FetchFunctions';
-import { useGetIdentity, useUpdate, useNotification } from '@refinedev/core';
-
-interface AircraftData {
-  aircraft: string;
-  mtow: number;
-}
+import { useAircraftMTOW, useProfilePNAircraft, useProfilePNPIC } from '@components/functions/FetchFunctions';
+import { useGetIdentity, useUpdate, useNotification, useShow, useList, useCreate } from '@refinedev/core';
 
 type UserProfile = {
   id: string;
+  aircraft: string[];
   presaved: {
-    aircrafts: AircraftData[];
     PIC: string[];
   };
+};
+
+type Aircraft = {
+  id: string;
+  mtow: number;
+};
+
+type ProfileOption = {
+  id: string;
+  label: string;
 };
 
 const PNCreate = () => {
@@ -43,22 +49,83 @@ const PNCreate = () => {
   const { data: identityData } = useGetIdentity<{ id: string }>();
   const { open } = useNotification();
   const { mutate: updateProfile } = useUpdate<UserProfile>();
+  const { mutate: createAircraft } = useCreate<Aircraft>();
 
-  const [aircraftOptions, setAircraftOptions] = useState<AircraftData[]>([]);
-  const [selectedAircraft, setSelectedAircraft] = useState<AircraftData | null>(null);
-  const [currentMTOW, setCurrentMTOW] = useState<number | ''>('');
+  const [aircraftOptions, setAircraftOptions] = useState<string[]>([]);
+  const [profilesOptions, setProfileOptions] = useState<ProfileOption[]>([]);
+  const [selectedAircraft, setSelectedAircraft] = useState<string | null>(null);
+  const [selectedBillableProfile, setSelectedBillableProfile] = useState<ProfileOption | null>(null);
+  const [currentMTOW, setCurrentMTOW] = useState<number | undefined>(undefined);
   const [picOptions, setPicOptions] = useState<string[]>([]);
+  const [billableExternal, setBillableExternal] = useState<boolean>(false);
+  const [isCustomAircraft, setIsCustomAircraft] = useState<boolean>(false);
 
-  const aircrafts = useProfilePNAircraft({ profileId: identityData?.id ?? "" });
+  // Fetch all aircraft from the database
+  const { data: aircraftData, isLoading: isLoadingAircraft } = useList<Aircraft>({
+    resource: 'aircraft',
+    pagination: {
+      mode: 'off',
+    },
+  });
+  
+  const { data: ProfilesData, isLoading: isLoadingProfiles } = useList<ProfileData>({
+    resource: 'profiles',
+     filters: [
+      {
+        field: "public",
+        operator: "eq",
+        value: "true",
+      },
+    ],
+    pagination: {
+      mode: 'off',
+    },
+  });
+
+
+
+  // Fetch PIC persons from profile
   const PICPersons = useProfilePNPIC({ profileId: identityData?.id ?? "" });
+  const { mtow: fetchedMTOW, isLoading: isMTOWLoading } = useAircraftMTOW({ aircraftId: selectedAircraft ?? "" });
 
-
-  // Initialize aircraft options
+  // Initialize aircraft options from all aircraft in database
   useEffect(() => {
-    if (aircrafts && aircrafts.length > 0) {
-      setAircraftOptions(aircrafts);
+    if (aircraftData?.data) {
+      setAircraftOptions(aircraftData.data.map(ac => ac.id));
     }
-  }, [aircrafts]);
+  }, [aircraftData]);
+
+  // Initialize profiles options from filtered profile in database
+
+  useEffect(() => {
+    if (ProfilesData?.data) {
+      const mappedOptions = ProfilesData.data.map((profile) => ({
+        id: profile.id,
+        label: profile.fullname,
+      }));
+      setProfileOptions(mappedOptions);
+    }
+  }, [ProfilesData]);
+
+
+  // Update MTOW when aircraft selection changes
+  useEffect(() => {
+    if (selectedAircraft && aircraftData?.data) {
+      const foundAircraft = aircraftData.data.find(ac => 
+        ac.id.toLowerCase() === selectedAircraft.toLowerCase()
+      );
+      
+      if (foundAircraft) {
+        setCurrentMTOW(foundAircraft.mtow);
+        setValue('mtow', foundAircraft.mtow, { shouldValidate: true });
+        setIsCustomAircraft(false);
+      } else {
+        setIsCustomAircraft(true);
+        setCurrentMTOW(undefined);
+        setValue('mtow', undefined, { shouldValidate: true });
+      }
+    }
+  }, [selectedAircraft, aircraftData]);
 
   // Initialize PIC options
   useEffect(() => {
@@ -66,14 +133,6 @@ const PNCreate = () => {
       setPicOptions(PICPersons);
     }
   }, [PICPersons]);
-
-  // Update MTOW when aircraft changes
-  useEffect(() => {
-    if (selectedAircraft) {
-      setCurrentMTOW(selectedAircraft.mtow);
-      setValue('mtow', selectedAircraft.mtow, { shouldValidate: true });
-    }
-  }, [selectedAircraft]);
 
   const {
     refineCore: { formLoading, onFinish },
@@ -96,33 +155,34 @@ const PNCreate = () => {
     },
   });
 
-  const watchedAircraft = watch('aircraft');
+  const watchedDepTime = watch('dep_time');
+  const watchedArrTime = watch('arr_time');
 
-  const handleSaveAircraftAndPIC = async (aircraftData: AircraftData | null, picName: string | null) => {
+  const [depArrSelected, setDepArrSelected] = useState<"DEP" | "ARR" | "LOCAL">('ARR');
+
+  const aircraftB = useProfilePNAircraft({ profileId: identityData?.id ?? "" })
+
+  const handleSaveAircraftAndPIC = async (aircraftRegistration: string | null, picName: string | null) => {
     try {
-      const updates: Partial<UserProfile['presaved']> = {};
-      let shouldUpdate = false;
-
-      // Handle aircraft update
-      if (aircraftData?.aircraft && aircraftData.mtow) {
-        const currentAircrafts = aircrafts || [];
-        const existingAircraftIndex = currentAircrafts.findIndex(
-          ac => ac.aircraft.toLowerCase() === aircraftData.aircraft.toLowerCase()
+      // For aircraft
+      if (aircraftRegistration) {
+        const currentAircrafts = aircraftB || [];
+        const aircraftExists = currentAircrafts.some(
+          ac => ac.toLowerCase() === aircraftRegistration.toLowerCase()
         );
 
-        if (existingAircraftIndex >= 0) {
-          const updatedAircrafts = [...currentAircrafts];
-          updatedAircrafts[existingAircraftIndex] = aircraftData;
-          updates.aircrafts = updatedAircrafts;
-          setAircraftOptions(updatedAircrafts);
-        } else {
-          updates.aircrafts = [...currentAircrafts, aircraftData];
-          setAircraftOptions(prev => [...prev, aircraftData]);
+        if (!aircraftExists) {
+          await updateProfile({
+            resource: 'profiles',
+            id: identityData?.id ?? "",
+            values: {
+              aircraft: [...currentAircrafts, aircraftRegistration],
+            },
+          });
         }
-        shouldUpdate = true;
       }
 
-      // Handle PIC update
+      // For PIC
       if (picName) {
         const currentPICs = PICPersons || [];
         const picExists = currentPICs.some(pic => 
@@ -130,32 +190,22 @@ const PNCreate = () => {
         );
 
         if (!picExists) {
-          updates.PIC = [...currentPICs, picName];
-          setPicOptions(prev => [...prev, picName]);
-          shouldUpdate = true;
+          await updateProfile({
+            resource: 'profiles',
+            id: identityData?.id ?? "",
+            values: {
+              presaved: {
+                PIC: [...currentPICs, picName],
+              },
+            },
+          });
         }
       }
 
-      // Perform the update if needed
-      if (shouldUpdate) {
-        await updateProfile({
-          resource: 'profiles',
-          id: identityData?.id ?? "",
-          values: {
-            presaved: {
-              ...(updates.aircrafts ? { aircrafts: updates.aircrafts } : { aircrafts: aircrafts || [] }),
-              ...(updates.PIC ? { PIC: updates.PIC } : { PIC: PICPersons || [] }),
-            },
-          },
-        }, {
-          onSuccess: () => {
-            open?.({
-              type: 'success',
-              message: 'Profile updated successfully',
-            });
-          },
-        });
-      }
+      open?.({
+        type: 'success',
+        message: 'Profile updated successfully',
+      });
     } catch (error) {
       open?.({
         type: 'error',
@@ -165,26 +215,49 @@ const PNCreate = () => {
     }
   };
 
-  // Updated handleFormSubmit to use the combined function
+  const createNewAircraft = async (registration: string, mtow: number) => {
+    try {
+      await createAircraft({
+        resource: 'aircraft',
+        values: {
+          id: registration,
+          mtow: mtow,
+        },
+      });
+      
+      // Add the new aircraft to the options list
+      setAircraftOptions(prev => [...prev, registration]);
+    } catch (error) {
+      console.error("Failed to create aircraft:", error);
+      throw error;
+    }
+  };
+
   const handleFormSubmit = handleSubmit(async (data) => {
     try {
+      // Check if this is a custom aircraft and MTOW is provided
+      if (isCustomAircraft && (!data.mtow || data.mtow <= 0)) {
+        throw new Error(t("MTOWRequiredForNewAircraft"));
+      }
+
       const processedData = {
         ...data,
         dep_time: data.dep_time?.trim() || undefined,
         arr_time: data.arr_time?.trim() || undefined,
+        billable: billableExternal === true ? selectedBillableProfile?.id : undefined,
       };
 
       if (!processedData.dep_time && !processedData.arr_time) {
         throw new Error(t("EitherDepartureOrArrivalRequired"));
       }
 
-      // Save both aircraft and PIC if needed
-      const aircraftData = data.aircraft && data.mtow 
-        ? { aircraft: data.aircraft, mtow: data.mtow } 
-        : null;
-      
-      await handleSaveAircraftAndPIC(aircraftData, data.pic_name || null);
-      
+      // Create aircraft if it's custom
+      if (isCustomAircraft && data.aircraft && data.mtow) {
+        await createNewAircraft(data.aircraft, data.mtow);
+      }
+
+      // Save to profile and submit
+      await handleSaveAircraftAndPIC(data.aircraft, data.pic_name || null);
       await onFinish(processedData);
       router.push('/priornotice');
     } catch (error) {
@@ -195,51 +268,14 @@ const PNCreate = () => {
     }
   });
 
-  const handleAircraftChange = (newValue: AircraftData | string | null) => {
-    if (typeof newValue === 'string') {
-      // Free text input
-      setSelectedAircraft(null);
-      setValue('aircraft', newValue, { shouldValidate: true });
-      setCurrentMTOW('');
-    } else if (newValue) {
-      // Selected from dropdown
-      setSelectedAircraft(newValue);
-      setValue('aircraft', newValue.aircraft, { shouldValidate: true });
-      setValue('mtow', newValue.mtow, { shouldValidate: true });
-    } else {
-      // Cleared
-      setSelectedAircraft(null);
-      setValue('aircraft', '', { shouldValidate: true });
-      setCurrentMTOW('');
-    }
-    trigger('aircraft');
-  };
-
-  const handleMTOWChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value === '' ? '' : Number(e.target.value);
-    setCurrentMTOW(value);
-    setValue('mtow', value === '' ? undefined : value, { shouldValidate: true });
-  };
-
   const checkValueTime = (time?: string) => {
     const str = time ?? "";
-
     if (!/^\d{1,4}$/.test(str)) return false;
-
     if (str.length < 4) return true;
-
-    // If 4 digits, validate HHMM format
     const hour = parseInt(str.slice(0, 2), 10);
     const minute = parseInt(str.slice(2), 10);
-
     return hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59;
   };
-
-
-  const watchedDepTime = watch('dep_time');
-  const watchedArrTime = watch('arr_time');
-
-  const [depArrSelected, setDepArrSelected] = useState<"DEP" | "ARR" | "LOCAL">('ARR');
 
   useEffect(() => {
     if (checkValueTime(watchedDepTime) && checkValueTime(watchedArrTime)) {
@@ -252,12 +288,10 @@ const PNCreate = () => {
       setDepArrSelected("ARR");
     }
   }, [watchedDepTime, watchedArrTime]);
-  
 
   const handleSelect = (option: "DEP" | "ARR" | "LOCAL") => {
     setDepArrSelected(option);
   };
-
 
   return (
     <Create
@@ -313,7 +347,6 @@ const PNCreate = () => {
                 </ButtonGroup>
               </Box>
             </Grid>
-
 
             {depArrSelected === "LOCAL" && (
               <>
@@ -405,18 +438,15 @@ const PNCreate = () => {
                   <Autocomplete
                     freeSolo
                     options={aircraftOptions}
-                    getOptionLabel={(option) => 
-                      typeof option === 'string' ? option : option.aircraft
-                    }
-                    value={selectedAircraft || value || null}
+                    loading={isLoadingAircraft}
+                    value={value || null}
                     onChange={(_, newValue) => {
-                      handleAircraftChange(newValue);
-                      onChange(newValue ? (typeof newValue === 'string' ? newValue : newValue.aircraft) : '');
+                      setSelectedAircraft(newValue);
+                      onChange(newValue || '');
                     }}
                     onInputChange={(_, newInputValue) => {
-                      if (newInputValue !== value) {
-                        onChange(newInputValue);
-                      }
+                      onChange(newInputValue);
+                      setSelectedAircraft(newInputValue);
                     }}
                     renderInput={(params) => (
                       <TextField
@@ -425,13 +455,16 @@ const PNCreate = () => {
                         inputRef={ref}
                         error={!!error}
                         helperText={error?.message}
-                        value={watchedAircraft || ''}
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <>
+                              {isLoadingAircraft ? <CircularProgress color="inherit" size={20} /> : null}
+                              {params.InputProps.endAdornment}
+                            </>
+                          ),
+                        }}
                       />
-                    )}
-                    renderOption={(props, option) => (
-                      <li {...props} key={typeof option === 'string' ? option : option.aircraft}>
-                        {typeof option === 'string' ? option : option.aircraft}
-                      </li>
                     )}
                   />
                 )}
@@ -441,7 +474,7 @@ const PNCreate = () => {
             <Grid item xs={12} md={6}>
               <TextField
                 {...register('mtow', {
-                  required: t("MTOWRequired"),
+                  required: isCustomAircraft ? t("MTOWRequiredForNewAircraft") : t("MTOWRequired"),
                   min: { value: 1, message: t("InvalidMTOW") },
                   max: { value: 10000, message: t("MTOWTooHigh") },
                   valueAsNumber: true,
@@ -449,10 +482,21 @@ const PNCreate = () => {
                 error={!!errors.mtow}
                 helperText={errors.mtow?.message as string}
                 fullWidth
-                value={currentMTOW}
-                onChange={handleMTOWChange}
+                value={currentMTOW ?? ''}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const input = e.target.value;
+                  const numericValue = input === '' ? undefined : Number(input);
+                  if (typeof numericValue === 'number' || numericValue === undefined) {
+                    setCurrentMTOW(numericValue);
+                  }
+                  setValue('mtow', numericValue, { shouldValidate: true });
+                }}
                 type="number"
                 label={t("MTOW (Kg)")}
+                disabled={!isCustomAircraft && !isMTOWLoading && currentMTOW !== undefined}
+                InputProps={{
+                  readOnly: !isCustomAircraft && !isMTOWLoading && currentMTOW !== undefined,
+                }}
               />
             </Grid>
 
@@ -498,6 +542,75 @@ const PNCreate = () => {
                   />
                 )}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    checked={billableExternal}
+                    onChange={(e) => setBillableExternal(e.target.checked)}
+                  />
+                }
+                label="billable"
+              />
+              {billableExternal === true && (
+                <Controller
+                  name="billable"
+                  control={control}
+                  rules={{ required: t("AircraftRequired") }}
+                  render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
+                    <Autocomplete
+                      freeSolo
+                      options={profilesOptions}
+                      loading={isLoadingProfiles}
+                      value={selectedBillableProfile}  // full object
+                      onChange={(_, newValue) => {
+                        if (typeof newValue === 'string') {
+                          // User typed something not in options
+                          setSelectedBillableProfile({ id: newValue, label: newValue });
+                          onChange(newValue);
+                        } else if (newValue && 'id' in newValue) {
+                          setSelectedBillableProfile(newValue);
+                          onChange(newValue.id);
+                        } else {
+                          setSelectedBillableProfile(null);
+                          onChange('');
+                        }
+                      }}
+                      onInputChange={(_, newInputValue) => {
+                        // Update the input value, but don't change selection unless they select from dropdown
+                        onChange(newInputValue);
+                      }}
+                      getOptionLabel={(option) => {
+                        // option can be string or ProfileOption
+                        if (typeof option === 'string') return option;
+                        if (option?.label) return option.label;
+                        return '';
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label={t("Billable Profile")}
+                          inputRef={ref}
+                          error={!!error}
+                          helperText={error?.message}
+                          InputProps={{
+                            ...params.InputProps,
+                            endAdornment: (
+                              <>
+                                {isLoadingProfiles ? <CircularProgress color="inherit" size={20} /> : null}
+                                {params.InputProps.endAdornment}
+                              </>
+                            ),
+                          }}
+                        />
+                      )}
+                    />
+
+                  )}
+                />
+              )}
             </Grid>
           </Grid>
         </Suspense>

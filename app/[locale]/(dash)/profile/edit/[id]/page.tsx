@@ -53,6 +53,7 @@ export default function ProfileEditPage() {
 
   const ratingOptions = ["Student", "LAPL", "PPL", "CPL", "ATPL", "MGPL", "UPL", "GPL"];
 
+
   useEffect(() => {
     if (profile) {
       reset(profile);
@@ -75,7 +76,7 @@ export default function ProfileEditPage() {
   };
 
   return (
-    <Edit isLoading={formLoading} saveButtonProps={saveButtonProps}>
+    <Edit isLoading={formLoading} saveButtonProps={saveButtonProps} goBack>
       <Box component="form" sx={{ p: 4,}} autoComplete="off">
         <Grid container spacing={4}>
           {/* Left Column: Avatar */}
@@ -174,40 +175,60 @@ export default function ProfileEditPage() {
                   helperText={errors.license?.message?.toString()}
                 />
               </Grid>
-              <Controller
-                name="ratings"
-                control={control}
-                render={({ field }) => {
-                  const currentRatings: string[] = field.value || [];
-                  const handleCheckboxChange = (option: string, checked: boolean) => {
-                    let newRatings = checked
-                      ? [...currentRatings, option]
-                      : currentRatings.filter((rating) => rating !== option);
-                    field.onChange(newRatings);
-                  };
-                  return (
-                    <FormControl component="fieldset" sx={{ mt: 2 }}>
-                      <Typography variant="h6">Aviation Ratings</Typography>
-                      <FormGroup row>
-                        {ratingOptions.map((option) => (
-                          <FormControlLabel
-                            key={option}
-                            control={
-                              <Checkbox
-                                checked={currentRatings.includes(option)}
-                                onChange={(e) =>
-                                  handleCheckboxChange(option, e.target.checked)
-                                }
-                              />
-                            }
-                            label={option}
-                          />
-                        ))}
-                      </FormGroup>
-                    </FormControl>
-                  );
-                }}
-              />
+              <Grid item xs={12}>
+                <Controller
+                  name="ratings"
+                  control={control}
+                  render={({ field }) => {
+                    const currentRatings: string[] = field.value || [];
+                    const handleCheckboxChange = (option: string, checked: boolean) => {
+                      let newRatings = checked
+                        ? [...currentRatings, option]
+                        : currentRatings.filter((rating) => rating !== option);
+                      field.onChange(newRatings);
+                    };
+                    return (
+                      <FormControl component="fieldset" sx={{ mt: 2 }}>
+                        <Typography variant="h6">Aviation Ratings</Typography>
+                        <FormGroup row>
+                          {ratingOptions.map((option) => (
+                            <FormControlLabel
+                              key={option}
+                              control={
+                                <Checkbox
+                                  checked={currentRatings.includes(option)}
+                                  onChange={(e) =>
+                                    handleCheckboxChange(option, e.target.checked)
+                                  }
+                                />
+                              }
+                              label={option}
+                            />
+                          ))}
+                        </FormGroup>
+                      </FormControl>
+                    );
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Controller
+                  name="public"
+                  control={control}
+                  render={({ field }) => (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={!!field.value}
+                          onChange={(e) => field.onChange(e.target.checked)}
+                          color="primary"
+                        />
+                      }
+                      label="Public Profile"
+                    />
+                  )}
+                />
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

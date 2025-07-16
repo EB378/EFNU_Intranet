@@ -128,11 +128,6 @@ export function FuelName({ id }: { id: string }) {
   return <span>{resourceData.label}</span>;
 }
 
-// Define the return type
-interface AircraftData {
-  aircraft: string;
-  mtow: number;
-}
 
 export function useProfilePNAircraft({ profileId }: { profileId: string }) {
   const { queryResult } = useShow({
@@ -142,16 +137,30 @@ export function useProfilePNAircraft({ profileId }: { profileId: string }) {
   });
 
   const profileData = queryResult?.data?.data as {
-    presaved?: {
-      aircrafts?: AircraftData[];
-    };
+    aircraft: string[];
   } | undefined;
 
-  if (!queryResult?.isLoading && profileData?.presaved?.aircrafts) {
-    return profileData.presaved.aircrafts;
+  if (!queryResult?.isLoading && profileData?.aircraft) {
+    return profileData.aircraft;
   }
 
   return [];
+}
+
+export function useAircraftMTOW({ aircraftId }: { aircraftId: string }) {
+  const { queryResult } = useShow({
+    resource: "aircraft",
+    id: aircraftId,
+    queryOptions: { enabled: !!aircraftId },
+  });
+
+  const mtow = queryResult?.data?.data?.mtow;
+
+  return {
+    mtow: typeof mtow === "number" ? mtow : undefined,
+    isLoading: queryResult?.isLoading,
+    error: queryResult?.error,
+  };
 }
 
 export function useProfilePNPIC({ profileId }: { profileId: string }) {

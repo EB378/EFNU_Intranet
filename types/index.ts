@@ -12,10 +12,30 @@ export interface ProfileData {
   status: "active" | "pending" | "suspended";
   updated_at: string;
   created_at: string;
-  profile_type: string;
+  presaved: string[];
   quick_nav?:string[];
+  aircraft: string[];
+  public: string;
 }
 
+
+export interface OrganisationData {
+  id: string;
+  name: string;
+  aircraft: string[];
+  members: string[];
+  created_by: string;
+  updated_at: string;
+  created_at: string;
+}
+
+export interface AircraftData {
+  id: string;
+  mtow: number;
+  created_by: string;
+  updated_at: string;
+  created_at: string;
+}
 
 // Fuels
 
@@ -45,6 +65,7 @@ export interface FuelingValues {
   created_at: string;
   price: number;
   billed_to: string;
+  billed_to_type: string;
 }
 export interface FuelItem extends FuelingValues {
   id: string;
@@ -82,6 +103,7 @@ export interface PriorNotice {
     created_at: string;
     updated_at: string;
     ifr_arrival: boolean;
+    billable: string;
 }
   
   

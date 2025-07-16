@@ -65,7 +65,6 @@ export const authProviderClient: AuthProvider = {
       license: "",
       role: "pilot",
       status: "active",
-      profile_type: "user",
     };
 
     try {

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
+import { useForm } from "@refinedev/react-hook-form";
 import { Spinner } from "@components/ui/Spinner";
-import { useGetIdentity } from "@refinedev/core";
+import { useGetIdentity, useList } from "@refinedev/core";
 import { 
   Container,
   Grid,
@@ -25,12 +26,7 @@ import {
   Select,
   MenuItem,
   FormControl,
-  Skeleton
-} from "@mui/material";
-import {  
-  AttachMoney as DollarIcon, 
-} from "@mui/icons-material";
-import {
+  Skeleton,
   Modal,
   Backdrop,
   Fade,
@@ -41,7 +37,6 @@ import {
   styled
 } from "@mui/material";
 import { useTheme } from "@hooks/useTheme";
-import { useForm, useList } from "@refinedev/core";
 import { useTranslations } from "next-intl";
 import {
   LocalGasStation,
@@ -50,11 +45,14 @@ import {
   Email,
   Phone,
   Place,
-  Info
+  Info,
+  AttachMoney as DollarIcon
 } from "@mui/icons-material";
 import { motion } from "framer-motion";
-import { FuelOption, FuelingValues, FuelItem, ProfileData } from '@/types/index';
+import { FuelOption, FuelingValues, FuelItem, OrganisationData, AircraftData } from '@/types/index';
 import { FuelName, ProfileName } from "@/components/functions/FetchFunctions";
+import { Controller, useWatch } from "react-hook-form";
+import Autocomplete from "@mui/material/Autocomplete";
 
 const HoverButton = styled(Button)(({ theme }) => ({
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -73,19 +71,29 @@ const FuelPage = () => {
   const [myRefuelingsModalOpen, setMyRefuelingsModalOpen] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [tankStatusModalOpen, setTankStatusModalOpen] = useState(false);
+  const [billedToType, setBilledToType] = useState<'profile' | 'organisation'>('profile');
 
   const { data: fuels } = useList<FuelOption>({
     resource: "fuels",
   });
 
-  const { 
-    onFinish,
+  const {
+    control,
+    register,
+    handleSubmit,
+    refineCore: { onFinish },
   } = useForm<FuelingValues>({
-    resource: 'fuelings',
-    action: "create",
-    redirect: false,
-    onMutationSuccess: () => {
-      setCreateModalOpen(false);
+    defaultValues: {
+      aircraft: "",
+      billed_to: identityData?.id || "",
+    },
+    refineCoreProps: {
+      resource: 'fuelings',
+      action: "create",
+      redirect: false,
+      onMutationSuccess: () => {
+        setCreateModalOpen(false);
+      }
     }
   });
 
@@ -109,29 +117,41 @@ const FuelPage = () => {
     },
   });
 
-  const { data: organisationData } = useList<ProfileData>({
-    resource: "profiles",
-    filters: [
-      {
-        field: "profile_type",
-        operator: "eq",
-        value: "organisation",
-      }
-    ]
-
+  const { data: organisationData } = useList<OrganisationData>({
+    resource: "organisation",
+  })
+  
+  const { data: aircraftData } = useList<AircraftData>({
+    resource: "aircraft",
   })
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    
+  const billedTo = useWatch({ control, name: "billed_to" });
+
+  useEffect(() => {
+    if (billedTo === identityData?.id) {
+      setBilledToType('profile');
+    } else {
+      setBilledToType('organisation');
+    }
+  }, [billedTo, identityData?.id]);
+
+  const filteredAircraft = billedTo && billedTo !== identityData?.id
+  ? aircraftData?.data?.filter((ac: AircraftData) => {
+      const org = organisationData?.data?.find(o => o.id === billedTo);
+      return org?.aircraft?.includes(ac.id);
+    })
+  : aircraftData?.data;
+
+  const handleFormSubmit = handleSubmit((data) => {
     onFinish({
-      aircraft: formData.get("aircraft") as string,
-      amount: Number(formData.get("amount")),
+      aircraft: data.aircraft,
+      amount: Number(data.amount),
       fuel: selectedFuel,
-      billed_to: formData.get("billed_to") as string,
+      billed_to: data.billed_to,
+      billed_to_type: billedToType,
     });
-  };
+  });
+
 
   return (
     <Box sx={{ minHeight: "100vh", py: 4 }}>
@@ -150,12 +170,14 @@ const FuelPage = () => {
             borderRadius: 4,
             p: 3,
           }}>
-            <Typography variant="h5" gutterBottom>
-              <LocalGasStation /> {t("Create.RecordFuelAddition")}
-            </Typography>
-            <IconButton onClick={() => setCreateModalOpen(false)}>
-              <Close />
-            </IconButton>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+              <Typography variant="h5" gutterBottom>
+                <LocalGasStation /> {t("Create.RecordFuelAddition")}
+              </Typography>
+              <IconButton onClick={() => setCreateModalOpen(false)}>
+                <Close />
+              </IconButton>
+            </Box>
 
             <form onSubmit={handleFormSubmit}>
               <Grid container spacing={2}>
@@ -169,7 +191,7 @@ const FuelPage = () => {
                   <TextField
                     fullWidth
                     required
-                    name="amount"
+                    {...register("amount", { valueAsNumber: true })}
                     label={t("Create.AmountAdded")}
                     type="number"
                     inputProps={{ min: 0.1, step: 0.1 }}
@@ -177,33 +199,48 @@ const FuelPage = () => {
                 </Grid>
                 
                 <Grid item xs={12}>
-                  <TextField
-                    fullWidth
-                    required
-                    name="aircraft"
-                    label={t("Create.AircraftRegistration")}
-                    placeholder={t("Create.egOHABC")}
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
                   <FormControl fullWidth required>
                     <InputLabel>Billed To</InputLabel>
-                    <Select 
-                      label="Billed To"
+                    <Select
+                      {...register("billed_to")}
                       defaultValue=""
-                      name="billed_to"
+                      label="Billed To"
                     >
                       <MenuItem value={identityData?.id}>Self</MenuItem>
-                      {organisationData?.data?.map((option: ProfileData) => (
+                      {organisationData?.data?.map((option: OrganisationData) => (
                         <MenuItem key={option.id} value={option.id}>
-                          {option.fullname?.charAt(0).toUpperCase() + option.fullname?.slice(1)}
+                          {option.name.charAt(0).toUpperCase() + option.name.slice(1)}
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
                 </Grid>
-                
+
+                <Grid item xs={12}>
+                  <Controller
+                    name="aircraft"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Autocomplete
+                        {...field}
+                        freeSolo
+                        options={filteredAircraft?.map((ac) => ({
+                          label: ac.id.toUpperCase(),
+                          value: ac.id,
+                        })) || []}
+                        onChange={(_, data) => field.onChange(data?.value || "")}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label={t("Create.AircraftRegistration")}
+                            required
+                          />
+                        )}
+                      />
+                    )}
+                  />
+                </Grid>
               </Grid>
 
               <Box mt={3}>

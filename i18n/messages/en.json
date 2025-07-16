@@ -139,7 +139,9 @@
     "PICNameRequired": "PIC (Full Name) is required.",
     "InvalidMTOW": "Invalid MTOW",
     "MTOWRequired": "MTOW (Kg) is required.",
-    "MTOWTooHigh": "MTOW (Kg) cannot exceed 10000 Kg."
+    "MTOWTooHigh": "MTOW (Kg) cannot exceed 10000 Kg.",
+    "EitherDepartureOrArrivalRequired": "Either Departure Or Arrival Required",
+    "Loading": "Loading..."
   },
   "WebCam": {
     "EFNUWebcams": "EFNU Webcams",

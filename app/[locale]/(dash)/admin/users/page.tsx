@@ -185,7 +185,6 @@ export default function MembersList() {
           <TableHead sx={{ bgcolor: 'action.hover' }}>
             <TableRow>
               <TableCell>Member</TableCell>
-              <TableCell>Type</TableCell>
               <TableCell>Role</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>License</TableCell>
@@ -206,11 +205,6 @@ export default function MembersList() {
                       </Typography>
                     </Box>
                   </Box>
-                </TableCell>
-                <TableCell>
-                  <Typography variant="body2">
-                    {member.profile_type.charAt(0).toUpperCase() + member.profile_type.slice(1)}
-                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Chip 
