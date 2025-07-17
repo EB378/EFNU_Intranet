@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import { Providers } from "@components/Layout/providers";
 import { Metadata, Viewport } from "next";
 import { APP_NAME, APP_DEFAULT_TITLE, APP_TITLE_TEMPLATE, APP_DESCRIPTION, defaultUrl } from "@/constants";
-import Pwa from "@components/pwa";
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
@@ -56,7 +55,6 @@ export default function RootLayout({
         <Providers defaultMode={defaultMode} locale={locale}>
           {children}
         </Providers>
-        <Pwa/>
       </body>
     </html>
   );
